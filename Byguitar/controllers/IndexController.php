@@ -14,6 +14,21 @@ class IndexController extends CController
 		echo "<pre>";
 		print_r($info);
 		echo "<hr>test";
+
+		$product = Yii::app()->shop->createCommand()
+		->select('*')
+		->from('bg_product')
+		->queryRow();
+		print_r($product);
+
+
+		// $user = Yii::app()->shop->createCommand() 
+	 //    ->select('id, username, profile') 
+	 //    ->from('bg_product u') 
+	 //    ->join('tbl_profile p', 'u.id=p.user_id') 
+	 //    ->where('id=:id', array(':id'=>$id)) 
+	 //    ->queryRow(); 
+
 	}
 
 

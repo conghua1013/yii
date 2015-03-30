@@ -34,13 +34,31 @@ return array(
 		// ),
 		// uncomment the following to use a MySQL database
 		
-		'db'=>array(
+		'db' => array(
 			'connectionString' => 'mysql:host=localhost;dbname=test',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'root',
 			'charset' => 'utf8',
 			// 'tablePrefix' => 'tbl_',
+		),
+		'byguitar' => array(
+			'class'=> 'CDbConnection',
+			'connectionString' => 'mysql:host=localhost;dbname=byguitar',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => 'root',
+			'charset' => 'utf8',
+			'tablePrefix' => 'bg_',
+		),
+		'shop' => array(
+			'class'=> 'CDbConnection',
+			'connectionString' => 'mysql:host=localhost;dbname=byguitar_shop',
+			'emulatePrepare' => true,
+			'username' => 'root',
+			'password' => 'root',
+			'charset' => 'utf8',
+			'tablePrefix' => 'bg_',
 		),
 		
 		'errorHandler'=>array(
