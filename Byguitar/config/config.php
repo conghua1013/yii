@@ -7,6 +7,7 @@
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+	// 'baseUrl'=>'mwq.yii.com',
 	'name'=>'byguitar Demo',
 
 	// preloading 'log' component
@@ -22,6 +23,7 @@ return array(
 
 	// application components
 	'components'=>array(
+		'baseUrl'=>'mwq.yii.com',
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
