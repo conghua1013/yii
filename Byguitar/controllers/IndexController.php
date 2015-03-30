@@ -7,28 +7,21 @@ class IndexController extends CController
 		$this->render('index');
 	}
 
-	public function actionTest(){
+	public function actionTest()
+	{
 		$model = User::model();
 		$_GET['id'] = 1;
 		$info = $model->findbyPk($_GET['id'])->getAttributes();
 		echo "<pre>";
 		print_r($info);
-		echo "<hr>test";
+		echo "<hr>";
 
 		$product = Yii::app()->shop->createCommand()
 		->select('*')
 		->from('bg_product')
+		->where('id = 1')
 		->queryRow();
 		print_r($product);
-
-
-		// $user = Yii::app()->shop->createCommand() 
-	 //    ->select('id, username, profile') 
-	 //    ->from('bg_product u') 
-	 //    ->join('tbl_profile p', 'u.id=p.user_id') 
-	 //    ->where('id=:id', array(':id'=>$id)) 
-	 //    ->queryRow(); 
-
 	}
 
 

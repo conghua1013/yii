@@ -35,7 +35,7 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db' => array(
-			'connectionString' => 'mysql:host=localhost;dbname=test',
+			'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=test',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'root',
@@ -44,7 +44,7 @@ return array(
 		),
 		'byguitar' => array(
 			'class'=> 'CDbConnection',
-			'connectionString' => 'mysql:host=localhost;dbname=byguitar',
+			'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=byguitar',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'root',
@@ -53,7 +53,7 @@ return array(
 		),
 		'shop' => array(
 			'class'=> 'CDbConnection',
-			'connectionString' => 'mysql:host=localhost;dbname=byguitar_shop',
+			'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=byguitar_shop',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'root',
