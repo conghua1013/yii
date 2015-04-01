@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>简单实用国产jQuery UI框架 - DWZ富客户端框架(J-UI.com)</title>
+<title>测试后台</title>
 
 <link href="css/dwz/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="css/dwz/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
