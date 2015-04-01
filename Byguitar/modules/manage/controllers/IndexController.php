@@ -3,7 +3,7 @@
 class IndexController extends ManageController {
 
 	public function actionIndex(){
-         $viewData = array();
+        $viewData = array();
         $this->render('index',$viewData);
 	}
 
