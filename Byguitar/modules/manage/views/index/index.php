@@ -143,10 +143,10 @@ $(function(){
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
 							<?php foreach($row['child'] as $child):?>
-							<li><a href="tabsPage.html" target="navTab"><?php echo $child['title']; ?></a>
+							<li><a href="#" target="navTab"><?php echo $child['title']; ?></a>
 								<ul>
 									<?php foreach($child['child'] as $childRow):?>
-									<li><a href="main.html" target="navTab" rel="main"><?php echo $childRow['title']; ?></a></li>
+									<li><a href="manage/product/index" target="navTab" rel="main"><?php echo $childRow['title']; ?></a></li>
 									<?php endforeach;?>
 								</ul>
 							</li>
