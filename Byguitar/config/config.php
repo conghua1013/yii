@@ -17,6 +17,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.modules.manage.components.*',
 		//'application.modules.manage.models.*',
 	),
 

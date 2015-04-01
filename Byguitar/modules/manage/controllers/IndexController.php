@@ -1,9 +1,9 @@
 <?php
 
-class IndexController extends CController {
+class IndexController extends ManageController {
 
 	public function actionIndex(){
-		echo "index class";
+                $this->render('index',array());
 	}
 
 	public function actionEcho(){
