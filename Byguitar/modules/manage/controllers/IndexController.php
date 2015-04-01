@@ -6,10 +6,17 @@ class IndexController extends ManageController {
                 $this->render('index',array());
 	}
 
-	public function actionEcho(){
-		echo "echo here";
+	public function actionTop(){
+                $this->render('top',array());
 	}
+        
+        public function actionLeft(){
+	       $this->render('left',array());	
+        }
 
+        public function actionRight() {
+               $this->render('right',array());
+        }
 
 
 }
