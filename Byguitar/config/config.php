@@ -17,6 +17,11 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		//'application.modules.manage.models.*',
+	),
+
+	'modules' => array(
+		'manage'=>array(),
 	),
 
 	'defaultController'=>'index',
