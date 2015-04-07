@@ -3,20 +3,27 @@
 class IndexController extends ManageController {
 
 	public function actionIndex(){
-                $this->render('index',array());
+         $viewData = array();
+        $this->render('index',$viewData);
 	}
 
 	public function actionTop(){
-                $this->render('top',array());
+        $viewData = array();
+        $this->render('top', $viewData);
 	}
         
-        public function actionLeft(){
-	       $this->render('left',array());	
-        }
+    public function actionLeft(){
+        $model = Menu::model();
+        $list = $model->getMenuList();
+        $viewData = array();
+        $viewData['list'] = $list;
+        $this->render('left', $viewData);	
+    }
 
-        public function actionRight() {
-               $this->render('right',array());
-        }
+    public function actionRight() {
+        $viewData = array();
+        $this->render('right', $viewData);
+    }
 
 
 }

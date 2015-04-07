@@ -18,7 +18,7 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'application.modules.manage.components.*',
-		//'application.modules.manage.models.*',
+		'application.modules.manage.models.*',
 	),
 
 	'modules' => array(

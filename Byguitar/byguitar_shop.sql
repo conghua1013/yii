@@ -2,7 +2,51 @@
 SQLyog Enterprise - MySQL GUI v8.1 
 MySQL - 5.1.49-community : Database - byguitar_shop
 *********************************************************************
-*/
+*/
+
+
+
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`byguitar_shop` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `byguitar_shop`;
+
+/*Table structure for table `bg_manage_menu` */
+
+DROP TABLE IF EXISTS `bg_manage_menu`;
+
+CREATE TABLE `bg_manage_menu` (
+  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `title` varchar(50) DEFAULT NULL COMMENT '菜单名称',
+  `url` varchar(100) DEFAULT NULL COMMENT '菜单链接',
+  `page_sign` varchar(30) DEFAULT NULL COMMENT '菜单页面标记',
+  `status` tinyint(1) DEFAULT '0' COMMENT '菜单状态',
+  `remark` varchar(255) DEFAULT NULL COMMENT '菜单描述',
+  `sort` smallint(6) DEFAULT NULL COMMENT '排序',
+  `parent_id` smallint(6) DEFAULT NULL COMMENT '父级id',
+  `level` tinyint(1) DEFAULT NULL COMMENT '菜单级别',
+  PRIMARY KEY (`id`),
+  KEY `level` (`level`),
+  KEY `pid` (`parent_id`),
+  KEY `status` (`status`)
+) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC COMMENT='后台系统菜单表';
+
+/*Data for the table `bg_manage_menu` */
+
+insert  into `bg_manage_menu`(id,name,title,url,page_sign,status,remark,sort,parent_id,level) values (1,'','商品','',NULL,1,'',1,0,1),(2,NULL,'分类管理','',NULL,1,'',1,1,2),(3,NULL,'品牌管理','',NULL,1,'',1,1,2),(4,NULL,'商品属性管理','',NULL,1,'',1,1,2),(5,NULL,'商品管理','',NULL,1,'',1,1,2),(6,'categoryList','分类列表','category/index',NULL,1,'',1,2,3),(7,'brandList','品牌列表','brand/index',NULL,1,'',1,3,3),(8,'productAttrList','商品属性列表','product/attrList',NULL,1,'',1,4,3),(9,'productList','商品列表','product/index',NULL,1,'',1,5,3),(10,NULL,'运营','',NULL,1,'',1,0,1),(11,'','网站首页配置','',NULL,1,'',1,10,2),(12,'bannerList','首页banner配置列表','banner/index',NULL,1,'',1,11,3),(13,'indexModuleList','首页模块配置','indexmodule/index',NULL,1,'',1,11,3),(14,NULL,'优惠券管理','',NULL,1,'',1,10,2),(15,NULL,'运营配置管理','',NULL,1,'',1,10,2),(16,'couponList','优惠券类型列表','coupon/index',NULL,1,'',1,14,3),(17,NULL,'订单','',NULL,1,'',1,0,1),(18,NULL,'订单管理','',NULL,1,'',1,17,2),(19,'orderList','订单列表','order/index',NULL,1,'',1,18,3),(20,NULL,'用户','',NULL,1,'',1,0,1),(21,NULL,'用户管理','',NULL,1,'',1,20,2),(22,'userList','用户列表','user/index',NULL,1,'',1,21,3),(23,NULL,'系统','',NULL,1,'',1,0,1),(24,NULL,'系统管理','',NULL,1,'',1,23,2),(25,'menuList','后台菜单列表','menu/index',NULL,1,'',1,24,3),(26,NULL,'数据','',NULL,1,'',1,0,1),(27,NULL,'订单数据','',NULL,1,'',1,26,2),(28,'orderStatistics','订单统计','statistics/index',NULL,1,'统计数据菜单',1,27,3),(29,'shopConfigList','运营配置项列表','shopConfig/index',NULL,1,'',1,15,3),(30,NULL,'支付方式管理','',NULL,1,'',1,10,2),(31,'paymentList','支付方式列表','payment/index',NULL,1,'',1,30,3),(32,NULL,'快递管理','',NULL,1,'',1,10,2),(33,'shippingList','快递列表','shipping/index',NULL,1,'',1,32,3),(34,NULL,'地区管理','',NULL,1,'',1,10,2),(35,'regionList','地区列表','region/index',NULL,1,'',1,34,3),(36,NULL,'客服','',NULL,1,'',1,0,1),(37,NULL,'评论管理','',NULL,1,'',1,36,2),(38,NULL,'咨询管理','',NULL,1,'',1,36,2),(39,'commentList','评论列表','comment/index',NULL,1,'',1,37,3),(40,'consultationList','资讯列表','consultation/index',NULL,1,'',1,38,3),(41,'coupon','优惠券列表','coupon/couponList',NULL,1,'',1,14,3);
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+
+
+
+
+
+
+
+
+
 
 /*!40101 SET NAMES utf8 */;
 
