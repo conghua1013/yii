@@ -30,7 +30,7 @@
 <script type="text/javascript" src="js/dwz/chart/g.bar.js"></script>
 <script type="text/javascript" src="js/dwz/chart/g.line.js"></script>
 <script type="text/javascript" src="js/dwz/chart/g.pie.js"></script>
-<script type="text/javascript" src="jd/dwz/chart/g.dot.js"></script>
+<script type="text/javascript" src="js/dwz/chart/g.dot.js"></script>
 
 <script src="js/dwz/dwz.core.js" type="text/javascript"></script>
 <script src="js/dwz/dwz.util.date.js" type="text/javascript"></script>
