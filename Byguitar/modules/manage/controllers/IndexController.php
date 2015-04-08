@@ -3,7 +3,10 @@
 class IndexController extends ManageController {
 
 	public function actionIndex(){
+        $model = Menu::model();
+        $list = $model->getMenuList();
         $viewData = array();
+        $viewData['list'] = $list;
         $this->render('index',$viewData);
 	}
 
