@@ -28,8 +28,24 @@ class Menu extends CActiveRecord
 		return 'bg_manage_menu';
 	}
 
-
+	//获取菜单列表
 	public function getMenuList(){
+		$criteria = new CDbCriteria(); 
+        $criteria->order = 'id DESC'; 
+  
+        $count = Menu::model()->count($criteria); 
+        $pages = new CPagination($count);
+        $pages->pageVar = 'pageNum'; 
+        $pages->pageSize = 10;
+        $pages->applyLimit($criteria); 
+        $list = Menu::model()->findAll($criteria); 
+        return array(
+        	'count'=>$count,
+        	'list'=>$list,
+        	);
+	}
+
+	public function getMenuListTree(){
 		$m = self::model();
 		$fields = 'id,name,title,url,level,parent_id';
 		$list = Yii::app()->shop->createCommand()

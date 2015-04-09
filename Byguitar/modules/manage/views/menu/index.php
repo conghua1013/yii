@@ -1,7 +1,7 @@
 <form id="pagerForm" method="post" action="manage/menu/index">
 	<input type="hidden" name="status" value="${param.status}">
 	<input type="hidden" name="keywords" value="${param.keywords}" />
-	<input type="hidden" name="pageNum" value="1" />
+	<input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
 	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
 	<input type="hidden" name="orderField" value="${param.orderField}" />
 </form>
@@ -63,31 +63,22 @@
 			</tr>
 		</thead>
 		<tbody>
+
 			<?php if($list): ?>
 			<?php foreach($list as $row): ?>
-			<tr target="sid_user" rel="1">
-				<td><?php echo $row['id']; ?></td>
-				<td><?php echo $row['title']; ?></td>
-				<td><?php echo $row['url']; ?></td>
-				<td><?php echo $row['sort']; ?></td>
-				<td><?php echo $row['page_sign']; ?></td>
-				<td><?php echo $row['status']; ?></td>
-				<td><?php echo $row['level']; ?></td>
-				<td><?php echo $row['parent_name']; ?></td>
+			<tr target="sid_user" rel="<?php echo $row->id; ?>">
+				<td><?php echo $row->id; ?></td>
+				<td><?php echo $row->title; ?></td>
+				<td><?php echo $row->url; ?></td>
+				<td><?php echo $row->sort; ?></td>
+				<td><?php echo $row->page_sign; ?></td>
+				<td><?php echo $row->status; ?></td>
+				<td><?php echo $row->level; ?></td>
+				<td><?php echo $row->parent_id; ?></td>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>
 
-			<tr target="sid_user" rel="2">
-				<td>天津农信社</td>
-				<td>A120113196309052434</td>
-				<td>天津市华建装饰工程有限公司</td>
-				<td>联社营业部</td>
-				<td>29385739203816293</td>
-				<td>5级</td>
-				<td>政府机构</td>
-				<td>2009-05-21</td>
-			</tr>
 		</tbody>
 	</table>
 	<div class="panelBar">
@@ -99,10 +90,10 @@
 				<option value="100">100</option>
 				<option value="200">200</option>
 			</select>
-			<span>条，共${totalCount}条</span>
+			<span>条，共<?php echo $count; ?>条</span>
 		</div>
 		
-		<div class="pagination" targetType="navTab" totalCount="200" numPerPage="20" pageNumShown="10" currentPage="1"></div>
+		<div class="pagination" targetType="navTab" totalCount="<?php echo $count; ?>" numPerPage="20" pageNumShown="10" currentPage="<?php echo $pageNum; ?>"></div>
 
 	</div>
 </div>

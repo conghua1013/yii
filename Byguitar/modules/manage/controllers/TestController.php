@@ -1,6 +1,6 @@
 <?php
 
-class TestController extends CController {
+class TestController extends ManageController {
 
 	public function actionIndex(){
 		echo "index class";
