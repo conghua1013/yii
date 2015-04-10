@@ -30,18 +30,18 @@ class Menu extends CActiveRecord
 
 	//获取菜单列表
 	public function getMenuList(){
+		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
 		$criteria = new CDbCriteria(); 
-        $criteria->order = 'id DESC'; 
-  
+        $criteria->order = 'id DESC';
+        $criteria->offset = ($pageNum-1)*20;
+        $criteria->limit = 20;
+
         $count = Menu::model()->count($criteria); 
-        $pages = new CPagination($count);
-        $pages->pageVar = 'pageNum'; 
-        $pages->pageSize = 10;
-        $pages->applyLimit($criteria); 
         $list = Menu::model()->findAll($criteria); 
         return array(
         	'count'=>$count,
         	'list'=>$list,
+        	'pageNum'=>$pageNum,
         	);
 	}
 

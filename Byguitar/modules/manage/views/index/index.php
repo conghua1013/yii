@@ -146,7 +146,7 @@ $(function(){
 							<li><a><?php echo $child['title']; ?></a>
 								<ul>
 									<?php foreach($child['child'] as $childRow):?>
-									<li><a href="manage/<?php echo $childRow['url'] ?>" target="navTab" rel="<?php echo $childRow['name']; ?>" fresh="false"><?php echo $childRow['title']; ?></a></li>
+									<li><a href="manage/<?php echo $childRow['url'] ?>" target="navTab" rel="<?php echo $childRow['name']; ?>" fresh="true"><?php echo $childRow['title']; ?></a></li>
 									<?php endforeach;?>
 								</ul>
 							</li>

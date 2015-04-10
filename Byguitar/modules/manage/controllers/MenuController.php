@@ -4,13 +4,11 @@ class MenuController extends ManageController {
 
 	//列表页面
 	public function actionIndex(){
-		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
-
 		$viewData = array();
 		$list = Menu::model()->getMenuList();
 		$viewData['list'] = $list['list'];
 		$viewData['count'] = $list['count'];
-		$viewData['pageNum'] = $pageNum;
+		$viewData['pageNum'] = $list['pageNum'];
 		$this->render('index', $viewData);
 	}
 
