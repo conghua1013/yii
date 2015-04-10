@@ -142,15 +142,19 @@ $(function(){
 					</div>
 					<div class="accordionContent">
 						<ul class="tree treeFolder">
+							<?php if(isset($row['child'])): ?>
 							<?php foreach($row['child'] as $child):?>
 							<li><a><?php echo $child['title']; ?></a>
 								<ul>
+									<?php if(isset($child['child'])): ?>
 									<?php foreach($child['child'] as $childRow):?>
 									<li><a href="manage/<?php echo $childRow['url'] ?>" target="navTab" rel="<?php echo $childRow['name']; ?>" fresh="true"><?php echo $childRow['title']; ?></a></li>
 									<?php endforeach;?>
+									<?php  endif; ?>
 								</ul>
 							</li>
 							<?php endforeach;?>
+							<?php  endif; ?>
 						</ul>
 					</div>
 					<?php endforeach;?>

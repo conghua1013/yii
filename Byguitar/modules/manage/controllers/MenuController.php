@@ -58,16 +58,11 @@ class MenuController extends ManageController {
 			$message = $e->getMessage();
 			$status = 300;
 		}
+
 		$res = array();
 		$res['statusCode'] 		= $status;
 		$res['message'] 		= $message;
-		$res['navTabId'] 		= '';
-		$res['rel'] 			= '';
-		$res['callbackType'] 	= '';
-		$res['forwardUrl'] 		= '';
-		$res['confirmMsg'] 		= '';
-		echo json_encode($res);
-		return;
+		$this->ajaxDwzReturn($res);
 	}
 
 	//编辑页面
@@ -121,23 +116,30 @@ class MenuController extends ManageController {
 		$res = array();
 		$res['statusCode'] 		= $status;
 		$res['message'] 		= $message;
-		$res['navTabId'] 		= '';
-		$res['rel'] 			= '';
-		$res['callbackType'] 	= '';
-		$res['forwardUrl'] 		= '';
-		$res['confirmMsg'] 		= '';
-		echo json_encode($res);
-		return;
+		$this->ajaxDwzReturn($res);
 	}
 
 	//删除页面
 	public function actionDel(){
-
+		$flag = Menu::model()->deleteByPk($_REQUEST['id']);
+		if($flag){
+			$message = '删除成功!';
+			$status = 200;
+		}else{
+			$message = '删除失败!';
+			$status = 300;
+		}
+		$res = array();
+		$res['statusCode'] 		= $status;
+		$res['message'] 		= $message;
+		$this->ajaxDwzReturn($res);
 	}
 
 	//树状图
 	public function actionTree(){
+		$tree = Menu::model()->getMenuListTree();
 		$viewData = array();
+		$viewData['tree'] = $tree;
 		$this->render('tree', $viewData);
 	}
 

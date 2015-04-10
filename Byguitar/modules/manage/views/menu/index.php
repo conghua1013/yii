@@ -45,7 +45,8 @@
 			<li><a class="add" href="manage/menu/add" target="navTab"><span>添加</span></a></li>
 			<li><a class="delete" href="manage/menu/del?id={sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li><a class="edit" href="manage/menu/edit?id={sid_user}" target="navTab"><span>修改</span></a></li>
-			<!-- <li class="line">line</li> -->
+			<li class="line">line</li>
+			<li><a class="add" href="manage/menu/tree" target="navTab"><span>菜单树状图</span></a></li>
 			<!-- <li><a class="icon" href="demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li> -->
 		</ul>
 	</div>
