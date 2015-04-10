@@ -2,7 +2,7 @@
 <div id="resultBox"></div>
 
 <div style="float:left; display:block; margin:10px; overflow:auto; width:800px; height:600px; border:solid 1px #CCC; line-height:21px; background:#FFF;">
-<ul class="tree treeFolder treeCheck expand">
+<ul class="tree treeFolder treeCheck expand collapse">
 	<?php if($tree): ?>
 	<?php foreach($tree as $list): ?>
 	<li><a tname="name" tvalue="<?php echo $list['id']; ?>"><?php echo $list['title']; ?></a>

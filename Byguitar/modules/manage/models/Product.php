@@ -28,4 +28,21 @@ class Product extends CActiveRecord
 		return 'bg_product';
 	}
 
+	public function getProductList() {
+		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
+		$criteria = new CDbCriteria(); 
+        $criteria->order = 'id DESC';
+        $criteria->offset = ($pageNum-1)*20;
+        $criteria->limit = 20;
+
+        $count = self::model()->count($criteria); 
+        $list = self::model()->findAll($criteria); 
+        return array(
+        	'count'=>$count,
+        	'list'=>$list,
+        	'pageNum'=>$pageNum,
+        	);
+	}
+ 
+
 }
