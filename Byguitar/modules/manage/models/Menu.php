@@ -75,4 +75,27 @@ class Menu extends CActiveRecord
 
 		return $newList;
 	}
+
+	public function getSelectMenuForEdit(){
+		$m = self::model();
+		$fields = 'id,name,title,url,level,parent_id';
+		$list = Yii::app()->shop->createCommand()
+		->select($fields)
+		->from('bg_manage_menu')
+		->order('level,sort')
+		->where('level<3')
+		->queryAll();
+		$newList = array();
+		foreach ( $list as $row ) {
+			$newList[$row['id']] = $row;
+		}
+
+		foreach ($newList as &$row ) {
+			if($row['level'] == 2){
+				$newList[$row['parent_id']]['child'][$row['id']] = $row;
+				unset($newList[$row['id']]);
+			}
+		}
+		return $newList;
+	}
 }

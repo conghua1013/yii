@@ -1,23 +1,52 @@
 <div class="pageContent">
-	<form method="post" action="demo/common/ajaxDone.html" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="manage/menu/add" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="57">
-			<dl>
-				<dt>资产总额：</dt>
-				<dd><input class="required" name="total" type="text" size="30" /></dd>
-			</dl>
-			<dl class="nowrap">
-				<dt>数据来源：</dt>
-				<dd><textarea cols="45" rows="5" name="source"></textarea></dd>
-			</dl>
-
+			<p>
+				<label>上级菜单：</label>
+				<select name="parent_id">
+					<option value="0" >顶级分类</option>
+					<?php if($select): ?>
+					<?php foreach($select as $list): ?>
+					<option value="<?php echo $list['id']; ?>" ><?php echo $list['title']; ?></option>
+						<?php if(isset($list['child']) && !empty($list['child'])): ?>
+						<?php foreach($list['child'] as $row): ?>
+							<option value="<?php echo $row['id']; ?>"><?php echo $list['title']."->".$row['title']; ?></option>
+						<?php endforeach; ?>
+						<?php endif; ?>
+					<?php endforeach; ?>
+					<?php endif; ?>
+				</select>
+			</p>
 			<div class="divider"></div>
-			<dl>
-				<dt>最新修改时间：</dt>
-				<dd><input readonly="readonly" type="text" size="30" /></dd>
-			</dl>
-			<dl>
-				<dt>最新修改人员：</dt>
-				<dd><input readonly="readonly" type="text" size="30" /></dd>
+			<p>
+				<label>标题：</label>
+				<input type="text" name="title" size="30" />
+			</p>
+			<div class="divider"></div>
+			<p>
+				<label>页面标志：</label>
+				<input type="text" name="page_sign" size="30" />
+			</p>
+			<div class="divider"></div>
+			<p>
+				<label>url：</label>
+				<input type="text" name="url" size="30" />
+			</p>
+			<div class="divider"></div>
+			<p>
+				<label>状态：</label>
+				<input type="radio" name="status" value="1" checked />显示
+				<input type="radio" name="status" value="0" />不显示
+			</p>
+			<div class="divider"></div>
+			<p>
+				<label>排序：</label>
+				<input type="text" name="sort" size="30" value="0"/>
+			</p>
+			<div class="divider"></div>
+			<dl class="nowrap">
+				<dt>备注：</dt>
+				<dd><textarea cols="45" rows="5" name="remark"></textarea></dd>
 			</dl>
 		</div>
 		<div class="formBar">

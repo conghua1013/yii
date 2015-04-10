@@ -14,14 +14,120 @@ class MenuController extends ManageController {
 
 	//添加页面
 	public function actionAdd(){
-		$viewData = array();
-		$this->render('add', $viewData);
+		if(empty($_POST)){
+			$select = Menu::model()->getSelectMenuForEdit();
+			$viewData = array();
+			$viewData['select'] = $select;
+			$this->render('add', $viewData);
+			exit;
+		}
+
+		try {
+			$message = '';
+			$status = 200;
+
+			if(!empty($_REQUEST['parent_id'])){
+				$info = Menu::model()->findByPk($_REQUEST['parent_id']);
+				if(empty($info)){
+					throw new exception('父级不存在！');
+				}
+				$level = $info['level']+1;
+			}else{
+				$level = 1;
+			}
+			
+			$m = new Menu();
+			$m->title 		= $_REQUEST['title'];
+			$m->url 		= $_REQUEST['url'];
+			$m->page_sign 	= $_REQUEST['page_sign'];
+			$m->status 		= $_REQUEST['status'];
+			$m->sort 		= $_REQUEST['sort'];
+			$m->remark 		= $_REQUEST['remark'];
+			$m->parent_id 	= $_REQUEST['parent_id'];
+			$m->level 		= $level;
+			$flag = $m->save();
+			if($flag){
+				$message = '添加成功!';
+				$status = 200;
+			}else{
+				$message = '添加失败!';
+				$status = 300;
+			}
+
+		} catch(Exception $e){
+			$message = $e->getMessage();
+			$status = 300;
+		}
+		$res = array();
+		$res['statusCode'] 		= $status;
+		$res['message'] 		= $message;
+		$res['navTabId'] 		= '';
+		$res['rel'] 			= '';
+		$res['callbackType'] 	= '';
+		$res['forwardUrl'] 		= '';
+		$res['confirmMsg'] 		= '';
+		echo json_encode($res);
+		return;
 	}
 
 	//编辑页面
 	public function actionEdit(){
-		$viewData = array();
-		$this->render('edit', $viewData);
+		if(empty($_POST)){
+			$select = Menu::model()->getSelectMenuForEdit();
+			$info = Menu::model()->findByPk($_REQUEST['id']);
+			$viewData = array();
+			$viewData['select'] = $select;
+			$viewData['info'] = $info;
+			$this->render('edit', $viewData);
+			exit;
+		}
+
+		try {
+			$message = '';
+			$status = 200;
+
+			if(!empty($_REQUEST['parent_id'])){
+				$info = Menu::model()->findByPk($_REQUEST['parent_id']);
+				if(empty($info)){
+					throw new exception('父级不存在！');
+				}
+				$level = $info['level']+1;
+			}else{
+				$level = 1;
+			}
+			
+			$m =  Menu::model()->findByPk($_REQUEST['id']);
+			$m->title 		= $_REQUEST['title'];
+			$m->url 		= $_REQUEST['url'];
+			$m->page_sign 	= $_REQUEST['page_sign'];
+			$m->status 		= $_REQUEST['status'];
+			$m->sort 		= $_REQUEST['sort'];
+			$m->remark 		= $_REQUEST['remark'];
+			$m->parent_id 	= $_REQUEST['parent_id'];
+			$m->level 		= $level;
+			$flag = $m->save();
+			if($flag){
+				$message = '修改成功!';
+				$status = 200;
+			}else{
+				$message = '修改失败!';
+				$status = 300;
+			}
+
+		} catch(Exception $e){
+			$message = $e->getMessage();
+			$status = 300;
+		}
+		$res = array();
+		$res['statusCode'] 		= $status;
+		$res['message'] 		= $message;
+		$res['navTabId'] 		= '';
+		$res['rel'] 			= '';
+		$res['callbackType'] 	= '';
+		$res['forwardUrl'] 		= '';
+		$res['confirmMsg'] 		= '';
+		echo json_encode($res);
+		return;
 	}
 
 	//删除页面
