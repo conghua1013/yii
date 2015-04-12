@@ -14,5 +14,10 @@ class ProductController extends ManageController {
     public function actionAdd(){
         $viewData = array();
         $this->render('add',$viewData);
+    }
+
+    public function actionEdit(){
+        $viewData = array();
+        $this->render('edit',$viewData);
     } 
 }
