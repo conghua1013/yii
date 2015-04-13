@@ -8,7 +8,7 @@
  * @property string $email
  * @property string $profile
  */
-class Product extends CActiveRecord
+class Brand extends CActiveRecord
 {  
 
 	//选择数据库
@@ -25,17 +25,20 @@ class Product extends CActiveRecord
 	//表名、全名
 	public function tableName()
 	{
-		return 'bg_product';
+		return 'bg_brand';
 	}
 
-	//商品页面的分页列表数据整理
-	public function getProductList() {
+	//获取菜单列表
+	public function getBrandListPage(){
 		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
 		$criteria = new CDbCriteria(); 
         $criteria->order = 'id DESC';
         $criteria->offset = ($pageNum-1)*20;
         $criteria->limit = 20;
-
+        if(!empty($_REQUEST['brand_name'])){
+        	$criteria->compare('brand_name',$_REQUEST['brand_name'],true);  
+        }
+        
         $count = self::model()->count($criteria); 
         $list = self::model()->findAll($criteria); 
         return array(
@@ -44,40 +47,4 @@ class Product extends CActiveRecord
         	'pageNum'=>$pageNum,
         	);
 	}
-
-	//整理商品页面的品牌选择
-	public function getBrandSelectList(){
-		$fields = 'id,brand_name';
-		$list = Yii::app()->shop->createCommand()
-		->select($fields)
-		->from('bg_brand')
-		->queryAll();
-
-		$data = array();
-		if($list){
-			foreach($list as $row){
-				$data[$row['id']] = $row;
-			}
-		}
-		return $data;
-	}
-
-	//整理商品页面的分类选择
-	public function getCategorySelectList(){
-		$fields = 'id,cat_name,parent_id,level';
-		$list = Yii::app()->shop->createCommand()
-		->select($fields)
-		->from('bg_category')
-		->queryAll();
-
-		$data = array();
-		if($list){
-			foreach($list as $row){
-				$data[$row['id']] = $row;
-			}
-		}
-		return $data;
-	}
- 
-
 }
