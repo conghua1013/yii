@@ -47,4 +47,20 @@ class Brand extends CActiveRecord
         	'pageNum'=>$pageNum,
         	);
 	}
+
+	//商品页面 选择品牌列表
+	public function getSelectBrandForProductEdit(){
+		$fields = 'id,brand_name';
+		$list = Yii::app()->shop->createCommand()
+		->select($fields)
+		->from('bg_brand')
+		->order('sort')
+		->where('is_show = 1')
+		->queryAll();
+		$newList = array();
+		foreach ( $list as $row ) {
+			$newList[$row['id']] = $row;
+		}
+		return $newList;
+	}
 }

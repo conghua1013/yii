@@ -28,21 +28,27 @@
 				<div class="unit">
 					<label>商品品牌：</label>
 					<select name="brand_id">
-						<option value="0"> 请选择 </option>
-						<volist name="brandList" id="row">
-						<option value="{$row.id}"> {$row.brand_name} </option>
-						</volist>
+						<?php if($brands): ?>
+						<?php foreach($brands as $row): ?>
+							<option value="<?php echo $row['id']; ?>"> <?php echo $row['brand_name']; ?> </option>
+						<?php endforeach; ?>
+						<?php endif; ?>
 					</select>
 				</div>
 				<div class="unit">
 					<label>商品分类：</label>
 					<select name="cat_id">
 						<option value="0">请选择</option>
-						<volist name="cateTree" id="vo">
-							<volist name="vo.child" id="row">
-								<option value="{$row.id}">{$vo.cat_name}---{$row.cat_name}</option>
-							</volist>
-						</volist>
+						<?php if($categorys): ?>
+						<?php foreach($categorys as $list): ?>
+							<option value="<?php echo $list['id']; ?>"> <?php echo $list['cat_name']; ?> </option>
+							<?php if(isset($list['child']) && !empty($list['child'])): ?>
+							<?php foreach($list['child'] as $row): ?>
+								<option value="<?php echo $row['id']; ?>"><?php echo $list['cat_name']."->".$row['cat_name']; ?></option>
+							<?php endforeach; ?>
+							<?php endif; ?>
+						<?php endforeach; ?>
+						<?php endif; ?>
 					</select>
 				</div>
 				<div class="unit">
