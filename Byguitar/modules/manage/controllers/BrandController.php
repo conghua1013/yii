@@ -9,6 +9,7 @@ class BrandController extends ManageController {
 		$viewData['list'] = $list['list'];
 		$viewData['count'] = $list['count'];
 		$viewData['pageNum'] = $list['pageNum'];
+		$viewData['request'] = $_REQUEST;
 		$this->render('index', $viewData);
 	}
 
@@ -47,6 +48,7 @@ class BrandController extends ManageController {
 			$m->describtion 	= $_REQUEST['describtion'];
 			$m->sort 			= $_REQUEST['sort'];
 			$m->is_show 		= $_REQUEST['is_show'];
+			$m->add_time 		= time();
 			$flag = $m->save();
 			if($flag){
 				$message = '添加成功!';

@@ -1,5 +1,5 @@
 <form id="pagerForm" method="post" action="manage/brand/index">
-	<input type="hidden" name="brand_name" value="${param.brand_name}" />
+	<input type="hidden" name="brand_name" value="<?php isset($request['brand_name']) ? $request['brand_name'] : ''; ?>" />
 	<input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
 	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
 	<input type="hidden" name="orderField" value="${param.orderField}" />
@@ -12,7 +12,7 @@
 		<table class="searchContent">
 			<tr>
 				<td>
-					品牌名称：<input type="text" name="brand_name" />
+					品牌名称：<input type="text" name="brand_name" value="<?php isset($request['brand_name']) ? $request['brand_name'] : ''; ?>" />
 				</td>
 			</tr>
 		</table>
@@ -61,8 +61,6 @@
 				<td><?php echo $row->address; ?></td>
 				<td><?php echo $row->mobile; ?></td>
 				<td><?php echo $row->tel; ?></td>
-				<td><?php echo $row->is_show == 0 ? '不显示' : '显示'; ?></td>
-				<td><?php echo $row->sort; ?></td>
 				<td><a class="delete" href="manage/brand/change?id=<?php echo $row->id; ?>&is_show=<?php echo $row->is_show == 0 ?1 : 0; ?>" target="ajaxTodo" title="确定要修改状态吗?">
 					<?php if($row->is_show == 1): ?>
 						<image  src="/css/dwz/images/accept.png" alt="显示"/>
@@ -70,6 +68,8 @@
 						<image  src="/css/dwz/images/error.png" alt="不显示"/>
 					<?php endif;?>
 				</a></td>
+				<td><?php echo $row->sort; ?></td>
+				<td><?php echo $row->add_time > 0 ? date('Y-m-d H:i:s') : ''; ?></td>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>
