@@ -11,10 +11,14 @@
 				<input type="text" name="english_name" size="30" value="<?php echo $info->english_name; ?>"/>
 			</p>
 			<div class="divider"></div>
-			<p>
+			<div class="unit">
 				<label>品牌logo：</label>
 				<input type="file" name="brand_logo" id="brand_logo"/>
-			</p>
+				<?php if($info->brand_logo): ?>
+					<image src="images/brand/<?php echo $info->brand_logo;?>" />
+				<?php endif;?>
+				<br><br>
+			</div>
 			<div class="divider"></div>
 			<p>
 				<label>品牌所在地：</label>
