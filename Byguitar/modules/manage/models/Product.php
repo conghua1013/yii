@@ -78,6 +78,29 @@ class Product extends CActiveRecord
 		}
 		return $data;
 	}
+
+    //商品属性树状结构数据
+    public function getProductAttrTree(){
+        $list = Yii::app()->shop->createCommand()
+            ->select('*')
+            ->from('bg_product_attributes')
+            ->queryAll();
+
+        $data = array();
+        if($list){
+            foreach($list as $row){
+                $data[$row['id']] = $row;
+            }
+
+            foreach ($data as &$row ) {
+                if($row['parent_id'] > 0){
+                    $data[$row['parent_id']]['child'][$row['id']] = $row;
+                    unset($data[$row['id']]);
+                }
+            }
+        }
+        return $data;
+    }
  
 
 }

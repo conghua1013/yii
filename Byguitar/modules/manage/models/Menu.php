@@ -67,7 +67,6 @@ class Menu extends CActiveRecord
 
 	//获取菜单的树状数据
 	public function getMenuListTree(){
-		$m = self::model();
 		$fields = 'id,name,title,url,level,parent_id';
 		$list = Yii::app()->shop->createCommand()
 		->select($fields)
@@ -100,7 +99,6 @@ class Menu extends CActiveRecord
 
 	//获取一二级分类用于添加或者编辑页面的选项。
 	public function getSelectMenuForEdit(){
-		$m = self::model();
 		$fields = 'id,name,title,url,level,parent_id';
 		$list = Yii::app()->shop->createCommand()
 		->select($fields)

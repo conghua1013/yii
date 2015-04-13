@@ -30,4 +30,28 @@ class ProductController extends ManageController {
         $viewData = array();
         $this->render('edit',$viewData);
     }
+
+
+
+
+
+
+
+    public function actionProductAttrTree(){
+        $tree = Product::model()->getProductAttrTree();
+        $viewData = array();
+        $viewData['tree'] = $tree;
+        $this->render('/productAttr/tree',$viewData);
+    }
+
+    public function actionProductAttrAdd(){
+        if(empty($_POST)){
+            $select = Product::model()->getProductAttrTree();
+            $viewData = array();
+            $viewData['select'] = $select;
+            $this->render('/productAttr/add',$viewData);
+        }
+
+        
+    }
 }
