@@ -29,7 +29,8 @@ class BrandController extends ManageController {
 			$image = CUploadedFile::getInstanceByName('brand_logo');
 			if($image){
 				$dir = Yii::getPathOfAlias('webroot').'/images/brand';
-				$extension = substr(strrchr($image->name, '.'), 1); 
+				// $extension = substr(strrchr($image->name, '.'), 1); 
+				$extension = $image->getExtensionName();
 				$brand_name = time().'_0.'.$extension;
 				$imagePath = $dir.'/'.$brand_name;
 				$status = $image->saveAs($imagePath,true);
@@ -87,7 +88,8 @@ class BrandController extends ManageController {
 			$image = CUploadedFile::getInstanceByName('brand_logo');
 			if($image){
 				$dir = Yii::getPathOfAlias('webroot').'/images/brand';
-				$extension = substr(strrchr($image->name, '.'), 1); 
+				// $extension = substr(strrchr($image->name, '.'), 1);
+				$extension = $image->getExtensionName(); 
 				$brand_name = time().'_'.$_REQUEST['id'].'.'.$extension;
 				$imagePath = $dir.'/'.$brand_name;
 				$status = $image->saveAs($imagePath,true);
