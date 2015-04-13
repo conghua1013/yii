@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="manage/brand/edit" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);" enctype="multupart/form-data">
+	<form method="post" action="manage/brand/edit" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);" enctype="multipart/form-data">
 		<div class="pageFormContent" layoutH="57">
 			<p>
 				<label>品牌名称：</label>
@@ -13,7 +13,7 @@
 			<div class="divider"></div>
 			<p>
 				<label>品牌logo：</label>
-				<input type="text" name="brand_logo" size="30" value="<?php echo $info->brand_logo; ?>"/>
+				<input type="file" name="brand_logo" id="brand_logo"/>
 			</p>
 			<div class="divider"></div>
 			<p>

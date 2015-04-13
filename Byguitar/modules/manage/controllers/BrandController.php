@@ -24,10 +24,20 @@ class BrandController extends ManageController {
 			$message = '';
 			$status = 200;
 
+			$brand_name = '';
+			$image = CUploadedFile::getInstanceByName('brand_logo');
+			if($image){
+				$dir = Yii::getPathOfAlias('webroot').'/images/brand';
+				$extension = substr(strrchr($image->name, '.'), 1); 
+				$brand_name = time().'_0.'.$extension;
+				$imagePath = $dir.'/'.$brand_name;
+				$status = $image->saveAs($imagePath,true);
+			}
+			
 			$m = new Brand();
 			$m->brand_name 		= $_REQUEST['brand_name'];
 			$m->english_name 	= $_REQUEST['english_name'];
-			//$m->brand_logo 		= $_REQUEST['brand_logo'];
+			$m->brand_logo 		= $brand_name;
 			$m->from_city 		= $_REQUEST['from_city'];
 			$m->address 		= $_REQUEST['address'];
 			$m->mobile 			= $_REQUEST['mobile'];
@@ -70,11 +80,23 @@ class BrandController extends ManageController {
 		try {
 			$message = '';
 			$status = 200;
+
+			$brand_name = '';
+			$image = CUploadedFile::getInstanceByName('brand_logo');
+			if($image){
+				$dir = Yii::getPathOfAlias('webroot').'/images/brand';
+				$extension = substr(strrchr($image->name, '.'), 1); 
+				$brand_name = time().'_'.$_REQUEST['id'].'.'.$extension;
+				$imagePath = $dir.'/'.$brand_name;
+				$status = $image->saveAs($imagePath,true);
+			}
 			
 			$m =  Brand::model()->findByPk($_REQUEST['id']);
 			$m->brand_name 		= $_REQUEST['brand_name'];
 			$m->english_name 	= $_REQUEST['english_name'];
-			//$m->brand_logo 		= $_REQUEST['brand_logo'];
+			if($brand_name){
+				$m->brand_logo 		= $brand_name;
+			}
 			$m->from_city 		= $_REQUEST['from_city'];
 			$m->address 		= $_REQUEST['address'];
 			$m->mobile 			= $_REQUEST['mobile'];

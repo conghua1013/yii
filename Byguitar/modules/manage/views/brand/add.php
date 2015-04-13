@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="manage/brand/add" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);" enctype="multupart/form-data">
+	<form method="post" action="manage/brand/add" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);" enctype="multupart/form-data">
 		<div class="pageFormContent" layoutH="57">
 			<p>
 				<label>品牌名称：</label>
