@@ -4,11 +4,13 @@ class MenuController extends ManageController {
 
 	//列表页面
 	public function actionIndex(){
+		$list = Menu::model()->getMenuListPage();
+		$nameList = Menu::model()->getMenuListForShowName();
 		$viewData = array();
-		$list = Menu::model()->getMenuList();
 		$viewData['list'] = $list['list'];
 		$viewData['count'] = $list['count'];
 		$viewData['pageNum'] = $list['pageNum'];
+		$viewData['names'] = $nameList;
 		$this->render('index', $viewData);
 	}
 
@@ -127,6 +129,31 @@ class MenuController extends ManageController {
 			$status = 200;
 		}else{
 			$message = '删除失败!';
+			$status = 300;
+		}
+		$res = array();
+		$res['statusCode'] 		= $status;
+		$res['message'] 		= $message;
+		$this->ajaxDwzReturn($res);
+	}
+
+	//修改状态
+	public function actionChange(){
+		$info = Menu::model()->findByPk($_REQUEST['id']);
+		try{
+			if(empty($info)){
+				throw new exception('记录不存在了！');
+			}
+			$info->status = $_REQUEST['status'];
+			$flag = $info->save();
+			if(empty($flag)){
+				throw new exception('修改状态失败！');
+			}
+
+			$message = '修改状态成功!';
+			$status = 200;
+		} catch (Exception $e){
+			$message = $e->getMessage();
 			$status = 300;
 		}
 		$res = array();

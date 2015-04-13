@@ -55,12 +55,13 @@
 			<tr>
 				<th width="80"></th>
 				<th width="120">链接名称</th>
-				<th>短链接</th>
+				<th width="120">短链接</th>
 				<th width="100">序号</th>
 				<th width="150">页面标示</th>
 				<th width="80" align="center">状态</th>
 				<th width="80">级别</th>
 				<th width="80">父级名称</th>
+				<th width="80">操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -73,9 +74,16 @@
 				<td><?php echo $row->url; ?></td>
 				<td><?php echo $row->sort; ?></td>
 				<td><?php echo $row->page_sign; ?></td>
-				<td><?php echo $row->status; ?></td>
+				<td><?php echo $row->status == 0 ? '不显示' : '显示'; ?></td>
 				<td><?php echo $row->level; ?></td>
-				<td><?php echo $row->parent_id; ?></td>
+				<td><?php echo isset($names[$row->parent_id]) ? $names[$row->parent_id]['title'] : '无'; ?></td>
+				<td><a class="delete" href="manage/menu/change?id=<?php echo $row->id; ?>&status=<?php echo $row->status == 0 ?1 : 0; ?>" target="ajaxTodo" title="确定要修改状态吗?">
+					<?php if($row->status == 1): ?>
+						<image  src="/css/dwz/images/accept.png" alt="显示"/>
+					<?php else: ?>
+						<image  src="/css/dwz/images/error.png" alt="不显示"/>
+					<?php endif;?>
+				</a></td>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>

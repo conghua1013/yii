@@ -29,7 +29,7 @@ class Menu extends CActiveRecord
 	}
 
 	//获取菜单列表
-	public function getMenuList(){
+	public function getMenuListPage(){
 		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
 		$criteria = new CDbCriteria(); 
         $criteria->order = 'id DESC';
@@ -45,6 +45,27 @@ class Menu extends CActiveRecord
         	);
 	}
 
+
+	//为了显示取出menulist的名字等字段
+	public function getMenuListForShowName(){
+		$fields = 'id,title';
+		$list = Yii::app()->shop->createCommand()
+		->select($fields)
+		->from('bg_manage_menu')
+		->order('level,sort')
+		->queryAll();
+
+
+		$data = array();
+		if($list){
+			foreach($list as $row){
+				$data[$row['id']] = $row;
+			}
+		}
+		return $data;
+	}
+
+	//获取菜单的树状数据
 	public function getMenuListTree(){
 		$m = self::model();
 		$fields = 'id,name,title,url,level,parent_id';
@@ -76,6 +97,8 @@ class Menu extends CActiveRecord
 		return $newList;
 	}
 
+
+	//获取一二级分类用于添加或者编辑页面的选项。
 	public function getSelectMenuForEdit(){
 		$m = self::model();
 		$fields = 'id,name,title,url,level,parent_id';

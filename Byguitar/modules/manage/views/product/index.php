@@ -42,9 +42,9 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="manage/product/add" target="navTab"><span>添加</span></a></li>
+			<li><a class="add" href="manage/product/add" target="navTab" title="商品添加"><span>添加</span></a></li>
 			<li><a class="delete" href="manage/product/del?id={sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
-			<li><a class="edit" href="manage/product/edit?id={sid_user}" target="navTab"><span>修改</span></a></li>
+			<li><a class="edit" href="manage/product/edit?id={sid_user}" target="navTab" title="商品修改"><span>修改</span></a></li>
 			<li class="line">line</li>
 			<li><a class="icon" href="demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li>
 		</ul>
