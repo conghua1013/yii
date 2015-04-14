@@ -192,7 +192,7 @@
 			</div>
 			<!-- 商品图片 end -->
 
-			
+			<input type="hidden" name="act" value="add"  />  <!-- 用来区分是添加还是编辑 -->
 		</div>
 		<div class="formBar">
 			<ul>

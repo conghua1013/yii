@@ -222,6 +222,7 @@
 
 	</div>
 	<input type="hidden" name="id" value="{$info.id}" id="product_id" />
+	<input type="hidden" name="act" value="edit"  />
 </div>
 
 <div class="formBar">
