@@ -8,7 +8,7 @@
  * @property string $email
  * @property string $profile
  */
-class ProductAttr extends CActiveRecord
+class ProductAttributes extends CActiveRecord
 {  
 
 	//选择数据库
