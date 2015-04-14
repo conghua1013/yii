@@ -10,7 +10,7 @@
                     <?php if(isset($list['child']) && !empty($list['child'])): ?>
                         <?php foreach($list['child'] as $row): ?>
                             <ul>
-                                <li><a tname="name" tvalue="<?php echo $row['id']; ?>"><?php echo $row['attr_name']; ?></a></li>
+                                <li><a tname="name" tvalue="<?php echo $row['id']; ?>"> <?php echo $row['attr_name']; ?> </a></li>
                             </ul>
                         <?php endforeach; ?>
                     <?php endif; ?>
