@@ -21,10 +21,12 @@ class ProductController extends ManageController {
         if(empty($_POST)){
             $categorys = Category::model()->getSelectCategoryForProductEdit(); //可选分类列表
             $brands = Brand::model()->getSelectBrandForProductEdit(); //可选品牌列表
+            $productAttributes = ProductAttributes::model()->getProductAttrTree();
             $viewData = array();
             $viewData['categorys'] = $categorys;
             $viewData['brands'] = $brands;
-            $this->render('add',$viewData);
+            $viewData['productAttributes'] = $productAttributes;
+            $this->render('add',$viewData);exit;
         }
 
         try{
@@ -56,7 +58,7 @@ class ProductController extends ManageController {
             $viewData['categorys'] = $categorys;
             $viewData['brands'] = $brands;
             $viewData['pInfo'] = $pInfo;
-            $this->render('edit',$viewData);
+            $this->render('edit',$viewData);exit;
         }
 
         try{
@@ -320,6 +322,14 @@ class ProductController extends ManageController {
         $res['statusCode']      = $status;
         $res['message']         = $message;
         $this->ajaxDwzReturn($res);        
+    }
+
+    //商品添加或者修改页面
+    public function actionGetProductAttrs(){
+        $attr_group_id = intval($_REQUEST['attr_id']);
+        $list = ProductAttributes::model()->getProductAttrTree();
+        $info = isset($list[$attr_group_id]) ? $list[$attr_group_id]['child'] : '';
+        exit(json_encode($info));
     }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 商品属性页面 end <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 }

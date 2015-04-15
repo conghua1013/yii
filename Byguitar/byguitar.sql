@@ -1,8 +1,28 @@
+CREATE TABLE `bg_product_stock` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `product_id` int(10) DEFAULT '0' COMMENT '商品id',
+  `size_id` int(5) DEFAULT '0' COMMENT '尺寸id',
+  `attr_id` tinyint(3) DEFAULT '0' COMMENT '属性id',
+  `attr_parent_id` tinyint(2) DEFAULT '0' COMMENT '属性的父级id',
+  `quantity` int(10) DEFAULT '0' COMMENT '数量',
+  `add_time` int(10) DEFAULT '0' COMMENT '添加时间',
+  `update_time` int(10) DEFAULT '0' COMMENT '更新时间',
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='商品库存表'
+
+/************** 以上是最近修改sql ******************/
+
+
+
+
+
+
 /*
 SQLyog Enterprise - MySQL GUI v8.1 
 MySQL - 5.1.49-community : Database - byguitar
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 

@@ -1,5 +1,4 @@
 <div style="display:block;">
-	
 	<form method="post" action="manage/product/add" class="pageForm required-validate" onsubmit="return iframeCallback(this)">
 	<div class="tabs" eventType="click" currentIndex="1">
 		<div class="tabsHeader">
@@ -145,49 +144,29 @@
 					<input type="radio" name="is_multiple" value="0" checked />否
 					<input type="radio" name="is_multiple" value="1" />是
 				</div>
-				<div class="unit quantity">
+				<div class="unit">
 					<label>商品库存：</label>
 					<input type="text" name="quantity" value="1">
 					<span>如果商品是有多个款式，请选择上面库存方式选择有多款，在下面的款式中写入款式个数</span>
 				</div>
-				
-				
-				<volist  name="attrList" id="v">
+				<div class="divider"></div>
 
-					<eq name="v.id" value="2">
-					<div class="unit"><!-- 原产地 -->
-						<label> {$v.attr_name} ：</label>
-						<select name="attr[{$v.id}]">
-							<option value="0"> 请选择 </option>
-							<volist  name="v.child" id="row">
-							<option value="{$row.id}"> {$row.attr_name} </option>
-							</volist >
-						</select>
-					</div>
-					</eq>
+				<div class="unit">
+					<label>多库存sku可选列表：</label>
+					<select name="attr_id" id="attr_id">
+						<option value="0">请选择</option>
+						<?php if(!empty($productAttributes)): ?>
+						<?php foreach($productAttributes as $row): ?>
+						<option value="<?php echo $row['id']; ?>"><?php echo $row['attr_name']; ?></option>
+						<?php endforeach; ?>
+						<?php endif; ?>
+					</select>
+					<p id="attr_content"></p>
+					<!-- <div style="border:1px solid green;height:30px;width:600px;" id="attr_content"></div> -->
+					
+				</div>
 
-					<eq name="v.id" value="1"> 
-					<div class="unit" style="display:none;" id="multiple_storage">  <!-- 尺寸规格 -->
-						<label> {$v.attr_name} ：</label>
-						<volist  name="v.child" id="row">
-						<input type="checkbox" name="attr[{$v.id}][]" value="{$row.id}"  id="attr_{$row.id}"/>
-						<span for="attr_{$row.id}">{$row.attr_name} </span>
-						<input type="input" name="stock[{$row.id}]" id="stock_{$row.id}" size="1"/>个&nbsp;&nbsp;&nbsp;
-						</volist >
-					</div>
-					</eq>
-
-					<eq name="v.id" value="3">
-					<div class="unit"> <!-- 颜色 -->
-						<label> {$v.attr_name} ：</label>
-						<volist  name="v.child" id="row">
-						<input type="radio" name="attr[{$v.id}][]" value="{$row.id}"  id="attr_{$row.id}"/><span for="attr_{$row.id}">{$row.attr_name} </span>
-						</volist >
-					</div>
-					</eq>
-
-				</volist >
-
+				<div class="divider"></div>
 				<div class="unit">
 					<label>同款不同色id：</label>
 					<input type="text" name="same_color_products" value="" />
@@ -208,8 +187,41 @@
 			<div class="tabsFooterContent"></div>
 		</div>
 	</div>
-</form>
-
-
-
+	</form>
 </div>
+
+<script>
+$(document).ready(function(){
+	$('#attr_id').change(function(){
+		changeLoadProductAttrs();
+	})
+
+})
+
+function changeLoadProductAttrs(){
+	$.ajax({  
+	    url:'manage/product/getProductAttrs',
+	    data: {attr_id:$("#attr_id").val()},
+	    type:'post',  
+	    cache:false,  
+	    dataType:'json',  
+	    success:function(data) {
+	    	if(data){
+	    		var htmlStr = '';
+	    		$.each(data,function(i,info){
+	    			htmlStr += '<span>'+info.attr_name+'</span>'
+	    			           +'<input type="hidden" name="attr_list[]" value="'+info.id+'" />'
+	    			           +'<input type="text" name="attr_stock[]" value="" />';
+	    		});
+	    		$('#attr_content').html(htmlStr);
+	    	} else {
+	    		alert('数据为空或者网络错误！')
+	    	}
+	    },  
+	    error : function() {    
+	        
+	    }  
+	});
+}
+</script>
+
