@@ -108,7 +108,7 @@ class ProductController extends ManageController {
     +
     */
     protected function saveProduct(){
-        if($_REQUEST['id']){
+        if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $model = Product::model()->finfByPk($_REQUEST['id']);
         }else{
             $model = new Product();
@@ -131,13 +131,13 @@ class ProductController extends ManageController {
         $flag = $model->save();
         if(empty($flag)){
             $error = $_REQUEST['id'] ? '修改商品基本失败！' : '添加商品基本失败！';
-            throw new exception($error)
+            throw new exception($error);
         }
         return $model->id;
     }
 
     //保存商品的分类信息
-    protected function saveProductCategory($productId);{
+    protected function saveProductCategory($productId){
         if(empty($_REQUEST['cat_id']) || empty($productId)){ return false;}
         
         $info = Category::model()->findByPk($_REQUEST['cat_id']);
@@ -145,8 +145,11 @@ class ProductController extends ManageController {
             throw new exception('改商品分类不存在！');
         }   
 
-        if($_REQUEST['id']){
+        if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $model = ProductCategory::model()->findByAttributes(array('product_id'=>$_REQUEST['id']));
+            if(empty($info)){
+                $model = new ProductCategory();
+            }
         } else{
             $model = new ProductCategory();
         }
@@ -165,7 +168,7 @@ class ProductController extends ManageController {
         $model->add_time = time();
         $flag = $model->save();
         if(empty($flag)){
-            throw new exception('商品分类信息添加失败！')
+            throw new exception('商品分类信息添加失败！');
         }
         return true;        
     }
@@ -182,8 +185,11 @@ class ProductController extends ManageController {
 
     //保存商品的扩展信息
     protected function saveProductExtend($productId){
-        if($_REQUEST['id']){
+        if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $model = ProductExtend::model()->findByAttributes(array('product_id'=>$_REQUEST['id']));
+            if(empty($info)){
+                $model = new ProductCategory();
+            }
         }else{
             $model = new ProductExtend();
         }
@@ -206,7 +212,7 @@ class ProductController extends ManageController {
         $flag = $model->save();
         if(empty($flag)){
             $error = $_REQUEST['id'] ? '修改商品扩展信息失败！' : '添加商品扩展信息失败！';
-            throw new exception($error)
+            throw new exception($error);
         }
         return true;
     }
@@ -227,7 +233,7 @@ class ProductController extends ManageController {
         $model->add_time    = time();
         $flag = $model->save();
         if(empty($flag)){
-            throw new exception('添加商品图片失败！')
+            throw new exception('添加商品图片失败！');
         }
         return true;
     }

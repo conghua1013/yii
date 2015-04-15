@@ -1,5 +1,4 @@
 <div style="display:block;">
-<!-- <div style="display:block; overflow:hidden; padding:0 3px; line-height:21px;"> -->
 	
 	<form method="post" action="manage/product/add" class="pageForm required-validate" onsubmit="return iframeCallback(this)">
 	<div class="tabs" eventType="click" currentIndex="1">
@@ -117,6 +116,11 @@
 					upFlashUrl="upload.php" upFlashExt="swf"
 					upMediaUrl="upload.php" upMediaExt:"avi">
 				</textarea>	
+				<div class="divider"></div>
+				<div class="unit">
+					<label>视频链接：</label>
+					<input type="text" name="vedio_url" />
+				</div>
 			</div>
 			<!-- 商品详情 end -->
 
@@ -126,11 +130,11 @@
 			<div class="pageFormContent">
 				<div class="unit">
 					<label>商品市场价：</label>
-					<input type="text" name="market_price">
+					<input type="text" name="market_price" />
 				</div>
 				<div class="unit">
 					<label>商品售价：</label>
-					<input type="text" name="sell_price">
+					<input type="text" name="sell_price" />
 				</div>
 				<div class="unit">
 					<label>成本价：</label>
