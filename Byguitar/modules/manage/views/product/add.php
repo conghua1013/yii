@@ -111,7 +111,7 @@
 
 			<!-- 商品详情 start   目前该模块不能移位否则导致显示高度不够   -->
 			<div>
-				<textarea class="editor" name="description" rows="29" cols="130"
+				<textarea class="editor" name="detail" rows="29" cols="130"
 					upLinkUrl="upload.php" upLinkExt="zip,rar,txt" 
 					upImgUrl="upload.php" upImgExt="jpg,jpeg,gif,png" 
 					upFlashUrl="upload.php" upFlashExt="swf"
@@ -191,8 +191,6 @@
 				</div>
 			</div>
 			<!-- 商品图片 end -->
-
-			<input type="hidden" name="act" value="add"  />  <!-- 用来区分是添加还是编辑 -->
 		</div>
 		<div class="formBar">
 			<ul>
