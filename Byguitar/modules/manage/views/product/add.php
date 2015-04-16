@@ -151,7 +151,7 @@
 				</div>
 				<div class="divider"></div>
 
-				<div class="unit">
+				<div style="border:1px solid #ccc;display:block;height:80px;">
 					<label>多库存sku可选列表：</label>
 					<select name="attr_id" id="attr_id">
 						<option value="0">请选择</option>
@@ -162,8 +162,7 @@
 						<?php endif; ?>
 					</select>
 					<p id="attr_content"></p>
-					<!-- <div style="border:1px solid green;height:30px;width:600px;" id="attr_content"></div> -->
-					
+					<p>此处的属性只能改变选择其中的一项当你切换的时候就会清除所有的sku信息。只要不提交就不会保存到数据库中</p>
 				</div>
 
 				<div class="divider"></div>
@@ -196,8 +195,14 @@ $(document).ready(function(){
 		changeLoadProductAttrs();
 	})
 
+	//商品属性列表删除操作绑定时间
+	$('.del_attr').live('click',function(){
+		$(this).parent().remove();
+	})
+
 })
 
+//动态加载
 function changeLoadProductAttrs(){
 	$.ajax({  
 	    url:'manage/product/getProductAttrs',
@@ -209,19 +214,32 @@ function changeLoadProductAttrs(){
 	    	if(data){
 	    		var htmlStr = '';
 	    		$.each(data,function(i,info){
-	    			htmlStr += '<span>'+info.attr_name+'</span>'
-	    			           +'<input type="hidden" name="attr_list[]" value="'+info.id+'" />'
-	    			           +'<input type="text" name="attr_stock[]" value="" />';
+	    			htmlStr += '<div id="att_id_'+info.id+'" class="attr_div"><span>'+info.attr_name+'</span>'
+	    			           +'<input type="hidden" name="attr_list['+info.id+']" value="'+info.id+'" />'
+	    			           +'<input type="text" name="attr_stock['+info.id+']" size="10"/>'
+	    			           +'<span class="del_attr">删除</span>'
+	    			           +'</div>';
 	    		});
 	    		$('#attr_content').html(htmlStr);
 	    	} else {
 	    		alert('数据为空或者网络错误！')
 	    	}
 	    },  
-	    error : function() {    
-	        
-	    }  
+	    error : function() {}  
 	});
 }
 </script>
+
+<style>
+.attr_div {
+	/*border:1px solid green;*/
+	float:left;
+	margin:0px 5px;
+}
+#attr_content {
+	/*border:1px solid blue;*/
+	width:700px;
+}
+
+</style>
 
