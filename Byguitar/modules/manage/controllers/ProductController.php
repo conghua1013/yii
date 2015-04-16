@@ -177,11 +177,34 @@ class ProductController extends ManageController {
 
     //保存商品的属性信息
     protected function saveProductAttr($productId){
+        if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
+            $res = ProductAttr::model()->deleteByAttributes(array('product_id'=>$_REQUEST['id']));
+            if(empty($res)){ 
+                throw new exception('商品属性信息删除失败！');
+            }
+        }
 
+        foreach($attr_list as $key => $row){
+            $model = new ProductAttr();
+            $message = array();
+            $message['product_id']      = $productId;           //商品id
+            $message['attr_group_id']   = $_REQUEST['attr_id']; //属性的组id
+            $message['attr_id']         = $key;                 //属性id
+            $message['num']             = $attr_stock[$key];    //个数
+            $message['add_time']        = time();               //添加时间
+            $flag = $model->save();
+            if(empty($flag)){
+                $error = '商品属性信息修改失败！';
+                throw new exception($error);
+            }
+        }
+        return true;
     }
 
     //保存商品的库存信息
     protected function saveProductStock($productId){
+
+        
         
     }
 
