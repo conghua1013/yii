@@ -3,51 +3,40 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
+	<meta name="keywords" content="layouts" />
+	<meta name="description" content="Yii中的layouts使用，header,footer的使用方式。" />
+	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
 	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->hostInfo; ?>/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->hostInfo; ?>/css/print.css" media="print" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->hostInfo; ?>/css/main.css" />
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+	<link rel="stylesheet" type="text/css" href="/css/web/common.css" />
+
+	<!-- blueprint js framework -->
+	<link rel="stylesheet" type="text/css" href="/js/web/common.js"/>
+
 </head>
 
 <body>
-
+<!-- page start -->
 <div class="container" id="page">
+	
+	<!-- 页面的头部 start -->
+	<?php $this->beginContent('/public/header'); ?> <?php $this->endContent(); ?>
+	<!-- 页面的头部 start -->
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
 
-	<div id="mainmenu">
-		<?php 
-		// $this->widget('zii.widgets.CMenu',array(
-		// 	'items'=>array(
-		// 		array('label'=>'Home', 'url'=>array('post/index')),
-		// 		array('label'=>'About', 'url'=>array('site/page', 'view'=>'about')),
-		// 		array('label'=>'Contact', 'url'=>array('site/contact')),
-		// 		array('label'=>'Login', 'url'=>array('site/login'), 'visible'=>Yii::app()->user->isGuest),
-		// 		array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-		// 	),
-		// )); 
-		?>
-	</div><!-- mainmenu -->
+	<!-- 页面的中间内容 start -->
+	<div id="main_content">
+		<?php echo $content; ?> 
+	</div>
+	<!-- 页面的中间内容 end -->
 
-	<?php 
-		// $this->widget('zii.widgets.CBreadcrumbs', array(
-		// 	'links'=>$this->breadcrumbs,
-		// )); 
-	?><!-- breadcrumbs -->
+	
+	<!-- 页面的底部 start -->
+	<?php $this->beginContent('/public/footer'); ?> <?php $this->endContent(); ?>
+	<!-- 页面的底部 end -->
 
-	<?php echo $content; ?>
-
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?> -- from index
-	</div><!-- footer -->
-
-</div><!-- page -->
+</div>
+<!-- page end -->
 
 </body>
 </html>
