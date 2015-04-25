@@ -1,4 +1,4 @@
-<div class="content main clear" id="reg_pop" style="display:block;border:1px solid #ccc;">
+<div class="content main clear">
 	<div class="pop_x"></div>
 	<div class="pop-left">
 		<a href="/sales">
@@ -16,7 +16,7 @@
 		<h2>加入旁白</h2> 
 			<div class="item">
 				<label class="label-1">E-mail</label>
-				<input class="fl input sinput umail" autocomplete="off" type="text" name="email" id="ulogmail">
+				<input class="fl input sinput umail" autocomplete="off" type="text" name="username" id="username">
 				<span class="oked_txt">&nbsp;</span>                    
 			</div>
 			<div class="item">

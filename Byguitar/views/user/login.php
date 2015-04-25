@@ -1,20 +1,21 @@
-<div class="content main clear" id="login_pop" style="display: block;">
+<div class="content main clear">
 	<div class="pop_x"></div>
 	<div class="pop-left">
 		<a href="/sales"><img src="/images/public/web/logo-pop.png" width="130" height="53" alt="PangBai Logo"></a>
 		<p>用设计打动生活</p>
 		<div class="toreg-p clear">
-		<span class="fl">&gt;还没有旁白帐号？</span>
+		<span class="fl">还没有旁白帐号？</span>
 		<a class="fl btns toreg-btn" href="">立即注册</a>
 		</div>
 	</div>
 
 	<div class="pop-right">  
 		<form id="loginform">
-		<h2>登录旁白</h2> 
+			<h2>登录旁白</h2>
+
 			<div class="item">
 				<label class="label-1">E-mail</label>
-				<input class="fl input sinput umail" autocomplete="off" type="text" name="email" id="ulogmail">
+				<input class="fl input sinput umail" autocomplete="off" type="text" name="username" id="username">
 				<span></span>                    
 			</div>
 			<div class="item">
