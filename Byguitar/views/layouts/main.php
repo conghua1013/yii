@@ -25,9 +25,7 @@
 
 
 	<!-- 页面的中间内容 start -->
-	<div id="main_content">
-		<?php echo $content; ?> 
-	</div>
+	<?php echo $content; ?> 
 	<!-- 页面的中间内容 end -->
 
 	
