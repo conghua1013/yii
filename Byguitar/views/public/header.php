@@ -10,7 +10,9 @@
 			<li><a class="nav-a" href="#">邀请好友</a></li>
 		</ul>
 		<div class="menu">欢迎来旁白！ 
-			<a class="black block" title="" href="#">登录</a><span>|</span><a class="black block" title="" href="#">注册</a>
+			<a class="black block" title="" href="/user/login">登录</a>
+			<span>|</span>
+			<a class="black block" title="" href="/user/register">注册</a>
 		</div>
 	</div>
 </div>

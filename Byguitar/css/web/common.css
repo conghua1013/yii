@@ -484,12 +484,13 @@ a.share:hover { background-position:0 -24px;}
 /*pop层通用css*/
 
 .pop {
-	width:665px;
-	height:318px;
+	/*width:665px;
+	position:absolute;
+	height:318px;*/
 	padding-bottom:28px;
 	display:none;
 	background-color:#f6f6f6;
-	position:absolute;
+	
 	z-index:999999;	
 }
 
