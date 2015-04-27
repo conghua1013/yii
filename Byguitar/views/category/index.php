@@ -44,69 +44,30 @@
 					<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
 					</div>
 				</div>
-		</div>
-		<div class="pinbox clear">
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		</div>
-		<div class="pinbox clear">
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		</div>
-		<div class="pinbox clear">
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		<div class="fl pin setpin">
-		<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
-		<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
-		<div class="pin-price clear"> <span class="fl gprice">￥60</span>
-		<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
-		</div>
-		</div>
-		</div>
+			</div>
+			<div class="pinbox clear">
+				<div class="fl pin setpin">
+					<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
+					<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
+					<div class="pin-price clear"> <span class="fl gprice">￥60</span>
+					<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
+					</div>
+				</div>
+				<div class="fl pin setpin">
+					<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
+					<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
+					<div class="pin-price clear"> <span class="fl gprice">￥60</span>
+					<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
+					</div>
+				</div>
+				<div class="fl pin setpin">
+					<div class="pin-img"><a href="" target="_blank"><img src="images/public/web/pin-2.jpg" width="300" height="300"></a></div>
+					<div class="pin-name"> <a class="black" href="" target="_blank">陶璟彩色挂钟（蓝）</a> </div>
+					<div class="pin-price clear"> <span class="fl gprice">￥60</span>
+					<div class="fr"> <span class="fl like like-on"></span> <span class="fl glike-num">25</span></div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
