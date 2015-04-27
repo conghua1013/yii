@@ -6,7 +6,7 @@
 // Any writable CConsoleApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'CMS Console',
+	'name'=>'Byguitar Console',
     // application components
     'components'=>array(
         //Main DB connection
