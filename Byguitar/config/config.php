@@ -59,7 +59,7 @@ return array(
 		),
 		'shop' => array(
 			'class'=> 'CDbConnection',
-			'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=byguitar_shop',
+			'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=byguitar_shop_yii',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'root',
