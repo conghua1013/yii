@@ -48,7 +48,7 @@
 		<ul class="toolBar">
 			<li class=""><a target="navTab" href="/manage/indexModule/add" class="add"><span>新增</span></a></li>
 			<li class="line">line</li>
-			<li><a class="delete" href="/manage/indexModule/delete/id/{sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
+			<li><a class="delete" href="/manage/indexModule/del/id/{sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li class="line">line</li>
 			<li><a class="edit" href="/manage/indexModule/edit/id/{sid_user}" target="navTab"><span>修改</span></a></li>
 		</ul>
