@@ -129,4 +129,14 @@ class CouponController extends ManageController {
         $this->ajaxDwzReturn($res);
     }
 
+    public function actionIndex(){
+        $list = Coupon::model()->getCouponListPage();
+        $viewData = array();
+        $viewData['list'] = $list['list'];
+        $viewData['count'] = $list['count'];
+        $viewData['pageNum'] = $list['pageNum'];
+        $viewData['request'] = $_REQUEST;
+        $this->render('index', $viewData);
+    }
+
 }
