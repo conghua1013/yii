@@ -20,6 +20,14 @@ class Coupon extends CActiveRecord
         return 'bg_coupon';
     }
 
+    //BELONGS_TO  MANY_MANY  HAS_ONE  MANY_MANY
+    public function relations()
+    {
+        return array(
+            'type' => array(self::BELONGS_TO, 'CouponType', 'coupon_type_id','select'=>'coupon_name,coupon_type'),
+        );
+    }
+
     //获取菜单列表
     public function getCouponListPage(){
         $pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
@@ -33,6 +41,7 @@ class Coupon extends CActiveRecord
 
         $count = self::model()->count($criteria);
         $list = self::model()->findAll($criteria);
+        
         return array(
             'count'=>$count,
             'list'=>$list,

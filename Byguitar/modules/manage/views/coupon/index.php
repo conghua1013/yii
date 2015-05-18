@@ -1,7 +1,7 @@
 <form id="pagerForm" method="post" action="/manage/coupon/index">
     <input type="hidden" name="status" value="${param.status}">
     <input type="hidden" name="keywords" value="${param.keywords}" />
-    <input type="hidden" name="pageNum" value="{$pageNum}" />
+    <input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
     <input type="hidden" name="numPerPage" value="{$numPerPage}" />
     <input type="hidden" name="orderField" value="${param.orderField}" />
 </form>
@@ -54,8 +54,8 @@
             <?php foreach($list as $row): ?>
                 <tr target="sid_user" rel="<?php echo $row->id; ?>">
                     <td><?php echo $row->id; ?></td>
-                    <td><?php echo $row->coupon_name; ?></td>
-                    <td><?php echo $row->coupon_type; ?></td>
+                    <td><?php echo $row->type->coupon_name; ?></td>
+                    <td><?php echo $row->type->coupon_type; ?></td>
                     <td><?php echo $row->coupon_sn; ?></td>
                     <td><?php echo $row->coupon_amount; ?></td>
                     <td><?php echo $row->satisfied_amount; ?></td>
@@ -78,7 +78,7 @@
             <span>条，共<?php echo $count; ?>条</span>
         </div>
 
-        <div class="pagination" targetType="navTab" totalCount="{$totalCount}" numPerPage="{$numPerPage}" pageNumShown="10" currentPage="{$pageNum}"></div>
+        <div class="pagination" targetType="navTab" totalCount="<?php echo $count; ?>" numPerPage="20" pageNumShown="10" currentPage="<?php echo $pageNum; ?>"></div>
 
     </div>
 </div>
