@@ -7,6 +7,10 @@ class IndexController extends CController
 		$this->render('index');
 	}
 
+	public function actionError(){
+		$this->render('error');
+	}
+
 	public function actionTest()
 	{
 		$model = User::model();
