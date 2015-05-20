@@ -11,8 +11,10 @@ class ProductController extends ManageController {
 		$viewData['list']         = $list['list'];
 		$viewData['count']        = $list['count'];
 		$viewData['pageNum']      = $list['pageNum'];
+        $viewData['numPerPage']   = $list['numPerPage'];
         $viewData['categorys']    = $categorys;
         $viewData['brands']       = $brands;
+        $viewData['request']       = $_REQUEST;
 		$this->render('index', $viewData);
     }
     

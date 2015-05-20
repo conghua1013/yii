@@ -1,8 +1,8 @@
 <form id="pagerForm" method="post" action="manage/product/index">
 	<input type="hidden" name="status" value="${param.status}">
-	<input type="hidden" name="keywords" value="${param.keywords}" />
+	<input type="hidden" name="product_name" value="<?php echo isset($request['product_name']) ? $request['product_name'] : ''; ?>" />
 	<input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
-	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
+	<input type="hidden" name="numPerPage" value="<?php echo $numPerPage; ?>" />
 	<input type="hidden" name="orderField" value="${param.orderField}" />
 </form>
 
@@ -13,20 +13,7 @@
 		<table class="searchContent">
 			<tr>
 				<td>
-					我的客户：<input type="text" name="keyword" />
-				</td>
-				<td>
-					<select class="combox" name="province">
-						<option value="">所有省市</option>
-						<option value="北京">北京</option>
-						<option value="上海">上海</option>
-						<option value="天津">天津</option>
-						<option value="重庆">重庆</option>
-						<option value="广东">广东</option>
-					</select>
-				</td>
-				<td>
-					建档日期：<input type="text" class="date" readonly="true" />
+					商品名称：<input type="text" name="product_name" value="<?php echo isset($request['product_name']) ? $request['product_name'] : ''; ?>"/>
 				</td>
 			</tr>
 		</table>
@@ -48,7 +35,7 @@
 			<li class="line">line</li>
 			<li><a class="icon" href="manage/product/info?id={sid_user}" target="navTab" title="查看详情"><span>查看详情</span></a></li>
 			<li class="line">line</li>
-			<li><a class="icon" href="demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li>
+			<!-- <li><a class="icon" href="demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li> -->
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="138">

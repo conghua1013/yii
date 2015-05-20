@@ -39,10 +39,14 @@ class Product extends CActiveRecord
 	//商品页面的分页列表数据整理
 	public function getProductList() {
 		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
+		$numPerPage = empty($_REQUEST['numPerPage']) ? 20 : $_REQUEST['numPerPage'];
 		$criteria = new CDbCriteria(); 
         $criteria->order = 'id DESC';
         $criteria->offset = ($pageNum-1)*20;
         $criteria->limit = 20;
+        if(isset($_REQUEST['product_name']) && !empty($_REQUEST['product_name'])){
+        	$criteria->compare('product_name',$_REQUEST['product_name'],true);//支持模糊查找
+        }
 
         $count = self::model()->count($criteria); 
         $list = self::model()->findAll($criteria); 
@@ -50,6 +54,7 @@ class Product extends CActiveRecord
         	'count'=>$count,
         	'list'=>$list,
         	'pageNum'=>$pageNum,
+        	'numPerPage'=>$numPerPage,
         	);
 	}
 
