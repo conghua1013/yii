@@ -249,9 +249,6 @@ class ProductController extends ManageController {
     */
     protected function saveProductImage($productId){
         //图片处理here
-
-
-
         $model = new ProductImage();
         $model->product_id  = $productId;
         $model->img         = '';
@@ -261,6 +258,13 @@ class ProductController extends ManageController {
             throw new exception('添加商品图片失败！');
         }
         return true;
+    }
+
+    public function actionInfo(){
+        $info = Product::model()->findByPk($_REQUEST['id']);
+        $viewData = array();
+        $viewData['info']         = $info;
+        $this->render('info', $viewData);
     }
 
 

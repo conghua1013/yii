@@ -13,7 +13,7 @@ class Order extends CActiveRecord
 
 	//选择数据库
 	public function getDbConnection() {       
-          return Yii::app()->shop;  
+        return Yii::app()->shop;  
     }   
 	
 	//单例模式
@@ -43,6 +43,12 @@ class Order extends CActiveRecord
         	'list'=>$list,
         	'pageNum'=>$pageNum,
         	);
+	}
+
+	//获取订单详情
+	public function getOrderInfo($oId){
+		$info = self::model()->findByPk($oId);
+		return $info;
 	}
 
 }

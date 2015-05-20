@@ -46,6 +46,8 @@
 			<li><a class="delete" href="manage/product/del?id={sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li><a class="edit" href="manage/product/edit?id={sid_user}" target="navTab" title="商品修改"><span>修改</span></a></li>
 			<li class="line">line</li>
+			<li><a class="icon" href="manage/product/info?id={sid_user}" target="navTab" title="查看详情"><span>查看详情</span></a></li>
+			<li class="line">line</li>
 			<li><a class="icon" href="demo/common/dwz-team.xls" target="dwzExport" targetType="navTab" title="实要导出这些记录吗?"><span>导出EXCEL</span></a></li>
 		</ul>
 	</div>
@@ -59,7 +61,7 @@
 				<th width="30">品牌</th>
 				<th width="30">售价</th>
 				<th width="30">市场价</th>
-				<th width="10" align="center">状态</th>
+				<th width="20" align="center">状态</th>
 				<th width="80">添加时间</th>
 			</tr>
 		</thead>
@@ -71,12 +73,12 @@
 				<td><?php echo $row->id; ?></td>
 				<td><?php echo $row->product_name; ?></td>
 				<td><?php echo $row->subhead; ?></td>
-				<td><?php echo $row->cat_id; ?></td>
-				<td><?php echo $row->brand_id; ?></td>
+				<td><?php echo $row->category->cat_name; ?></td>
+				<td><?php echo $row->brand->brand_name; ?></td>
 				<td><?php echo $row->sell_price; ?></td>
 				<td><?php echo $row->market_price; ?></td>
 				<td><?php echo $row->status; ?></td>
-				<td><?php echo $row->add_time; ?></td>
+				<td><?php echo $row->add_time ? date('Y-m-d H:i:s',$row->add_time) : ''; ?></td>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>

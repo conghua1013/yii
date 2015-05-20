@@ -68,7 +68,8 @@ return array(
 		),
 		
 		'errorHandler'=>array(
-			'errorAction'=>'index/error',
+			//'errorAction'=>'index/error',
+			'errorAction'=>'site/error',
 		),
 
 		'urlManager'=>array(

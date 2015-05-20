@@ -27,15 +27,13 @@
     </form>
 </div>
 <div class="pageContent">
-    <!-- <div class="panelBar">
+    <div class="panelBar">
         <ul class="toolBar">
-            <li class=""><a mask="true" target="dialog" href="manage/order/add" class="add"  width="660" height="430"><span>优惠券添加</span></a></li>
+            <li><a class="icon" href="manage/order/info?id={sid_user}" target="navTab" title="查看订单"><span>查看订单</span></a></li>
             <li class="line">line</li>
-            <li><a class="delete" href="manage/order/del?id={sid_user}" target="ajaxTodo" title="确定要删除优惠券吗?"><span>删除</span></a></li>
-            <li class="line">line</li>
-            <li class=""><a mask="true" target="dialog" href="manage/order/edit?id={sid_user}" class="add"  width="660" height="430"><span>优惠券修改</span></a></li>
+            <li><a class="add" href="manage/order/info?id={sid_user}" target="navTab" title="查看订单"><span>查看订单</span></a></li>
         </ul>
-    </div> -->
+    </div>
     <table class="table" width="100%" layoutH="138">
         <thead>
         <tr>

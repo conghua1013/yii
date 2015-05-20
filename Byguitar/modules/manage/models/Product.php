@@ -28,6 +28,14 @@ class Product extends CActiveRecord
 		return 'bg_product';
 	}
 
+	public function relations()
+    {
+        return array(
+            'category' => array(self::BELONGS_TO, 'Category', 'cat_id','select'=>'cat_name'),
+            'brand' => array(self::BELONGS_TO, 'Brand', 'brand_id','select'=>'brand_name'),
+        );
+    }
+
 	//商品页面的分页列表数据整理
 	public function getProductList() {
 		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
