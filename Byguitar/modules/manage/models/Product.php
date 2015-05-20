@@ -92,4 +92,12 @@ class Product extends CActiveRecord
 		return $data;
 	}
 
+	public function getProductStatus($status,$type = ""){
+		$a = array(0=>'新添加',1=>'初审',2=>'上架',3=>'下架');
+		if(empty($type)){
+			return isset($a[$status]) ? $a[$status] : '';
+		}
+		return $a;
+	}
+
 }

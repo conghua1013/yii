@@ -64,7 +64,7 @@
 				<td><?php echo $row->brand->brand_name; ?></td>
 				<td><?php echo $row->sell_price; ?></td>
 				<td><?php echo $row->market_price; ?></td>
-				<td><?php echo $row->status; ?></td>
+				<td><?php echo Product::model()->getProductStatus($row->status); ?></td>
 				<td><?php echo $row->add_time ? date('Y-m-d H:i:s',$row->add_time) : ''; ?></td>
 			</tr>
 			<?php endforeach; ?>
