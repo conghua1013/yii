@@ -2,7 +2,8 @@
 	<input type="hidden" name="brand_name" value="<?php isset($request['brand_name']) ? $request['brand_name'] : ''; ?>" />
 	<input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
 	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
-	<input type="hidden" name="orderField" value="${param.orderField}" />
+	<input type="hidden" name="orderField" value="${param.orderField }" />
+    <input type="hidden" name="orderDirection" value="${param.orderDirection }" />
 </form>
 
 
@@ -39,7 +40,7 @@
 	<table class="table" width="100%" layoutH="138">
 		<thead>
 			<tr>
-				<th width="30"></th>
+				<th width="30" orderField="id" orderDirection="asc" class="asc">ID</th>
 				<th width="120">品牌名称</th>
 				<th width="120">品牌英文名</th>
 				<th width="80">联系地址</th>

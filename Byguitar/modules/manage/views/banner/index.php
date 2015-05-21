@@ -2,7 +2,8 @@
     <input type="hidden" name="brand_name" value="<?php isset($request['brand_name']) ? $request['brand_name'] : ''; ?>" />
     <input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
     <input type="hidden" name="numPerPage" value="${model.numPerPage}" />
-    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="orderField" value="${param.orderField }" />
+    <input type="hidden" name="orderDirection" value="${param.orderDirection }" />
 </form>
 
 <div class="pageContent">

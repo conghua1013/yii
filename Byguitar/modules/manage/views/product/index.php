@@ -3,7 +3,7 @@
 	<input type="hidden" name="product_name" value="<?php echo isset($request['product_name']) ? $request['product_name'] : ''; ?>" />
 	<input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
 	<input type="hidden" name="numPerPage" value="<?php echo $numPerPage; ?>" />
-	<input type="hidden" name="orderField" value="${param.orderField}" />
+	<input type="hidden" name="orderField" value="id" />
 </form>
 
 
