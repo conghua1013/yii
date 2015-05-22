@@ -11,12 +11,12 @@
 
             <div class="unit">
                 <label>地区编号：</label>
-                <input type="text" class="required" name="area_code" value="<?php echo$info->area_code;?>"/>
+                <input type="text" class="required" name="area_code" value="<?php echo $info->area_code;?>"/>
             </div>
 
             <div class="unit">
                 <label>父级编号：</label>
-                <input type="text" class="required" name="parent_id" value="<?php echo$info->parent_id;?>"/>
+                <input type="text" class="required" name="parent_id" value="<?php echo $info->parent_id;?>"/>
             </div>
 
             <div class="unit">

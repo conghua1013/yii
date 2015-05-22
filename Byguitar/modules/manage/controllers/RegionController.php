@@ -27,13 +27,13 @@ class RegionController extends ManageController {
 				}
 				$level = $info['level']+1;
 			}
-			$payment = new Region();
-			$payment->region_name 	= $_POST['region_name'];
-			$payment->area_code 	= $_POST['area_code'];
-			$payment->is_show 		= $_POST['is_show'];
-			$payment->level 		= $level;
-			$payment->parent_id 	= $_POST['parent_id'];
-			$flag = $payment->save();
+			$m = new Region();
+			$m->region_name = $_POST['region_name'];
+			$m->area_code 	= $_POST['area_code'];
+			$m->is_show 	= $_POST['is_show'];
+			$m->level 		= $level;
+			$m->parent_id 	= $_POST['parent_id'];
+			$flag = $m->save();
 			if($flag){
 				$message = '添加成功!';
 				$status = 200;
