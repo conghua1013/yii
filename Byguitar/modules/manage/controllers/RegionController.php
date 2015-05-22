@@ -71,7 +71,6 @@ class RegionController extends ManageController {
 				}
 				$level = $info['level']+1;
 			}
-			$m = new Region();
 			$m->region_name = $_POST['region_name'];
 			$m->area_code 	= $_POST['area_code'];
 			$m->is_show 	= $_POST['is_show'];

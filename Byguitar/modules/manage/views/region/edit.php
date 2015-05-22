@@ -6,17 +6,17 @@
 
             <div class="unit">
                 <label>地区名称：</label>
-                <input type="text" class="required" name="region_name" value="<?php $info->region_name;?>"/>
+                <input type="text" class="required" name="region_name" value="<?php echo $info->region_name;?>"/>
             </div>
 
             <div class="unit">
                 <label>地区编号：</label>
-                <input type="text" class="required" name="area_code" value="<?php $info->area_code;?>"/>
+                <input type="text" class="required" name="area_code" value="<?php echo$info->area_code;?>"/>
             </div>
 
             <div class="unit">
                 <label>父级编号：</label>
-                <input type="text" class="required" name="parent_id" value="<?php $info->parent_id;?>"/>
+                <input type="text" class="required" name="parent_id" value="<?php echo$info->parent_id;?>"/>
             </div>
 
             <div class="unit">
@@ -30,7 +30,7 @@
                 <input type="text" name="sort" value="0"/>
             </div>
 
-            <input type="hidden" name="id" value="<?php $info->id;?>" />
+            <input type="hidden" name="id" value="<?php echo $info->id;?>" />
         </div>
 
         <div class="formBar">

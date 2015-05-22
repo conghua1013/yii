@@ -29,7 +29,7 @@ class Region extends CActiveRecord
 	}
 
 	//获取菜单列表
-	public function getPaymentListPage(){
+	public function getRegionListPage(){
 		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
 		$criteria = new CDbCriteria(); 
         $criteria->order = 'id DESC';
