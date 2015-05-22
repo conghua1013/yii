@@ -34,7 +34,7 @@
                     <td><?php echo $row->username; ?></td>
                     <td><?php echo $row->email; ?></td>
                     <td><?php echo $row->mobile; ?></td>
-                    <td><?php echo $row->regtime; ?></td>
+                    <td><?php echo $row->regtime ? date('Y-m-d H:i:s',$row->regtime) : '-'; ?></td>
                 </tr>
             <?php endforeach; ?>
             <?php endif; ?>
