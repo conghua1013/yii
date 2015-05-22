@@ -6,7 +6,6 @@
 	<input type="hidden" name="orderField" value="id" />
 </form>
 
-
 <div class="pageHeader">
 	<form onsubmit="return navTabSearch(this);" action="manage/product/index" method="post">
 	<div class="searchBar">
@@ -60,8 +59,8 @@
 				<td><?php echo $row->id; ?></td>
 				<td><?php echo $row->product_name; ?></td>
 				<td><?php echo $row->subhead; ?></td>
-				<td><?php echo $row->category->cat_name; ?></td>
-				<td><?php echo $row->brand->brand_name; ?></td>
+				<td><?php echo !empty($row->category) ? $row->category->cat_name : ''; ?></td>
+				<td><?php echo !empty($row->brand) ?  $row->brand->brand_name : ''; ?></td>
 				<td><?php echo $row->sell_price; ?></td>
 				<td><?php echo $row->market_price; ?></td>
 				<td><?php echo Product::model()->getProductStatus($row->status); ?></td>
@@ -72,6 +71,7 @@
 
 		</tbody>
 	</table>
+
 	<div class="panelBar">
 		<div class="pages">
 			<span>显示</span>
@@ -83,9 +83,8 @@
 			</select>
 			<span>条，共<?php echo $count; ?>条</span>
 		</div>
-		
 		<div class="pagination" targetType="navTab" totalCount="<?php echo $count; ?>" numPerPage="20" pageNumShown="10" currentPage="<?php echo $pageNum; ?>"></div>
-
 	</div>
+	
 </div>
 
