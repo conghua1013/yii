@@ -84,5 +84,28 @@ class PaymentController extends ManageController {
 		$this->ajaxDwzReturn($res);
 	}
 
+	public function actionDel(){
+		try{
+			if(empty($_REQUEST['id'])){
+				throw new Exception("数据错误，id不能为空！", 1);
+			}
+			$flag = Payment::model()->deleteByPk($_REQUEST['id']);
+			if($flag){
+				$message = '删除成功!';
+				$status = 200;
+			}else{
+				$message = '删除失败!';
+				$status = 300;
+			}
+		}catch(Exception $e){
+			$message = $e->getMessage();
+			$status = 300;
+		}
+
+		$res = array();
+		$res['statusCode'] 		= $status;
+		$res['message'] 		= $message;
+		$this->ajaxDwzReturn($res);
+	}
 
 }
