@@ -31,17 +31,22 @@ class User extends CActiveRecord
 	//获取菜单列表
 	public function getUserListPage(){
 		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
-		$criteria = new CDbCriteria(); 
-        $criteria->order = 'id DESC';
-        $criteria->offset = ($pageNum-1) * 20;
-        $criteria->limit = 20;
+        $numPerPage = empty($_REQUEST['numPerPage']) ? 20 : $_REQUEST['numPerPage'];
+        $sortField = isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : 'id';
+        $sortFlag = isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : 'desc';
+		$criteria = new CDbCriteria();
+        $criteria->order = $sortField.' '.$sortFlag;
+        $criteria->offset = ($pageNum-1) * $numPerPage;
+        $criteria->limit = $numPerPage;
+        if(isset($_REQUEST['username']) && !empty($_REQUEST['username'])){
+        	$criteria->compare('username',$_REQUEST['username'],true);//支持模糊查找
+        }
 
         $count = self::model()->count($criteria); 
         $list = self::model()->findAll($criteria); 
         return array(
         	'count'=>$count,
         	'list'=>$list,
-        	'pageNum'=>$pageNum,
         	);
 	}
 

@@ -1,29 +1,45 @@
 <form id="pagerForm" method="post" action="/manage/user/index">
-    <input type="hidden" name="status" value="${param.status}">
-    <input type="hidden" name="keywords" value="${param.keywords}" />
-    <input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
-    <input type="hidden" name="numPerPage" value="{$numPerPage}" />
-    <input type="hidden" name="orderField" value="${param.orderField}" />
+    <input type="hidden" name="username" value="<?php echo isset($request['username']) ? $request['username'] : ''; ?>" />
+    <input type="hidden" name="pageNum" value="<?php echo isset($request['pageNum']) ? $request['pageNum'] : 1 ; ?>" />
+    <input type="hidden" name="numPerPage" value="<?php echo isset($request['numPerPage']) ? $request['numPerPage'] : 20 ; ?>" />
+    <input type="hidden" name="orderField" value="<?php echo isset($request['orderField']) ? $request['orderField'] : 'id'; ?>" />
+    <input type="hidden" name="orderDirection" value="<?php echo isset($request['orderDirection']) ? $request['orderDirection'] : 'desc'; ?>" />
 </form>
 
-<div class="pageContent">
-    <div class="panelBar">
-        <!-- <ul class="toolBar">
-            <li><a mask="true" target="dialog" href="manage/user/add" class="add"  width="660" height="430" title="快递添加"><span>添加</span></a></li>
-            <li class="line">line</li>
-            <li><a class="delete" href="manage/user/del?id={sid_user}" target="ajaxTodo" title="确定要快递吗?"><span>删除</span></a></li>
-            <li class="line">line</li>
-            <li><a mask="true" target="dialog" href="manage/user/edit?id={sid_user}" class="add"  width="660" height="430" title="快递修改"><span>修改</span></a></li>
-        </ul> -->
+<div class="pageHeader">
+    <form onsubmit="return navTabSearch(this);" action="/manage/user/index" method="post">
+    <div class="searchBar">
+        <table class="searchContent">
+            <tr>
+                <td>
+                    用户名：<input type="text" name="username" value="<?php echo isset($request['username']) ? $request['username'] : ''; ?>" />
+                </td>
+            </tr>
+        </table>
+        <div class="subBar">
+            <ul>
+                <li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
+                <li><a class="button" href="/manage/User" target="dialog" mask="true" title="查询框"><span>高级检索</span></a></li>
+            </ul>
+        </div>
     </div>
-    <table class="table" width="100%" layoutH="75">
+    </form>
+</div>
+
+<div class="pageContent">
+    <table class="table" width="100%" layoutH="110">
         <thead>
         <tr>
-            <th width="30">ID</th>
+            <th width="30" orderField="id"
+                <?php if(isset($request['orderDirection'])){echo 'orderDirection="'.$request['orderDirection'].'"';} ?>
+                <?php if(isset($request['orderDirection'])){echo 'class="'.$request['orderDirection'].'"';} ?>
+                >ID</th>
             <th width="80">用户名</th>
-            <th width="40">email</th>
-            <th width="100">手机号</th>
-            <th width="150">注册时间</th>
+            <th width="100">email</th>
+            <th width="80">手机号</th>
+            <th width="20">状态</th>
+            <th width="100">注册时间</th>
+            <th width="100">最后登录时间</th>
         </tr>
         </thead>
         <tbody>
@@ -34,7 +50,9 @@
                     <td><?php echo $row->username; ?></td>
                     <td><?php echo $row->email; ?></td>
                     <td><?php echo $row->mobile; ?></td>
+                    <td><?php echo $row->islock == 1 ? '启用' : '禁用'; ?></td>
                     <td><?php echo $row->regtime ? date('Y-m-d H:i:s',$row->regtime) : '-'; ?></td>
+                    <td><?php echo $row->lastlogin ? date('Y-m-d H:i:s',$row->lastlogin) : '-'; ?></td>
                 </tr>
             <?php endforeach; ?>
             <?php endif; ?>
@@ -52,7 +70,7 @@
             <span>条，共<?php echo $count; ?>条</span>
         </div>
 
-        <div class="pagination" targetType="navTab" totalCount="<?php echo $count; ?>" numPerPage="20" pageNumShown="10" currentPage="<?php echo $pageNum; ?>"></div>
+        <div class="pagination" targetType="navTab" totalCount="<?php echo $count; ?>" numPerPage="<?php echo isset($request['numPerPage']) ? $request['numPerPage'] : 20 ; ?>" pageNumShown="10" currentPage="<?php echo isset($request['pageNum']) ? $request['pageNum'] : 1 ; ?>"></div>
 
     </div>
 </div>

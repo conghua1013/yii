@@ -40,7 +40,7 @@
 	<table class="table" width="100%" layoutH="138">
 		<thead>
 			<tr>
-				<th width="30" orderField="id" orderDirection="desc" class="desc">ID</th>
+				<th width="30" orderField="id">ID</th>
 				<th width="120">品牌名称</th>
 				<th width="120">品牌英文名</th>
 				<th width="80">联系地址</th>

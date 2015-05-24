@@ -8,7 +8,7 @@ class UserController extends ManageController {
 		$viewData = array();
 		$viewData['list'] = $list['list'];
 		$viewData['count'] = $list['count'];
-		$viewData['pageNum'] = $list['pageNum'];
+		$viewData['request'] = $_REQUEST;
 		$this->render('index', $viewData);
 	}
 
