@@ -48,7 +48,7 @@
 				<th width="150">电话</th>
 				<th width="80" align="center">是否展示</th>
 				<th width="80">排序</th>
-				<th width="80">添加时间</th>
+				<th width="100">添加时间</th>
 			</tr>
 		</thead>
 		<tbody>

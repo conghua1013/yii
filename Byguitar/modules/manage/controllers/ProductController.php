@@ -283,6 +283,17 @@ class ProductController extends ManageController {
      * 商品的属性分类树
      +
      */
+    public function actionAttrlist(){
+        $list = ProductAttributes::model()->getAttrListPage();
+        //$nameList = ProductAttributes::model()->getMenuListForShowName();
+        $viewData = array();
+        $viewData['list'] = $list['list'];
+        $viewData['count'] = $list['count'];
+        $viewData['pageNum'] = $list['pageNum'];
+        //$viewData['names'] = $nameList;
+        $this->render('/productAttr/index', $viewData);
+    }
+
     public function actionProductAttrTree(){
         $tree = ProductAttributes::model()->getProductAttrTree();
         $viewData = array();
@@ -327,10 +338,13 @@ class ProductController extends ManageController {
      */
     public function actionProductAttrEdit(){
         if(empty($_POST)){
-            $select = ProductAttributes::model()->getProductAttrTree();
+            $info = ProductAttributes::model()->findByPk($_REQUEST['id']);
+            $select = ProductAttributes::model()->getSelectAttributes();
+            
             $viewData = array();
+            $viewData['info'] = $info;
             $viewData['select'] = $select;
-            $this->render('/productAttr/edit',$viewData);
+            $this->render('/productAttr/edit',$viewData);exit;
         }
 
         $model =  ProductAttributes::model()->findByPk($_REQUEST['id']);
@@ -359,6 +373,30 @@ class ProductController extends ManageController {
         $list = ProductAttributes::model()->getProductAttrTree();
         $info = isset($list[$attr_group_id]) ? $list[$attr_group_id]['child'] : '';
         exit(json_encode($info));
+    }
+
+    public function actionProductAttrDel(){
+        try{
+            if(empty($_REQUEST['id'])){
+                throw new Exception("数据错误，id不能为空！", 1);
+            }
+            $flag = ProductAttributes::model()->deleteByPk($_REQUEST['id']);
+            if($flag){
+                $message = '删除成功!';
+                $status = 200;
+            }else{
+                $message = '删除失败!';
+                $status = 300;
+            }
+        }catch(Exception $e){
+            $message = $e->getMessage();
+            $status = 300;
+        }
+
+        $res = array();
+        $res['statusCode']      = $status;
+        $res['message']         = $message;
+        $this->ajaxDwzReturn($res);
     }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 商品属性页面 end <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
 }

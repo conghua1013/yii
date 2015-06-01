@@ -6,8 +6,8 @@
                 <select name="parent_id">
                     <option value="0" >顶级分类</option>
                     <?php if($select): ?>
-                        <?php foreach($select as $list): ?>
-                            <option value="<?php echo $list['id']; ?>" <?php if($list['id'] == $info->id){ echo 'selected';} ?> ><?php echo $list['attr_name']; ?></option>
+                        <?php foreach($select as $row): ?>
+                            <option value="<?php echo $row->id; ?>" <?php if($row->id == $info->parent_id){ echo 'selected';} ?> ><?php echo $row->attr_name; ?></option>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </select>

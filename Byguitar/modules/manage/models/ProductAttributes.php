@@ -25,8 +25,39 @@ class ProductAttributes extends CActiveRecord
 	//表名、全名
 	public function tableName()
 	{
-		return 'bg_Product_attributes';
+		return 'bg_product_attributes';
 	}
+
+    public function relations()
+    {
+        return array(
+            'parent' => array(self::BELONGS_TO, 'ProductAttributes', 'parent_id','select'=>'attr_name'),
+        );
+    }
+
+    public function getAttrListPage(){
+        $pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
+        $criteria = new CDbCriteria(); 
+        $criteria->order = 'id DESC';
+        $criteria->offset = ($pageNum-1)*20;
+        $criteria->limit = 20;
+
+        $count = self::model()->count($criteria); 
+        $list = self::model()->findAll($criteria); 
+        return array(
+            'count'=>$count,
+            'list'=>$list,
+            'pageNum'=>$pageNum,
+            );
+    }
+
+
+    public function getSelectAttributes(){
+        $criteria = new CDbCriteria(); 
+        $criteria->compare('parent_id',0,true);
+        $list = self::model()->findAll($criteria);
+        return $list;
+    }
 
 	//商品属性树状结构数据
     public function getProductAttrTree(){
