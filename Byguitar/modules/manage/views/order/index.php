@@ -12,9 +12,8 @@
         <div class="searchBar">
             <table class="searchContent">
                 <tr>
-                    <td>
-                        优惠券名称：<input type="text" name="coupon_name" />
-                    </td>
+                    <td>订单编号：<input type="text" name="order_sn" /></td>
+                    <td>收货人：<input type="text" name="consignee" /></td>
                 </tr>
             </table>
             <div class="subBar">
@@ -29,9 +28,9 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a class="icon" href="manage/order/info?id={sid_user}" target="navTab" title="查看订单"><span>查看订单</span></a></li>
-            <li class="line">line</li>
-            <li><a class="add" href="manage/order/info?id={sid_user}" target="navTab" title="查看订单"><span>查看订单</span></a></li>
+            <li><a class="icon" href="/manage/order/info?id={sid_user}" target="navTab" title="查看订单"><span>查看订单</span></a></li>
+            <!-- <li class="line">line</li>
+            <li><a class="add" href="manage/order/info?id={sid_user}" target="navTab" title="查看订单"><span>查看订单</span></a></li> -->
         </ul>
     </div>
     <table class="table" width="100%" layoutH="138">

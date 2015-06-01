@@ -35,6 +35,12 @@ class Order extends CActiveRecord
         $criteria->order = 'id DESC';
         $criteria->offset = ($pageNum-1)*20;
         $criteria->limit = 20;
+        if(!empty($_REQUEST['order_sn'])){
+            $criteria->compare('order_sn',$_REQUEST['order_sn'],true);
+        }
+        if(!empty($_REQUEST['consignee'])){
+            $criteria->compare('consignee',$_REQUEST['consignee'],true);
+        }
 
         $count = self::model()->count($criteria); 
         $list = self::model()->findAll($criteria); 
