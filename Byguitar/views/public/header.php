@@ -66,7 +66,7 @@
             </div>           
         <else />
         	<div class="fr info">
-                <span class="minfo"><span>欢迎来到彼岸吉他!</span><a class="qing" href="__APP__/public/login">登录</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="brown" href="__APP__/public/reg">注册</a></span>
+                <span class="minfo"><span>欢迎来到彼岸吉他!</span><a class="qing" href="/user/login">登录</a>&nbsp;&nbsp;&nbsp;&nbsp;<a class="brown" href="/user/reg">注册</a></span>
         	</div>
         </present>
         <div class="clear"></div>
