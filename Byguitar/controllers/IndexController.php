@@ -4,7 +4,29 @@ class IndexController extends CController
 {
 
 	public function actionIndex(){
-		$this->render('index');
+
+		// echo "ssss";
+		// exit;
+
+		echo "<pre>";
+		// $config = Yii::app()->params['Rpc_Service'];
+		// print_r($config);
+		$obj = PHPClient::instance('shop')->setClassName('User');
+		$ret_sync = $obj->getInfoByUid(567);
+		print_r($ret_sync);
+
+		$obj = PHPClient::instance('shop')->setClassName('Product');
+		$ret_sync = $obj->TestDb(20);
+		print_r($ret_sync);
+
+		$obj = PHPClient::instance('test')->setClassName('Blog');
+		$ret_sync = $obj->getTitleListByUid(20);
+		print_r($ret_sync);
+
+		//$config = $obj->getRpcClientByName('aa');
+		//print_r($config);
+		exit;
+		//$this->render('index');
 	}
 
 	public function actionError(){
