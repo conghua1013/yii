@@ -33,7 +33,8 @@ return array(
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
-		),
+            //'class' => 'WebUser',
+        ),
 		// 'db'=>array(
 		// 	'connectionString' => 'sqlite:protected/data/blog.db',
 		// 	'tablePrefix' => 'tbl_',
