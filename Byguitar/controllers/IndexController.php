@@ -3,30 +3,51 @@
 class IndexController extends CController
 {
 
-	public function actionIndex(){
+	public function actionIndex() {
+
+        include_once '/www/www/yii/Byguitar/lib/PHPClient/RpcClient.php';
+        include_once '/www/www/yii/Byguitar/lib/PHPClient/Rpc.php';
+
+         echo "<pre>";
+        $config = Yii::app()->params['Rpc_Service'];
+        \PHPClient\Rpc::config($config);
+
+         $obj =  \PHPClient\Rpc::inst('shop')->setClassName('User');
+         $data = $obj->getInfoByUidXX(567);
+        print_r($obj);
+         print_r($data);
+
+        $obj =  \PHPClient\Rpc::inst('test')->setClassName('User');
+        $data = $obj->getEmailXX(57777);
+        print_r($obj);
+        print_r($data);
+         exit;
 
 		// echo "ssss";
 		// exit;
 
-		echo "<pre>";
-		// $config = Yii::app()->params['Rpc_Service'];
-		// print_r($config);
-		$obj = PHPClient::instance('shop')->setClassName('User');
-		$ret_sync = $obj->getInfoByUid(567);
-		print_r($ret_sync);
-
-		$obj = PHPClient::instance('shop')->setClassName('Product');
-		$ret_sync = $obj->TestDb(20);
-		print_r($ret_sync);
-
-		$obj = PHPClient::instance('test')->setClassName('Blog');
-		$ret_sync = $obj->getTitleListByUid(20);
-		print_r($ret_sync);
+		//echo "<pre>";
+//		 $config = Yii::app()->params['Rpc_Service'];
+//		 print_r($config);
+        //Yii::import('application.lib.PHPClient.RpcClient.php');
+//        include_once ROOT_PATH.'/lib/PHPClient/RpcClient.php';
+//		$obj = \PHPClient\RpcClient::instance('shop')->setClassName('User');
+//		$ret_sync = $obj->getInfoByUid(567);
+//		print_r($ret_sync);
+//        exit;
+//
+//		$obj = PHPClient::instance('shop')->setClassName('Product');
+//		$ret_sync = $obj->TestDb(20);
+//		print_r($ret_sync);
+//
+//		$obj = PHPClient::instance('test')->setClassName('Blog');
+//		$ret_sync = $obj->getTitleListByUid(20);
+//		print_r($ret_sync);
 
 		//$config = $obj->getRpcClientByName('aa');
 		//print_r($config);
-		exit;
-		//$this->render('index');
+		//exit;
+		$this->render('index');
 	}
 
 	public function actionError(){
@@ -95,7 +116,7 @@ class IndexController extends CController
 
 	//测试删除
 	public function actionTestDelete(){
-		User::model()->deleteByPk($pk,$condition,$params); 
+		//User::model()->deleteByPk($pk,$condition,$params);
 	}
 
 	//测试查询
