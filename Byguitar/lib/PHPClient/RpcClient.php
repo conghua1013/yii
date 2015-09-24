@@ -168,9 +168,9 @@ class RpcClient
     public function sendData($method, $arguments)
     {
         $other_msg = array();
-        $other_msg['remote_ip'] = $_SERVER['REMOTE_ADDR'];
+        $other_msg['remote_ip'] = $this->getLocalIp();
         $other_msg['user']      = self::$rpcArray['user'];
-        $other_msg['secrect']   = self::$rpcArray['secrect'];
+        $other_msg['password']   = md5(self::$rpcArray['user'].self::$rpcArray['secrect']);
 
         $this->openConnection();
         $bin_data = \PHPClient\JsonProtocol::encode(array(
@@ -184,6 +184,23 @@ class RpcClient
             throw new \Exception('Can not send data');
         }
         return true;
+    }
+
+
+    /**
+     * 获得本机ip
+     */
+    public function getLocalIp()
+    {
+        if (isset($_SERVER['SERVER_ADDR']) && $_SERVER['SERVER_ADDR'] != '127.0.0.1')
+        {
+            $ip = $_SERVER['SERVER_ADDR'];
+        }
+        else
+        {
+            $ip = gethostbyname(trim(`hostname`));
+        }
+        return $ip;
     }
 
     /**
@@ -285,7 +302,7 @@ class JsonProtocol
 
 
 // ==以下调用示例==
-if(PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__))
+if(false && PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__))
 {
     // 服务端列表
     $address_array = array(

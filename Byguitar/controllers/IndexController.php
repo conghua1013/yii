@@ -13,12 +13,12 @@ class IndexController extends CController
         \PHPClient\Rpc::config($config);
 
          $obj =  \PHPClient\Rpc::inst('shop')->setClassName('User');
-         $data = $obj->getInfoByUidXX(567);
+         $data = $obj->getInfoByUid(567);
         print_r($obj);
          print_r($data);
 
         $obj =  \PHPClient\Rpc::inst('test')->setClassName('User');
-        $data = $obj->getEmailXX(57777);
+        $data = $obj->getEmail(57777);
         print_r($obj);
         print_r($data);
          exit;
