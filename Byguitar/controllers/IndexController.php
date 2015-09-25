@@ -2,25 +2,25 @@
 
 class IndexController extends CController
 {
+    public function actionTestRpc(){
+        $aaa = 'nnnn';
+    }
 
 	public function actionIndex() {
 
-        include_once '/www/www/yii/Byguitar/lib/PHPClient/RpcClient.php';
-        include_once '/www/www/yii/Byguitar/lib/PHPClient/Rpc.php';
-
          echo "<pre>";
-        $config = Yii::app()->params['Rpc_Service'];
-        \PHPClient\Rpc::config($config);
+         $config = Yii::app()->params['Rpc_Service'];
+         \PHPClient\Rpc::config($config);
 
          $obj =  \PHPClient\Rpc::inst('shop')->setClassName('User');
          $data = $obj->getInfoByUid(567);
-        print_r($obj);
+         print_r($obj);
          print_r($data);
 
-        $obj =  \PHPClient\Rpc::inst('test')->setClassName('User');
-        $data = $obj->getEmail(57777);
-        print_r($obj);
-        print_r($data);
+         $obj =  \PHPClient\Rpc::inst('test')->setClassName('User');
+         $data = $obj->getEmail(57777);
+         print_r($obj);
+         print_r($data);
          exit;
 
 		// echo "ssss";

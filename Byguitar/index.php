@@ -13,6 +13,10 @@ define('ROOT_PATH',dirname(__FILE__));
 $yii=dirname(__FILE__).'/../framework/yii.php';
 $config=dirname(__FILE__).'/config/config.php';
 
+//自动加载lib库
+require ROOT_PATH.'/lib/Bootstrap/Autoloader.php';
+\Bootstrap\Autoloader::instance()->addRoot(ROOT_PATH.'/lib/')->init();
+
 // remove the following line when in production mode
 // defined('YII_DEBUG') or define('YII_DEBUG',true);
 
