@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="manage/brand/edit" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);" enctype="multipart/form-data">
+	<form method="post" action="/manage/brand/edit" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);" enctype="multipart/form-data">
 		<div class="pageFormContent" layoutH="57">
 			<p>
 				<label>品牌名称：</label>
@@ -58,11 +58,16 @@
 			<div class="divider"></div>
 			<p>
 				<label>关键字（页面title）：</label>
+				<input type="text" name="title" size="30" value="<?php echo $info->title; ?>"/>
+			</p>
+			<div class="divider"></div>
+			<p>
+				<label>关键字（页面keywords）：</label>
 				<input type="text" name="keywords" size="30" value="<?php echo $info->keywords; ?>"/>
 			</p>
 			<div class="divider"></div>
 			<dl class="nowrap">
-				<dt>描述（页面title）：</dt>
+				<dt>描述（页面describtion）：</dt>
 				<dd><textarea cols="45" rows="5" name="describtion"><?php echo $info->describtion; ?></textarea></dd>
 			</dl>
 			<input type="hidden" name="id" value="<?php echo $info->id; ?>" />

@@ -29,11 +29,11 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li class=""><a mask="true" target="dialog" href="manage/coupon/typeadd" class="add"  width="660" height="430"><span>优惠券添加</span></a></li>
+            <li class=""><a mask="true" target="dialog" href="/manage/coupon/typeadd" class="add"  width="660" height="430"><span>优惠券添加</span></a></li>
             <li class="line">line</li>
-            <li><a class="delete" href="manage/coupon/typedel?id={sid_user}" target="ajaxTodo" title="确定要删除优惠券吗?"><span>删除</span></a></li>
+            <li><a class="delete" href="/manage/coupon/typedel?id={sid_user}" target="ajaxTodo" title="确定要删除优惠券吗?"><span>删除</span></a></li>
             <li class="line">line</li>
-            <li class=""><a mask="true" target="dialog" href="manage/coupon/typeedit?id={sid_user}" class="add"  width="660" height="430"><span>优惠券修改</span></a></li>
+            <li class=""><a mask="true" target="dialog" href="/manage/coupon/typeedit?id={sid_user}" class="add"  width="660" height="430"><span>优惠券修改</span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="138">
@@ -47,6 +47,7 @@
             <th width="150">满足金额</th>
             <th width="80">开始时间</th>
             <th width="80">结束时间</th>
+            <th width="80">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -61,6 +62,11 @@
                     <td><?php echo $row->satisfied_amount; ?></td>
                     <td><?php echo $row->start_time > 0 ? date('Y-m-d H:i:s',$row->start_time) : ''; ?></td>
                     <td><?php echo $row->end_time > 0 ? date('Y-m-d H:i:s',$row->end_time) : ''; ?></td>
+                    <td>
+                        <?php if($row->coupon_type == 1): ?>
+                            <a mask="true" target="dialog" href="/manage/coupon/makeCoupon?id=<?php echo $row->id;?>" class="add"  width="660" height="430"><span>生产</span></a>
+                        <?php endif ; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             <?php endif; ?>

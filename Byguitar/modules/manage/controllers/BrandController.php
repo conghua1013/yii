@@ -17,23 +17,20 @@ class BrandController extends ManageController {
 	public function actionAdd(){
 		if(empty($_POST)){
 			$viewData = array();
-			$this->render('add', $viewData);
-			exit;
+			$this->render('add', $viewData); exit;
 		}
 
+		$message = '添加成功！';
+		$status = 200;
 		try {
-			$message = '';
-			$status = 200;
-
 			$brand_name = '';
 			$image = CUploadedFile::getInstanceByName('brand_logo');
 			if($image){
 				$dir = Yii::getPathOfAlias('webroot').'/images/brand';
-				// $extension = substr(strrchr($image->name, '.'), 1); 
 				$extension = $image->getExtensionName();
 				$brand_name = time().'_0.'.$extension;
 				$imagePath = $dir.'/'.$brand_name;
-				$status = $image->saveAs($imagePath,true);
+				$image->saveAs($imagePath,true);
 			}
 			
 			$m = new Brand();
@@ -48,20 +45,16 @@ class BrandController extends ManageController {
 			$m->keywords 		= $_REQUEST['keywords'];
 			$m->describtion 	= $_REQUEST['describtion'];
 			$m->sort 			= $_REQUEST['sort'];
+			$m->title 			= $_REQUEST['title'];
 			$m->is_show 		= $_REQUEST['is_show'];
 			$m->add_time 		= time();
 			$flag = $m->save();
-			if($flag){
-				$message = '添加成功!';
-				$status = 200;
-			}else{
-				$message = '添加失败!';
-				$status = 300;
+			if(!$flag){
+				throw new exception('添加失败！');
 			}
-
 		} catch(Exception $e){
 			$message = $e->getMessage();
-			$status = 300;
+			$status = 500;
 		}
 
 		$res = array();
@@ -76,23 +69,20 @@ class BrandController extends ManageController {
 			$info = Brand::model()->findByPk($_REQUEST['id']);
 			$viewData = array();
 			$viewData['info'] = $info;
-			$this->render('edit', $viewData);
-			exit;
+			$this->render('edit', $viewData); exit;
 		}
 
+		$message = '修改成功！';
+		$status = 200;
 		try {
-			$message = '';
-			$status = 200;
-
 			$brand_name = '';
 			$image = CUploadedFile::getInstanceByName('brand_logo');
 			if($image){
 				$dir = Yii::getPathOfAlias('webroot').'/images/brand';
-				// $extension = substr(strrchr($image->name, '.'), 1);
 				$extension = $image->getExtensionName(); 
 				$brand_name = time().'_'.$_REQUEST['id'].'.'.$extension;
 				$imagePath = $dir.'/'.$brand_name;
-				$status = $image->saveAs($imagePath,true);
+				$image->saveAs($imagePath,true);
 			}
 			
 			$m =  Brand::model()->findByPk($_REQUEST['id']);
@@ -109,19 +99,15 @@ class BrandController extends ManageController {
 			$m->keywords 		= $_REQUEST['keywords'];
 			$m->describtion 	= $_REQUEST['describtion'];
 			$m->sort 			= $_REQUEST['sort'];
+			$m->title 			= $_REQUEST['title'];
 			$m->is_show 		= $_REQUEST['is_show'];
 			$flag = $m->save();
-			if($flag){
-				$message = '修改成功!';
-				$status = 200;
-			}else{
-				$message = '修改失败!';
-				$status = 300;
+			if(!$flag){
+				throw new exception('修改失败！');
 			}
-
 		} catch(Exception $e){
 			$message = $e->getMessage();
-			$status = 300;
+			$status = 500;
 		}
 		$res = array();
 		$res['statusCode'] 		= $status;
@@ -131,14 +117,29 @@ class BrandController extends ManageController {
 
 	//删除页面
 	public function actionDel(){
-		$flag = Brand::model()->deleteByPk($_REQUEST['id']);
-		if($flag){
-			$message = '删除成功!';
-			$status = 200;
-		}else{
-			$message = '删除失败!';
-			$status = 300;
+		$message = '删除成功!';
+		$status = 200;
+
+		try {
+			$info = Brand::model()->findByPk($_REQUEST['id']);
+			if(empty($info)){
+				throw new exception('记录不存在！');
+			}
+
+			$dir = Yii::getPathOfAlias('webroot').'/images/brand/';
+			if($info['brand_logo']){
+				unlink($dir.$info['brand_logo']);
+			}
+
+			$flag = Brand::model()->deleteByPk($_REQUEST['id']);
+			if(!$flag){
+				throw new exception('记录删除失败！');
+			}
+		} catch (exception $e){
+			$message = '删除失败!【'.$e->getMessage().'】';
+			$status = 500;
 		}
+
 		$res = array();
 		$res['statusCode'] 		= $status;
 		$res['message'] 		= $message;
@@ -162,7 +163,7 @@ class BrandController extends ManageController {
 			$status = 200;
 		} catch (Exception $e){
 			$message = $e->getMessage();
-			$status = 300;
+			$status = 500;
 		}
 		$res = array();
 		$res['statusCode'] 		= $status;

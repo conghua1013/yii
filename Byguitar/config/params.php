@@ -13,4 +13,18 @@ return array(
             'secrect'=> '*#test*#',
         ),
 	),
+
+    'image' => array(
+        'product' => array(
+            'sizes' => array(100,300,600),
+            'path' => '/www/www/yii/Byguitar/images/product/',
+            'types' => array('jpg','gif','png','jpeg'),
+        ),
+        'brand' => array(
+            //'sizes' => array(100,300,600),
+            'path' => '/www/www/yii/Byguitar/images/brand/',
+            'types' => array('jpg','gif','png','jpeg'),
+        ),
+
+    )
 );

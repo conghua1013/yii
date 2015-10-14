@@ -49,4 +49,18 @@ class Coupon extends CActiveRecord
         );
     }
 
+
+    public function getCouponSn(){
+        $a = array('A','B','C','D','E','F','G','H','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y','Z','2','3','4','5','6','7','8','9');
+
+        srand((float) microtime() * 10000000);
+        $numKeys = array_rand($a,12);
+        $newNumber = array();
+        foreach ($numKeys as $value) {
+            array_push($newNumber, $a[$value]);
+        }
+        
+        return implode('', $newNumber);
+    }
+
 }

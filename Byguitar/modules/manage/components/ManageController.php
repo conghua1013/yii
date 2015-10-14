@@ -16,6 +16,12 @@ class ManageController extends CController {
 		return;
     }
 
+	public function displayJson($data)
+	{
+		header("Content-type:json/application;charset=utf-8");
+		echo json_encode($data);
+	}
+
 }
 
 

@@ -20,14 +20,12 @@ class CategoryController extends ManageController {
 			$select = Category::model()->getSelectCategoryForEdit();
 			$viewData = array();
 			$viewData['select'] = $select;
-			$this->render('add', $viewData);
-			exit;
+			$this->render('add', $viewData); exit;
 		}
 
+		$message = '添加成功！';
+		$status = 200;
 		try {
-			$message = '';
-			$status = 200;
-
 			if(!empty($_REQUEST['parent_id'])){
 				$info = Category::model()->findByPk($_REQUEST['parent_id']);
 				if(empty($info)){
@@ -51,17 +49,13 @@ class CategoryController extends ManageController {
 			$m->level 			= $level;
 			$m->add_time 		= time();
 			$flag = $m->save();
-			if($flag){
-				$message = '添加成功!';
-				$status = 200;
-			}else{
-				$message = '添加失败!';
-				$status = 300;
+			if(!$flag){
+				throw new exception('添加失败!');
 			}
 
 		} catch(Exception $e){
 			$message = $e->getMessage();
-			$status = 300;
+			$status = 500;
 		}
 
 		$res = array();
@@ -82,10 +76,9 @@ class CategoryController extends ManageController {
 			exit;
 		}
 
+		$message = '';
+		$status = 200;
 		try {
-			$message = '';
-			$status = 200;
-
 			if(!empty($_REQUEST['parent_id'])){
 				$info = Category::model()->findByPk($_REQUEST['parent_id']);
 				if(empty($info)){
@@ -109,12 +102,8 @@ class CategoryController extends ManageController {
 			$m->level 			= $level;
 			$m->add_time 		= time();
 			$flag = $m->save();
-			if($flag){
-				$message = '修改成功!';
-				$status = 200;
-			}else{
-				$message = '修改失败!';
-				$status = 300;
+			if(!$flag){
+				throw new exception('修改失败!');
 			}
 
 		} catch(Exception $e){

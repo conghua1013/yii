@@ -1,8 +1,11 @@
-<h2 class="contentTitle">商品属性树形图【<a class="add" href="manage/product/productAttrAdd" target="navTab" title="商品属性添加"><span>商品属性添加</span></a>】</h2>
+<h2 class="contentTitle">商品属性树形图
+    【<a class="add" href="/manage/product/productAttrAdd" target="navTab" title="商品属性添加"><span>商品属性添加</span></a>】
+    【<a class="list" href="/manage/product/Attrlist" target="navTab" title="商品属性列表"><span>商品属性列表</span></a>】
+</h2>
 <div id="resultBox"></div>
 
 <div style="float:left; display:block; margin:10px; overflow:auto; width:800px; height:600px; border:solid 1px #CCC; line-height:21px; background:#FFF;">
-    <ul class="tree treeFolder treeCheck expand ">     <!--collapse-->
+    <ul class="tree treeFolder treeCheck expand ">
         <?php if($tree): ?>
             <?php foreach($tree as $list): ?>
                 <li><a tname="name" tvalue="<?php echo $list['id']; ?>"><?php echo $list['attr_name']; ?></a>

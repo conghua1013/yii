@@ -1,17 +1,18 @@
 <div style="display:block;">
-	<form method="post" action="manage/product/add" class="pageForm required-validate" onsubmit="return iframeCallback(this)">
+	<form method="post" action="/manage/product/add" class="pageForm required-validate" onsubmit="return iframeCallback(this)">
 	<div class="tabs" eventType="click" currentIndex="1">
+
 		<div class="tabsHeader">
 			<div class="tabsHeaderContent">
 				<ul>
 					<li><a href="javascript:;"><span>商品基本信息</span></a></li>
 					<li class="selected"><a href="javascript:;"><span>商品详情</span></a></li>
-					<li><a href="javascript:;"><span>商品图片</span></a></li>
+					<li><a href="javascript:;"><span>商品价格及库存</span></a></li>
 				</ul>
 			</div>
 		</div>
-		<div class="tabsContent" layoutH="70">
 
+		<div class="tabsContent" layoutH="70">
 
 			<!-- 商品基本信息 start -->
 			<div class="pageFormContent">
@@ -26,6 +27,7 @@
 				<div class="unit">
 					<label>商品品牌：</label>
 					<select name="brand_id">
+						<option value="0"> 请选择 </option>
 						<?php if($brands): ?>
 						<?php foreach($brands as $row): ?>
 							<option value="<?php echo $row['id']; ?>"> <?php echo $row['brand_name']; ?> </option>
@@ -105,8 +107,6 @@
 			</div>
 			<!-- 商品基本信息 end -->
 
-
-
 			<!-- 商品详情 start   目前该模块不能移位否则导致显示高度不够   -->
 			<div>
 				<textarea class="editor" name="detail" rows="29" cols="130"
@@ -123,9 +123,7 @@
 			</div>
 			<!-- 商品详情 end -->
 
-			
-
-			<!-- 商品图片 start -->
+			<!-- 商品价格及库存 start -->
 			<div class="pageFormContent">
 				<div class="unit">
 					<label>商品市场价：</label>
@@ -151,7 +149,8 @@
 				</div>
 				<div class="divider"></div>
 
-				<div style="border:1px solid #ccc;display:block;height:80px;">
+				<div style="/*border:1px solid #ccc;*/display:none;">
+					<div>
 					<label>多库存sku可选列表：</label>
 					<select name="attr_id" id="attr_id">
 						<option value="0">请选择</option>
@@ -161,8 +160,12 @@
 						<?php endforeach; ?>
 						<?php endif; ?>
 					</select>
-					<p id="attr_content"></p>
-					<p>此处的属性只能改变选择其中的一项当你切换的时候就会清除所有的sku信息。只要不提交就不会保存到数据库中</p>
+					</div>
+					<div style="clear:both;"></div>
+					<div id="attr_content"></div>
+					<div style="clear: both;"></div>
+					<div style="margin-top:5px;">此处的属性只能改变选择其中的一项,当你切换的时候就会清除下面显示的所有的属性信息，替换为你选中的属性项中的列表，<br>
+						然后你不需要的选项你可以点击删除删除掉，或者不填也可以。只要不点提交按钮就不会保存到数据库中</div>
 				</div>
 
 				<div class="divider"></div>
@@ -172,7 +175,8 @@
 					<span>商品id都是以,分割</span>
 				</div>
 			</div>
-			<!-- 商品图片 end -->
+			<!-- 商品价格及库存 end -->
+
 		</div>
 		<div class="formBar">
 			<ul>
@@ -190,9 +194,25 @@
 </div>
 
 <script>
+	window.productAttrList = <?php echo json_encode($productAttributes); ?>
+</script>
+
+<script>
 $(document).ready(function(){
+
+	//属性列表切换选项操作
 	$('#attr_id').change(function(){
-		changeLoadProductAttrs();
+		if(window.productAttrList){
+			var htmlStr = '';
+			$.each(window.productAttrList[$('#attr_id').val()].child,function(i,info){
+				htmlStr += '<div id="att_id_'+info.id+'" class="attr_div"><span>'+info.attr_name+'</span>'
+					+'<input type="hidden" name="attr_list['+info.id+']" value="'+info.id+'" />'
+					+'<input type="text" name="attr_stock['+info.id+']" size="10"/>'
+					+'<span class="del_attr">删除</span>'
+					+'</div>';
+			});
+			$('#attr_content').html(htmlStr);
+		}
 	})
 
 	//商品属性列表删除操作绑定时间
@@ -200,34 +220,18 @@ $(document).ready(function(){
 		$(this).parent().remove();
 	})
 
+	$('input[name="is_multiple"]').click(function(){
+		if($('input[name="is_multiple"]:checked ').val() == 0){
+			$('#attr_id').val(0); //设置select的值为初始值
+			$('#attr_content').parent().hide();
+			$('#attr_content').html('');
+		}else{
+			$('#attr_content').parent().show();
+		}
+	})
+
 })
 
-//动态加载
-function changeLoadProductAttrs(){
-	$.ajax({  
-	    url:'manage/product/getProductAttrs',
-	    data: {attr_id:$("#attr_id").val()},
-	    type:'post',  
-	    cache:false,  
-	    dataType:'json',  
-	    success:function(data) {
-	    	if(data){
-	    		var htmlStr = '';
-	    		$.each(data,function(i,info){
-	    			htmlStr += '<div id="att_id_'+info.id+'" class="attr_div"><span>'+info.attr_name+'</span>'
-	    			           +'<input type="hidden" name="attr_list['+info.id+']" value="'+info.id+'" />'
-	    			           +'<input type="text" name="attr_stock['+info.id+']" size="10"/>'
-	    			           +'<span class="del_attr">删除</span>'
-	    			           +'</div>';
-	    		});
-	    		$('#attr_content').html(htmlStr);
-	    	} else {
-	    		alert('数据为空或者网络错误！')
-	    	}
-	    },  
-	    error : function() {}  
-	});
-}
 </script>
 
 <style>
@@ -239,7 +243,5 @@ function changeLoadProductAttrs(){
 #attr_content {
 	/*border:1px solid blue;*/
 	width:700px;
-}
-
 </style>
 

@@ -20,24 +20,22 @@ class CouponController extends ManageController {
             $this->render('typeadd', $viewData);exit;
         }
 
+        $message = '添加成功!';
+        $status = 300;
         try {
             $m = new CouponType();
             $m->coupon_name         = $_REQUEST['coupon_name'];
             $m->coupon_type         = $_REQUEST['coupon_type'];
             $m->coupon_sn           = $_REQUEST['coupon_sn'];
             $m->coupon_amount       = $_REQUEST['coupon_amount'];
-            $m->satisfied_amount 	  = $_REQUEST['satisfied_amount'];
-            $m->detail 		     = $_REQUEST['detail'];
-            $m->start_time 	     = strtotime( $_REQUEST['start_time']);
-            $m->end_time 		     = strtotime($_REQUEST['end_time']);
-            $m->add_time 		     = time();
+            $m->satisfied_amount 	= $_REQUEST['satisfied_amount'];
+            $m->detail              = $_REQUEST['detail'];
+            $m->start_time 	        = strtotime( $_REQUEST['start_time']);
+            $m->end_time 		    = strtotime($_REQUEST['end_time']);
+            $m->add_time            = time();
             $flag = $m->save();
-            if($flag){
-                $message = '添加成功!';
-                $status = 200;
-            }else{
-                $message = '添加失败!';
-                $status = 300;
+            if(!$flag){
+                throw new exception('添加失败！');
             }
         } catch(Exception $e){
             $message = $e->getMessage();
@@ -59,6 +57,8 @@ class CouponController extends ManageController {
             $this->render('typeedit', $viewData); exit;
         }
 
+        $message = '修改成功!';
+        $status = 200;
         try {
             $m =  CouponType::model()->findByPk($_REQUEST['id']);
             $m->coupon_name         = $_REQUEST['coupon_name'];
@@ -71,11 +71,7 @@ class CouponController extends ManageController {
             $m->end_time 		     = strtotime($_REQUEST['end_time']);
             $flag = $m->save();
             if($flag){
-                $message = '修改成功!';
-                $status = 200;
-            }else{
-                $message = '修改失败!';
-                $status = 300;
+                throw new exception('修改失败');     
             }
 
         } catch(Exception $e){
@@ -86,6 +82,55 @@ class CouponController extends ManageController {
         $res['statusCode'] 		= $status;
         $res['message'] 		= $message;
         $this->ajaxDwzReturn($res);
+    }
+
+    /**
+     * 生成优惠券
+     */
+    public function actionMakeCoupon(){
+        if(empty($_POST)){
+            $info = CouponType::model()->findByPk($_REQUEST['id']);
+            $viewData = array();
+            $viewData['info'] = $info;
+            $this->render('makecoupon', $viewData); exit;
+        }
+
+        $message = '生成成功!';
+        $status = 200;
+        try {
+            $typeInfo = CouponType::model()->findByPk($_REQUEST['id']);
+            if(empty($typeInfo)){
+                throw new exception('该优惠券类型不存在！');
+            }
+            $model = Coupon::model();
+            $couponSns = array();
+            $okNumber = 0;
+            
+            for($i=0;$i<$_REQUEST['send_num'];$i++){
+                $sn = $model->getCouponSn();
+                if(in_array($sn,$couponSns)){continue;}
+                $m = new Coupon();
+                $m->coupon_sn           = $sn;
+                $m->coupon_type_id      = $_REQUEST['id'];
+                $m->coupon_amount       = $typeInfo['coupon_amount'];
+                $m->satisfied_amount    = $typeInfo['satisfied_amount'];
+                $m->start_time          = $typeInfo['start_time'];
+                $m->end_time            = $typeInfo['end_time'];
+                $m->add_time            = time();
+                $flag = $m->save();
+                $okNumber += empty($flag) ? 0 : 1;
+                array_push($couponSns,$sn);
+            }
+
+        } catch(Exception $e){
+            $message = $e->getMessage();
+            $status = 300;
+        }
+        $res = array();
+        $res['statusCode']      = $status;
+        $res['message']         = $message;
+        $this->ajaxDwzReturn($res);
+
     }
 
     //删除页面

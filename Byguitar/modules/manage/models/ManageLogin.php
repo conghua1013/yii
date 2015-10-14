@@ -73,11 +73,11 @@ class ManageLogin extends CFormModel
      * 验证以保存密码的用户信息
      */
     public function checkManageLogin(){
-        if(empty(Yii::app()->request->cookies['manage_id']) || empty(Yii::app()->request->cookies['email']) || empty(Yii::app()->request->cookies['manage_pwd'])){
+        if(empty(Yii::app()->request->cookies['manage_id']) || empty(Yii::app()->request->cookies['manage_email']) || empty(Yii::app()->request->cookies['manage_pwd'])){
             return false;
         }
 
-        $info = Admin::model()->findByAttributes(array('email'=>Yii::app()->request->cookies['email']));
+        $info = Admin::model()->findByAttributes(array('email'=>Yii::app()->request->cookies['manage_email']));
         if(empty($info) || empty($info->password)){
             return false;
         }

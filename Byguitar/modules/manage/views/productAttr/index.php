@@ -9,13 +9,13 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a mask="true" target="dialog" href="manage/product/ProductAttrAdd" class="add"  width="660" height="430" title="商品属性添加"><span>添加</span></a></li>
+            <li><a mask="true" target="dialog" href="/manage/product/ProductAttrAdd" class="add"  width="660" height="430" title="商品属性添加"><span>添加</span></a></li>
             <li class="line">line</li>
-            <li><a class="delete" href="manage/product/ProductAttrDel?id={sid_user}" target="ajaxTodo" title="确定要删除该商品属性吗?"><span>删除</span></a></li>
+            <li><a class="delete" href="/manage/product/ProductAttrDel?id={sid_user}" target="ajaxTodo" title="确定要删除该商品属性吗?"><span>删除</span></a></li>
             <li class="line">line</li>
-            <li><a mask="true" target="dialog" href="manage/product/ProductAttrEdit?id={sid_user}" class="add"  width="660" height="430" title="商品属性修改"><span>修改</span></a></li>
+            <li><a mask="true" target="dialog" href="/manage/product/ProductAttrEdit?id={sid_user}" class="add"  width="660" height="430" title="商品属性修改"><span>修改</span></a></li>
             <li class="line">line</li>
-            <li><a href="manage/product/ProductAttrTree" target="navTab" class="icon" title="商品属性树状图"><span>属性树状图</span></a></li>
+            <li><a href="/manage/product/ProductAttrTree" target="navTab" class="icon" title="商品属性树状图"><span>属性树状图</span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="75">

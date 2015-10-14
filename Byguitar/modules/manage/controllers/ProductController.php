@@ -14,7 +14,7 @@ class ProductController extends ManageController {
         $viewData['numPerPage']   = $list['numPerPage'];
         $viewData['categorys']    = $categorys;
         $viewData['brands']       = $brands;
-        $viewData['request']       = $_REQUEST;
+        $viewData['request']      = $_REQUEST;
 		$this->render('index', $viewData);
     }
     
@@ -31,6 +31,7 @@ class ProductController extends ManageController {
             $this->render('add',$viewData);exit;
         }
 
+        $transaction = Yii::app()->shop->beginTransaction();
         try{
             $status = 200;
             $message = '添加成功!';
@@ -38,11 +39,14 @@ class ProductController extends ManageController {
             $productId = $this->saveProduct(); //保存商品的基本信息
             $this->saveProductCategory($productId); //保存商品的分类信息
             $this->saveProductExtend($productId); //保存商品的扩展信息
+            $this->saveProductStock($productId); //保存商品的库存信息
             // $this->saveProductAttr($productId); //保存商品的属性信息
-            // $this->saveProductStock($productId); //保存商品的库存信息
+
+            $transaction->commit();
         } catch(exception $e){
+            $transaction->rollback();
             $status = 200;
-            $message = '添加失败!';
+            $message = '添加失败!【'.$e->getMessage().'】';
         }
         $res = array();
         $res['statusCode']      = $status;
@@ -56,55 +60,49 @@ class ProductController extends ManageController {
             $pInfo = Product::model()->findByPk($_REQUEST['id']);
             $categorys = Category::model()->getSelectCategoryForProductEdit(); //可选分类列表
             $brands = Brand::model()->getSelectBrandForProductEdit(); //可选品牌列表
+            $productAttributes = ProductAttributes::model()->getProductAttrTree();
+            $pImages = ProductImage::model()->findAllByAttributes(array('product_id'=>$_REQUEST['id']));
+            $stocks = ProductStock::model()->findAllByAttributes(array('product_id'=>$_REQUEST['id']));
+
+            $attrList = array();
+            foreach($productAttributes as $row){
+                if($row['child']){
+                    $attrList += $row['child'];
+                }
+            }
+
             $viewData = array();
-            $viewData['categorys'] = $categorys;
-            $viewData['brands'] = $brands;
-            $viewData['pInfo'] = $pInfo;
+            $viewData['categorys']          = $categorys;
+            $viewData['brands']             = $brands;
+            $viewData['pInfo']              = $pInfo;
+            $viewData['pImages']            = $pImages;
+            $viewData['stocks']             = $stocks;
+            $viewData['attrList']          = $attrList;
+            $viewData['productAttributes']  = $productAttributes;
             $this->render('edit',$viewData);exit;
         }
 
+        $transaction = Yii::app()->shop->beginTransaction();
         try{
             $status = 200;
-            $message = '添加成功!';
+            $message = '修改成功!';
             $productId = $this->saveProduct(); //保存商品的基本信息
             $this->saveProductCategory($productId); //保存商品的分类信息
             $this->saveProductExtend($productId); //保存商品的扩展信息
+            $this->saveProductStock($productId); //保存商品的库存信息
             // $this->saveProductAttr($productId); //保存商品的属性信息
-            // $this->saveProductStock($productId); //保存商品的库存信息
+
+            $transaction->commit();
         } catch(exception $e){
+            $transaction->rollback();
             $status = 200;
-            $message = '添加失败!';
+            $message = '修改失败!【'.$e->getMessage().'】';
         }
         $res = array();
         $res['statusCode']      = $status;
         $res['message']         = $message;
         $this->ajaxDwzReturn($res);
     }
-
-
-    //保存商品的图片信息
-    public function actionProductImage(){
-
-        try{
-            $status = 200;
-            $message = '添加成功!';
-            $productId = intval($_REQUEST['id']);
-            if(empty($productId)){
-                throw new exception('商品id不能为空！');
-            }
-            $this->saveProductImage($productId);
-        } catch(exception $e){
-            $status = 200;
-            $message = '添加失败!';
-        }
-        $res = array();
-        $res['statusCode']      = $status;
-        $res['message']         = $message;
-        $this->ajaxDwzReturn($res);
-    }
-
-
-
 
     /**
     +
@@ -113,10 +111,12 @@ class ProductController extends ManageController {
     */
     protected function saveProduct(){
         if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
-            $model = Product::model()->finfByPk($_REQUEST['id']);
+            $model = Product::model()->findByPk($_REQUEST['id']);
         }else{
             $model = new Product();
+            $model->product_sn      = 'BG'.date('Y-m-d').rand(10,99);    //商品名称
         }
+
         $model->product_name    = $_REQUEST['product_name'];    //商品名称
         $model->subhead         = $_REQUEST['subhead'];         //商品副标题
         $model->brand_id        = $_REQUEST['brand_id'];        //商品品牌id
@@ -146,7 +146,7 @@ class ProductController extends ManageController {
         
         $info = Category::model()->findByPk($_REQUEST['cat_id']);
         if(empty($info)){
-            throw new exception('改商品分类不存在！');
+            throw new exception('该商品分类不存在！');
         }   
 
         if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
@@ -186,38 +186,80 @@ class ProductController extends ManageController {
             }
         }
 
-        foreach($attr_list as $key => $row){
-            $model = new ProductAttr();
-            $message = array();
-            $message['product_id']      = $productId;           //商品id
-            $message['attr_group_id']   = $_REQUEST['attr_id']; //属性的组id
-            $message['attr_id']         = $key;                 //属性id
-            $message['num']             = $attr_stock[$key];    //个数
-            $message['add_time']        = time();               //添加时间
-            $flag = $model->save();
-            if(empty($flag)){
-                $error = '商品属性信息修改失败！';
-                throw new exception($error);
-            }
-        }
+//        foreach($attr_list as $key => $row){
+//            $model = new ProductAttr();
+//            $message = array();
+//            $message['product_id']      = $productId;           //商品id
+//            $message['attr_group_id']   = $_REQUEST['attr_id']; //属性的组id
+//            $message['attr_id']         = $key;                 //属性id
+//            $message['num']             = $attr_stock[$key];    //个数
+//            $message['add_time']        = time();               //添加时间
+//            $flag = $model->save();
+//            if(empty($flag)){
+//                $error = '商品属性信息修改失败！';
+//                throw new exception($error);
+//            }
+//        }
         return true;
     }
 
     //保存商品的库存信息
     protected function saveProductStock($productId){
 
+        //多属性库存保存
+        if($_REQUEST['is_multiple'] == 1){
+            if($_REQUEST['attr_stock']){
+
+                $temp_ids = array();
+                foreach($_REQUEST['attr_stock'] as $attr_id => $row){
+                    if(empty($row)){ continue; }
+                    $model = ProductStock::model()->findByAttributes(array('product_id' => $productId,'attr_id' => $attr_id));
+                    if(empty($model)){
+                        $model = new ProductStock();
+                    }
+                    $model->product_id  = $productId;
+                    $model->attr_id     = $attr_id;
+                    $model->quantity    = $row;
+                    $model->add_time    = time();
+                    $model->update_time = time();
+                    $flag = $model->save();
+                    array_push($temp_ids,$attr_id);
+                }
+
+                //todo 删除出了这次保存外的其他数据，防止错误数据存在
+                $criteria = new CDbCriteria;
+                $criteria->addCondition('product_id='.$productId);
+                $criteria->addNotInCondition('attr_id', $temp_ids);
+                ProductStock::model()->deleteAll($criteria);
+            }
+        }else{
+            $model = ProductStock::model()->findByAttributes(array('product_id' => $productId));
+            if(empty($model)){
+                $model = new ProductStock();
+            }
+            $model->product_id  = $productId;
+            $model->attr_id     = 0;
+            $model->quantity    = $_REQUEST['quantity'];
+            $model->add_time    = time();
+            $model->update_time = time();
+            $flag = $model->save();
+
+            //todo 删除出了这次保存外的其他数据，防止错误数据存在；
+            $criteria = new CDbCriteria;
+            $criteria->addCondition('id != '.$model->id);
+            $criteria->addCondition('product_id ='.$productId);
+            ProductStock::model()->deleteAll($criteria);
+        }
         
-        
+        return true;
     }
 
     //保存商品的扩展信息
     protected function saveProductExtend($productId){
         if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $model = ProductExtend::model()->findByAttributes(array('product_id'=>$_REQUEST['id']));
-            if(empty($info)){
-                $model = new ProductCategory();
-            }
-        }else{
+        }
+        if(empty($info)){
             $model = new ProductExtend();
         }
 
@@ -244,23 +286,117 @@ class ProductController extends ManageController {
         return true;
     }
 
+
+
+    //保存商品的图片信息
+    public function actionUploadImage(){
+
+        try{
+            $status = 200;
+            $message = '图片上传成功!';
+            $productId = intval($_REQUEST['id']);
+            if(empty($productId)){
+                throw new exception('商品id不能为空！');
+            }
+            $data = $imageId = $this->saveProductImage($productId);
+        } catch(exception $e){
+            $status = 500;
+            $message = $e->getMessage();
+        }
+
+        $data['status'] = $status;
+        $data['errorMsg'] = $message;
+        $this->displayJson($data);
+    }
+
     /**
-    +
     * 保存商品的图片信息
-    +
     */
     protected function saveProductImage($productId){
+        $imageConfig = Yii::app()->params['image']['product'];
+        if(empty($imageConfig)){
+            throw new exception('缺少商品图片配置');
+        }
+        $image = CUploadedFile::getInstanceByName('Filedata');
+        $path = $imageConfig['path'].date('Ym').'/';
+        $this->createPath($path);
+        $imageName = date('YmdHis').rand(1,1000);
+        $imageNamePath = $path.$imageName.'.'.$image->getExtensionName();
+        $image->saveAs($imageNamePath,true);
+
+        $images_arr = array();
+        Yii::import("ext.Thumb.CThumb");
+        foreach($imageConfig['sizes'] as $row){
+            $im = null;
+            $imagetype = strtolower($image->getExtensionName());
+            if($imagetype == 'gif')
+                $im = imagecreatefromgif($imageNamePath);
+            else if ($imagetype == 'jpg')
+                $im = imagecreatefromjpeg($imageNamePath);
+            else if ($imagetype == 'png')
+                $im = imagecreatefrompng($imageNamePath);
+
+            $newImagePath = $path.$imageName.'-'.$row.'.'.$image->getExtensionName();
+            CThumb::resizeImage($im,$row, $row, $newImagePath, $imagetype);
+            $images_arr['image_'.$row] = str_replace(ROOT_PATH,'',$newImagePath);
+        }
+
         //图片处理here
         $model = new ProductImage();
         $model->product_id  = $productId;
-        $model->img         = '';
+        $model->img         = str_replace(ROOT_PATH,'',$imageNamePath);
         $model->add_time    = time();
         $flag = $model->save();
         if(empty($flag)){
             throw new exception('添加商品图片失败！');
         }
-        return true;
+        return array('imgid' => $model->id,'img' => $images_arr);
     }
+
+
+    public function createPath($dir, $mode = 0755){
+        if (is_dir($dir) || @mkdir($dir,$mode)) return true;
+        if (!$this->createPath(dirname($dir),$mode)) return false;
+        return @mkdir($dir,$mode);
+    }
+
+    /**
+     * 删除商品图库中的图片
+     */
+    public function actionDeleteImage(){
+        try{
+            $status = 200;
+            $message = '删除成功!';
+            $imageId = intval($_REQUEST['id']);
+            if(empty($imageId)){
+                throw new exception('图片id为空，刷新后重试！');
+            }
+            $info = ProductImage::model()->findByPk($imageId);
+            if(empty($info)){
+                throw new exception('图片记录不存在，请刷新后再重试！');
+            }
+            $imageConfig = Yii::app()->params['image']['product'];
+            foreach($imageConfig['sizes'] as $row){
+                $path = pathinfo($info->img);
+                $temp = explode('.',$path['basename']);
+                $tempPath = $path['dirname'].'/'.$temp[0].'-'.$row.'.'.$temp[1];
+                @unlink(ROOT_PATH.$tempPath);
+            }
+            @unlink(ROOT_PATH.$info->img);
+            $flag = ProductImage::model()->deleteByPk($imageId);
+            if(empty($flag)){
+                throw new exception('删除失败，刷新后重试！');
+            }
+        } catch(exception $e){
+            $status = 500;
+            $message = '删除失败!【'.$e->getMessage().'】';
+        }
+        $result['status'] = $status;
+        $result['message'] = $message;
+        $result['id'] = $imageId;
+        $this->displayJson($result);
+    }
+
 
     public function actionInfo(){
         $info = Product::model()->findByPk($_REQUEST['id']);
@@ -285,12 +421,10 @@ class ProductController extends ManageController {
      */
     public function actionAttrlist(){
         $list = ProductAttributes::model()->getAttrListPage();
-        //$nameList = ProductAttributes::model()->getMenuListForShowName();
         $viewData = array();
         $viewData['list'] = $list['list'];
         $viewData['count'] = $list['count'];
         $viewData['pageNum'] = $list['pageNum'];
-        //$viewData['names'] = $nameList;
         $this->render('/productAttr/index', $viewData);
     }
 
