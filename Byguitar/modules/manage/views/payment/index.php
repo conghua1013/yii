@@ -9,11 +9,11 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a mask="true" target="dialog" href="manage/payment/add" class="add"  width="660" height="430"><span>支付方式添加</span></a></li>
+            <li><a mask="true" target="dialog" href="/manage/payment/add" class="add"  width="660" height="430"><span>支付方式添加</span></a></li>
             <li class="line">line</li>
-            <li><a class="delete" href="manage/payment/del?id={sid_user}" target="ajaxTodo" title="确定要删除支付方式吗?"><span>删除</span></a></li>
+            <li><a class="delete" href="/manage/payment/del?id={sid_user}" target="ajaxTodo" title="确定要删除支付方式吗?"><span>删除</span></a></li>
             <li class="line">line</li>
-            <li><a mask="true" target="dialog" href="manage/payment/edit?id={sid_user}" class="add"  width="660" height="430"><span>支付方式修改</span></a></li>
+            <li><a mask="true" target="dialog" href="/manage/payment/edit?id={sid_user}" class="add"  width="660" height="430"><span>支付方式修改</span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="75">

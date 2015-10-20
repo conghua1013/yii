@@ -1,6 +1,6 @@
 <div class="pageContent">
 
-    <form method="post" action="manage/payment/edit" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
+    <form method="post" action="/manage/payment/edit" class="pageForm required-validate" enctype="multipart/form-data" onsubmit="return iframeCallback(this, navTabAjaxDone);">
 
         <div class="pageFormContent" layoutH="58">
 
@@ -17,6 +17,9 @@
             <div class="unit">
                 <label>支付方式图片：</label>
                 <input type="file" name="payment_logo" />
+                <?php if($info->payment_logo):?>
+                <image width="80" src="<?php echo $info->payment_logo;?>" alt="<?php echo $info->payment_logo;?>"/>
+                <?php endif; ?>
             </div>
 
             <div class="unit">

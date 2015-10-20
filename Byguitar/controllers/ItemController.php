@@ -1,8 +1,9 @@
 <?php
 
-class ItemController extends CController {
+class ItemController extends ShopBaseController 
+{
 
 	public function actionIndex(){
-		$this->render('index',array());
+		$this->render('item/index',array());
 	}
 }

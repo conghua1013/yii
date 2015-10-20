@@ -5,26 +5,21 @@
 <div class="fl indexcat">
     <h1>全部商品分类</h1>
     <ul class="catlist catlist_on" id="catlist">
-    
+        <?php if($this->params['cateList']): ?>
+        <?php foreach($this->params['cateList'] as $row): ?>
         <volist name="cateTree" id="vo">
         <li class="catitem">
-            <empty name="vo.url">
-            <h3><a href="/shop/category/{$vo.id}" >{$vo.cat_name}</a></h3>
-            <else/>
-            <h3><a href="{$vo.url}" >{$vo.cat_name}</a></h3>
-            </empty>
+            <h3><a href="<?php if($row['url']){ echo $row['url']; }else{ echo '/shop/category/'.$row['id'] ;} ?>" ><?php echo $row['cat_name']; ?></a></h3>
             <div class="subcatlist">
-                <volist name="vo.child" id="row">
-                    <empty name="row.url">
-                    <p><a href="/shop/category/{$row.id}">{$row.cat_name}</a></p>
-                    <else/>
-                    <p><a href="{$row.url}">{$row.cat_name}</a></p>
-                    </empty>
-                </volist>
+                <?php if($row['child']): ?>
+                <?php foreach($row['child'] as $child): ?>
+                    <p><a href="<?php if($child['url']){ echo $child['url']; }else{ echo '/shop/category/'.$child['id'] ;} ?>"><?php echo $child['cat_name']; ?></a></p>  
+                <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </li>
-        </volist>
-
+        <?php endforeach; ?>
+        <?php endif; ?>
     </ul>
 </div>
 

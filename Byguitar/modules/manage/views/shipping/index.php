@@ -9,11 +9,11 @@
 <div class="pageContent">
     <div class="panelBar">
         <ul class="toolBar">
-            <li><a mask="true" target="dialog" href="manage/shipping/add" class="add"  width="660" height="430" title="快递添加"><span>添加</span></a></li>
+            <li><a mask="true" target="dialog" href="/manage/shipping/add" class="add"  width="660" height="430" title="快递添加"><span>添加</span></a></li>
             <li class="line">line</li>
-            <li><a class="delete" href="manage/shipping/del?id={sid_user}" target="ajaxTodo" title="确定要快递吗?"><span>删除</span></a></li>
+            <li><a class="delete" href="/manage/shipping/del?id={sid_user}" target="ajaxTodo" title="确定要删除此快递吗?"><span>删除</span></a></li>
             <li class="line">line</li>
-            <li><a mask="true" target="dialog" href="manage/shipping/edit?id={sid_user}" class="add"  width="660" height="430" title="快递修改"><span>修改</span></a></li>
+            <li><a mask="true" target="dialog" href="/manage/shipping/edit?id={sid_user}" class="add"  width="660" height="430" title="快递修改"><span>修改</span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="75">

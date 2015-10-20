@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends CController {
+class UserController extends ShopBaseController {
 
 	//用户登录
 	public function actionLogin(){

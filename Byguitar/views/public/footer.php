@@ -1,6 +1,6 @@
 <div class="foot">
   <div class="foot-app clearfix">
-      <a class="fl" href="{$Think.config.WEB}/app/" title="彼岸吉他APP下载" target="_blank"><img src="__PUBLIC__/Images/public/appicon-foot.png" width="80" height="80" /></a>
+      <a class="fl" href="{$Think.config.WEB}/app/" title="彼岸吉他APP下载" target="_blank"><img src="/images/public/web/appicon-foot.png" width="80" height="80" /></a>
       <p class="fl foot-app-intro">彼岸吉他APP<br/><span>您还可以使用我们的手机APP更便捷全面的服务</span></p>
       <a class="fr foot-app-btn white" href="{$Think.config.WEB}/app/" title="彼岸吉他APP下载" target="_blank">APP下载</a>
   </div>
@@ -44,7 +44,8 @@
       </dl>
       <div class="fr foot-sns">
         <img src="__PUBLIC__/Images/public/aqcode-foot.png" width="142" height="142" /><p>扫描浏览 / 关注我们</p>
-        <div class="foot-sns-box clearfix"><!-- <a class="fr foot-sns-weibo" href="" target="_blank"></a> -->
+        <div class="foot-sns-box clearfix">
+          <!-- <a class="fr foot-sns-weibo" href="" target="_blank"></a> -->
         <a class="fr foot-sns-weibo" href="http://weibo.com/byguitar" title="彼岸吉他官方微博" target="_blank"></a></div>
       </div>
       <div class="fr foot-alllogo"><img src="__PUBLIC__/Images/public/alllogo-foot.png" width="102" height="137" /><p>彼岸吉他工作组策划运营</p></div>

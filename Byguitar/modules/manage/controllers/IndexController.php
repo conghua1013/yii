@@ -2,7 +2,7 @@
 
 class IndexController extends ManageController {
 
-	public function actionIndex(){
+    public function actionIndex(){
         $manage_id = Yii::app()->session['manage_id'];
         if(empty($manage_id)){
             $model =new ManageLogin();
@@ -17,7 +17,7 @@ class IndexController extends ManageController {
         $viewData = array();
         $viewData['list'] = $list;
         $this->render('index',$viewData);
-	}
+    }
 
     public function actionLogin()
     {

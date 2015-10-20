@@ -1,6 +1,6 @@
 <div class="pageContent">
 
-    <form method="post" action="manage/payment/add" class="pageForm required-validate" onsubmit="return iframeCallback(this, navTabAjaxDone);">
+    <form method="post" action="/manage/payment/add" class="pageForm required-validate" enctype="multipart/form-data" onsubmit="return iframeCallback(this, navTabAjaxDone);">
 
         <div class="pageFormContent" layoutH="58">
 
