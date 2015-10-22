@@ -29,7 +29,7 @@ class BannerController extends ManageController {
                 $dir = Yii::getPathOfAlias('webroot').'/images/banner';
                 // $extension = substr(strrchr($image->name, '.'), 1);
                 $extension = $image->getExtensionName();
-                $banner_name = time().'_0.'.$extension;
+                $banner_name = time().'_'.rand(100,999).'.'.$extension;
                 $imagePath = $dir.'/'.$banner_name;
                 $image->saveAs($imagePath,true);
             }

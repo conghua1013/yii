@@ -100,4 +100,116 @@ class Product extends CActiveRecord
 		return $a;
 	}
 
+
+    public function getProductInfoById($id){
+        if(empty($id)){return false;}
+        $info = Product::model()->findByPk($id);
+        if(empty($info)){return false;}
+        $data = $info->getAttributes();
+        $data['images'] = $this->getProductImagesByProductId($id);
+        return $data;
+    }
+
+
+    public function getProductInfoByIds($product_ids,$info_type='simple'){
+        if(empty($product_ids)){return '';}
+        $criteria = new CDbCriteria;
+        if(empty($info_type) || $info_type == 'simple'){
+            $criteria->select = 'id,product_name,sell_price,market_price,discount';
+        } else {
+            $criteria->select = '*';
+        }
+        
+        $criteria->addInCondition('id',$product_ids);
+        $list = Product::model()->findAll($criteria);
+
+        //$list = Product::model()->findAllByPk($product_ids);
+        //$list = Product::model()->findAllByAttributes(array('id'=>$product_ids)); //同理可用
+        $data = array();
+        if(!empty($list)){
+            foreach ($list as $row) {
+                $data[$row->id] = $row->getAttributes();
+            }
+
+            $images_list = $this->getProductImagesByProductIds($product_ids);
+            if($images_list){
+                foreach ($images_list as $key => $row) {
+                    $data[$key]['images'] = isset($data[$key]) ? $row['images'] : '';
+                }
+            }
+        }
+        return $data;
+    }
+
+    //获取商品封面图片（用于列表展示--单个）
+    public function getProductFaceImageByProductId($product_id) {
+        if(empty($product_id)){return '';}
+        $info = ProductImage::model()->findByAttributes(array('product_id'=>$product_id));
+        if(empty($info)){return '';}
+        return $this->getImageSizesByImageName($info->img);
+    }
+
+    //获取商品封面图片（用于列表展示--批量）
+    public function getProductFaceImageByProductIds($product_ids) {
+        if(empty($product_ids)){return '';}
+        $criteria = new CDbCriteria;
+        $criteria->select = '*';
+        $criteria->addInCondition('product_id',$product_ids);
+        $criteria->group = 'product_id';
+        $list = ProductImage::model()->findAll($criteria);
+        if(empty($list)){return '';}
+        $data = array();
+        foreach ($list as $row) {
+            $data[$row->product_id] = $row->getAttributes();
+            $data[$row->product_id]['images'] = $this->getImageSizesByImageName($row->img);
+        }
+        return $data;
+    }
+
+    //获取商品的图册
+    public function getProductImagesByProductId($product_id) {
+        if(empty($product_id)){return '';}
+        $list = ProductImage::model()->findAllByAttributes(array('product_id'=>$product_id));
+        if(empty($list)){return '';}
+        $data = array();
+        foreach ($list as $row) {
+            $data[$row->id] = $row->getAttributes();
+            $data[$row->id]['images'] = $this->getImageSizesByImageName($row->img);
+        }
+        return $data;
+    }
+
+
+    public function getProductImagesByProductIds($product_ids){
+        if(empty($product_ids)){return '';}
+        // $criteria = new CDbCriteria;
+        // $criteria->select = '*';
+        // $criteria->addInCondition('product_id',$product_ids);
+        // $list = ProductImage::model()->findAll($criteria);
+        // 已上构造方法也可用
+
+        $list = ProductImage::model()->findAllByAttributes(array('product_id'=>$product_ids));
+        $data = array();
+        if(!empty($list)){
+            foreach ($list as $row) {
+                if(isset($data[$row->product_id])){continue;}
+                $data[$row->product_id]['images'] = $this->getImageSizesByImageName($row->img);
+            }
+        }
+        return $data;
+    }
+
+    
+    public function getImageSizesByImageName($source_image){
+        $imageConfig = Yii::app()->params['image']['product'];
+        $data = array();
+        foreach($imageConfig['sizes'] as $row){
+            $path = pathinfo($source_image);
+            $temp = explode('.',$path['basename']);
+            $tempPath = $path['dirname'].'/'.$temp[0].'-'.$row.'.'.$temp[1];
+            $data['image_'.$row] = $tempPath;
+        }
+        return $data;
+    }
+
 }

@@ -27,12 +27,14 @@ class IndexModuleController extends ManageController {
 
         try {
             $banner_name = '';
-            $image = CUploadedFile::getInstanceByName('banner_image');
+            $image = CUploadedFile::getInstanceByName('img');
             if($image){
-                $dir = Yii::getPathOfAlias('webroot').'/images/indexmodule';
+                //$dir = Yii::getPathOfAlias('webroot').'/images/indexmodule';
+                $imageConfig = Yii::app()->params['image']['module_banner'];
+                $dir = $imageConfig['path'];
                 // $extension = substr(strrchr($image->name, '.'), 1);
                 $extension = $image->getExtensionName();
-                $banner_name = time().'_0.'.$extension;
+                $banner_name = time().'_'.rand(100,999).'.'.$extension;
                 $imagePath = $dir.'/'.$banner_name;
                 $image->saveAs($imagePath,true);
             }
@@ -81,9 +83,11 @@ class IndexModuleController extends ManageController {
 
         try {
             $banner_name = '';
-            $image = CUploadedFile::getInstanceByName('banner_image');
+            $image = CUploadedFile::getInstanceByName('img');
             if($image){
-                $dir = Yii::getPathOfAlias('webroot').'/images/indexmodule';
+                //$dir = Yii::getPathOfAlias('webroot').'/images/indexmodule';
+                $imageConfig = Yii::app()->params['image']['module_banner'];
+                $dir = $imageConfig['path'];
                 // $extension = substr(strrchr($image->name, '.'), 1);
                 $extension = $image->getExtensionName();
                 $banner_name = time().'_'.$_REQUEST['id'].'.'.$extension;
@@ -107,6 +111,8 @@ class IndexModuleController extends ManageController {
             $m->add_time 	 = time();
             $flag = $m->save();
             if($flag){
+                //todo 删除原图片
+
                 $message = '修改成功!';
                 $status = 200;
             }else{
@@ -128,6 +134,7 @@ class IndexModuleController extends ManageController {
     public function actionDel(){
         $flag = IndexModule::model()->deleteByPk($_REQUEST['id']);
         if($flag){
+            //todo 删除原图片
             $message = '删除成功!';
             $status = 200;
         }else{

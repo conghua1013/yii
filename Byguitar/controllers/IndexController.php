@@ -2,269 +2,241 @@
 
 class IndexController extends ShopBaseController
 {
-    public function actionTestRpc(){
-        
-        echo "<pre>";
-        $config = Yii::app()->params['Rpc_Service'];
-        \PHPClient\Rpc::config($config);
-
-        $obj =  \PHPClient\Rpc::inst('shop')->setClassName('User');
-        $data = $obj->getInfoByUid(567);
-        print_r($obj);
-        print_r($data);
-
-        $obj =  \PHPClient\Rpc::inst('test')->setClassName('User');
-        $data = $obj->getEmail(57777);
-        print_r($obj);
-        print_r($data);
-        exit;
-
-        $config = Yii::app()->params['Rpc_Service'];
-        print_r($config);
-        Yii::import('application.lib.PHPClient.RpcClient.php');
-        include_once ROOT_PATH.'/lib/PHPClient/RpcClient.php';
-        $obj = \PHPClient\RpcClient::instance('shop')->setClassName('User');
-        $ret_sync = $obj->getInfoByUid(567);
-        print_r($ret_sync);
-        exit;
-
-        $obj = PHPClient::instance('shop')->setClassName('Product');
-        $ret_sync = $obj->TestDb(20);
-        print_r($ret_sync);
-
-        $obj = PHPClient::instance('test')->setClassName('Blog');
-        $ret_sync = $obj->getTitleListByUid(20);
-        print_r($ret_sync);
-
-        //$config = $obj->getRpcClientByName('aa');
-        //print_r($config);
-        //exit;
-    }
+     
 
     public function actionIndex() {
 
-        //echo $this->getViewPath();
+        $lunbo = $this->getLunboBanner();
+        $banner = $this->getBanner();
+        $module = $this->getIndexModule();
 
-        $this->render('index/index');
+        // echo "<pre>";
+        // print_r($module);
+        // exit;
+
+        $viewData = array();
+        $viewData['lunbo'] = $lunbo;
+        $viewData['banner'] = $banner;
+        $viewData['module'] = $module;
+        $this->render('index/index',$viewData);
     }
 
-    public function actionError(){
-            $this->render('error');
-    }
+    //获取轮播的图片
+    public function getLunboBanner(){
+        $criteria = new CDbCriteria(); 
+        $criteria->compare('station',1);
+        $criteria->compare('is_show',1);
+        $criteria->compare('start_time','<='.time());
+        $criteria->compare('end_time', '>=' .time());
+        $criteria->limit = 5;
+        $criteria->order = 'sort desc ,id desc';
 
-    public function actionTest()
-    {
-        $model = User::model();
-        $_GET['id'] = 1;
-        $info = $model->findbyPk($_GET['id'])->getAttributes();
-        echo "<pre>";
-        print_r($info);
-        echo "<hr>";
-
-        $product = Yii::app()->shop->createCommand()
-        ->select('*')
-        ->from('bg_product')
-        ->where('id = 1')
-        ->queryRow();
-        print_r($product);
-    }
-
-    public function actionTestShiwu(){
-        //创建db链接
-        $db_byguitar = Yii::app()->byguitar;
-        $db_shop = Yii::app()->shop;
-
-        //创建事务
-        $db_byguitar_trans = $db_byguitar->beginTransaction();
-        $db_shop_trans = $db_byguitar->beginTransaction();
-
-        try{
-
-                # 数据库操作、、、
-
-                throw new exception('aaaa',1);//数据库操作失败，抛出异常，跳转到执行回滚程序。
-
-                #成功提交事务
-                $db_byguitar_trans->commit();
-                $db_shop_trans->commit();
-        } catch (exception $e){
-                #失败、事务回滚。
-                $db_byguitar_trans->rollback();
-                $db_shop_trans->rollback();
+        $list = Banner::model()->findAll($criteria);
+        if(empty($list)){return false;}
+        $newList = array();
+        $i = 1;//用于页面展示序号
+        foreach ($list as $row) {
+            $newList[$i] = $row->getAttributes();
+            //$newList[$i]['img'] = get_host('img').'/Public/Images/banner/'.$row['img'];
+            $i++;
         }
-        return true;		
+        return $newList;
     }
 
-    public function actionTestInsert(){
-        $model = new User;        
-        $model->username='aaa'; 
-        $model->password='bbb'; 
-        if($model->save()>0){
+    //获取轮播下面的两个banner
+    public function getBanner(){
+        $criteria = new CDbCriteria(); 
+        $criteria->compare('station',2);
+        $criteria->compare('is_show',1);
+        $criteria->compare('start_time','<='.time());
+        $criteria->compare('end_time', '>=' .time());
+        $criteria->limit = 2;
+        $criteria->order = 'sort desc ,id desc';
 
+        $list = Banner::model()->findAll($criteria);
+        if(empty($list)){return false;}
+        $newList = array();
+        $i = 1;//用于页面展示序号
+        foreach ($list as $row) {
+            $newList[$i] = $row->getAttributes();
+            //$newList[$i]['img'] = get_host('img').'/Public/Images/banner/'.$row['img'];
+            $i++;
         }
+        return $newList;
     }
 
-    //测试更新
-    public function actionTestUpdate(){
-        $count = User::model()->updateAll(array('username'=>'11111','password'=>'11111'),'password=:pass',array(':pass'=>'1111a1')); 
-        if($count>0){  
 
+    //获取首页的显示模块
+    public function getIndexModule(){
+        $criteria = new CDbCriteria();
+        $criteria->compare('is_show',1);
+        $criteria->compare('start_time','<='.time());
+        $criteria->compare('end_time', '>=' .time());
+        $criteria->limit = 5;
+        $criteria->order = 'sort desc ,id desc';
+
+        $order = 'sort desc ,id desc';
+        $list = IndexModule::model()->findAll($criteria);
+        if(empty($list)){return false;}
+
+        $imageConfig = Yii::app()->params['image']['module_banner'];
+
+        $moduleList = array();
+        foreach ($list as $row) {
+            $moduleInfo = $row->getAttributes();
+            $moduleInfo['start_time']   = date('Y-m-d H:i:s',$row['start_time']);
+            $moduleInfo['end_time']     = date('Y-m-d H:i:s',$row['end_time']);
+            $moduleInfo['title']        = $row['title'];
+            $moduleInfo['link']         = $row['link'];
+            if($moduleInfo['img']){
+                $moduleInfo['img'] = str_replace(ROOT_PATH, '', $imageConfig['path']).$moduleInfo['img'];
+            }
+
+            $moduleInfo['list'] = $this->getModuleProduct($row);
+            array_push($moduleList, $moduleInfo);
         }
-    }
+        return $moduleList;
+    } 
 
-    //测试删除
-    public function actionTestDelete(){
-        //User::model()->deleteByPk($pk,$condition,$params);
-    }
+    
 
-    //测试查询
-    public function actionTestSelect(){
-        //直接执行查询
-        $sql = "select * from bg_user where id = 1";
-        $res = yii::app()->byguitar->createCommand($sql);
-
-        //直接model实例化查询
-        $model = User::model();
-        $res = $model->findbyPk(1); //对象格式
-        $res = $model->findbyPk(1)->getAttributes();//数组格式
-
-        //构造方法获取数据
-        $criteria=new CDbCriteria; 
-        $criteria->select='product_name';  // 只选择 'title' 列 
-        $criteria->condition='id=1'; 
-        $product = Product::model()->find($criteria);
-
-
-        //联合查询
-        $user = Yii::app()->shop->createCommand() 
-        ->select('p.id, p.product_name, p.cat_id, b.brand_name') 
-        ->from('bg_product p') 
-        ->join('bg_branch b', 'p.brand_id=b.id') 
-        ->where('id=:id', array(':id'=>1)) 
-        ->queryRow();
-
-        //Yii::app()->shop->createCommand()->text() //查看sql
-
-        //in的用法
-        //where(array('in', 'id', array(1,2,3)))
-
-        //and的用法
-        // where(array('and', 'id=:id', 'username=:username'), array(':id'=>$id, ':username'=>$username);
-            // 在where()中使用 OR 与 AND用法相同，如下：  ##看起来比直接写更加繁琐##
-            // where( array('and', 'type=1', array('or', 'id=:id','username=:username') ),array(':id'=>$id, ':username'=>$username ));
-
-            // LIKE 用法
-            //where( array('like', 'name', '%tester%') );
-
-            // ->select(): SELECT子句
-            // ->selectDistinct(): SELECT子句，并保持了记录的唯一性
-            // ->from():         构建FROM子句
-            // ->where():        构建WHERE子句
-            // ->join():         在FROM子句中构建INNER JOIN 子句
-            // ->leftJoin():     在FROM子句中构建左连接子句
-            // ->rightJoin():    在FROM子句中构建右连接子句
-            // ->crossJoin():    添加交叉查询片段(没用过)
-            // ->naturalJoin():  添加一个自然连接子片段
-            // ->group():        GROUP BY子句
-            // ->having():       类似于WHERE的子句，但要与GROUP BY连用
-            // ->order():        ORDER BY子句
-            // ->limit():        LIMIT子句的第一部分
-            // ->offset():       LIMIT子句的第二部分
-            // ->union():        appends a UNION query fragment
-
+    //获取模块下面的商品
+    protected function getModuleProduct($info){
+        $list = array();
+        if(empty($info['type'])){
+            $pids = $info['product_ids'];
+            if(empty($pids)){return false;}
+            $pidArr = explode(',', $pids);
+            $list = Product::model()->getProductInfoByIds($pidArr);
+        }else{
+            $list = $this->getModuleProductAuto($info);
+        }
+        return $list;
     }
 
 
-    // public $layout='column1';
+    //通过自动策略获取商品
+    protected function getModuleProductAuto($info){
+        $list = array();
+        //热销商品
+        if($info['type'] == 1){
+            $list = $this->getNewProducts();
+        }elseif($info['type'] == 2){
+            $list = $this->getHotProducts();
+        }elseif($info['type'] == 3){
+            $list = $this->getBestProducts();
+        }elseif($info['type'] == 4){
+            $list = $this->getPromoteProducts();
+        }
+        return $list;
+    }
 
-    // /**
-    //  * Declares class-based actions.
-    //  */
-    // public function actions()
-    // {
-    // 	return array(
-    // 		// captcha action renders the CAPTCHA image displayed on the contact page
-    // 		'captcha'=>array(
-    // 			'class'=>'CCaptchaAction',
-    // 			'backColor'=>0xFFFFFF,
-    // 		),
-    // 		// page action renders "static" pages stored under 'protected/views/site/pages'
-    // 		// They can be accessed via: index.php?r=site/page&view=FileName
-    // 		'page'=>array(
-    // 			'class'=>'CViewAction',
-    // 		),
-    // 	);
-    // }
+    
 
-    // /**
-    //  * This is the action to handle external exceptions.
-    //  */
-    // public function actionError()
-    // {
-    //     if($error=Yii::app()->errorHandler->error)
-    //     {
-    //     	if(Yii::app()->request->isAjaxRequest)
-    //     		echo $error['message'];
-    //     	else
-    //         	$this->render('error', $error);
-    //     }
-    // }
+    /**
+     +
+     *自动策略抓取商品1（新品）
+     +
+     */
+    protected function getNewProducts(){
+        $criteria = new CDbCriteria();
+        $criteria->compare('status',2);
+        $criteria->compare('is_show',1);
+        $criteria->limit = 5;
+        $criteria->order = 'add_time desc,id desc';
+        $list = Product::model()->findAll($criteria);
+        if(empty($list)){return false;}
 
-    // /**
-    //  * Displays the contact page
-    //  */
-    // public function actionContact()
-    // {
-    // 	$model=new ContactForm;
-    // 	if(isset($_POST['ContactForm']))
-    // 	{
-    // 		$model->attributes=$_POST['ContactForm'];
-    // 		if($model->validate())
-    // 		{
-    // 			$headers="From: {$model->email}\r\nReply-To: {$model->email}";
-    // 			mail(Yii::app()->params['adminEmail'],$model->subject,$model->body,$headers);
-    // 			Yii::app()->user->setFlash('contact','Thank you for contacting us. We will respond to you as soon as possible.');
-    // 			$this->refresh();
-    // 		}
-    // 	}
-    // 	$this->render('contact',array('model'=>$model));
-    // }
+        $idsArr = array();
+        foreach ($list as $value) {
+            array_push($idsArr, $value->id);
+        }
 
-    // /**
-    //  * Displays the login page
-    //  */
-    // public function actionLogin()
-    // {
-    // 	if (!defined('CRYPT_BLOWFISH')||!CRYPT_BLOWFISH)
-    // 		throw new CHttpException(500,"This application requires that PHP was compiled with Blowfish support for crypt().");
+        $list = Product::model()->getProductFaceImageByProductIds($idsArr);
+        return $list;
+    }
 
-    // 	$model=new LoginForm;
 
-    // 	// if it is ajax validation request
-    // 	if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
-    // 	{
-    // 		echo CActiveForm::validate($model);
-    // 		Yii::app()->end();
-    // 	}
 
-    // 	// collect user input data
-    // 	if(isset($_POST['LoginForm']))
-    // 	{
-    // 		$model->attributes=$_POST['LoginForm'];
-    // 		// validate user input and redirect to the previous page if valid
-    // 		if($model->validate() && $model->login())
-    // 			$this->redirect(Yii::app()->user->returnUrl);
-    // 	}
-    // 	// display the login form
-    // 	$this->render('login',array('model'=>$model));
-    // }
+    /**
+     +
+     *自动策略抓取商品1（热卖）销量最高的5个商品
+     +
+     */
+    protected function getHotProducts(){
+        $criteria = new CDbCriteria();
+        $criteria->compare('status',2);
+        $criteria->compare('is_show',1);
+        $criteria->limit = 5;
+        $criteria->order = 'sold_num desc,id desc';
+        $list = Product::model()->findAll($criteria);
+        if(empty($list)){return false;}
 
-    // /**
-    //  * Logs out the current user and redirect to homepage.
-    //  */
-    // public function actionLogout()
-    // {
-    // 	Yii::app()->user->logout();
-    // 	$this->redirect(Yii::app()->homeUrl);
-    // }
+        $idsArr = array();
+        foreach ($list as $value) {
+            array_push($idsArr, $value->id);
+        }
+
+        $list = Product::model()->getProductFaceImageByProductIds($idsArr);
+        return $list;
+    }
+
+
+
+    /**
+     +
+     *自动策略抓取商品2（特卖）折扣最高的5个
+     +
+     */
+    protected function getPromoteProducts(){
+        $criteria = new CDbCriteria();
+        $criteria->compare('status',2);
+        $criteria->compare('is_show',1);
+        $criteria->compare('promote_start_time','<='.time());
+        $criteria->compare('promote_end_time', '>=' .time());
+        $criteria->limit = 5;
+        $criteria->order = 'discount asc,id desc';
+        $list = Product::model()->findAll($criteria);
+        if(empty($list)){return false;}
+
+        $idsArr = array();
+        foreach ($list as $value) {
+            array_push($idsArr, $value->id);
+        }
+
+        $list = Product::model()->getProductFaceImageByProductIds($idsArr);
+        return $list;
+    }
+
+
+
+    /**
+     +
+     *自动策略抓取商品3（精选）售出个数最高按照品牌取出5个
+     +
+     */
+    protected function getBestProducts(){
+        $criteria = new CDbCriteria();
+        $criteria->compare('status',2);
+        $criteria->compare('is_show',1);
+        $criteria->compare('promote_start_time','<='.time());
+        $criteria->compare('promote_end_time', '>=' .time());
+        $criteria->group = 'brand_id';
+        $criteria->limit = 5;
+        $criteria->order = 'sold_num desc,id desc';
+        $list = Product::model()->findAll($criteria);
+        if(empty($list)){return false;}
+
+        $idsArr = array();
+        foreach ($list as $value) {
+            array_push($idsArr, $value->id);
+        }
+
+        $list = Product::model()->getProductFaceImageByProductIds($idsArr);
+        return $list;
+    }
+
+
+
+    
 }

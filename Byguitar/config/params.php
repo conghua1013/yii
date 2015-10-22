@@ -32,6 +32,10 @@ return array(
             'path' => '/www/www/yii/Byguitar/images/bank/',
             'types' => array('jpg','gif','png','jpeg'),
         ),
+        'module_banner' => array(
+            'path' => '/www/www/yii/Byguitar/images/module_banner/',
+            'types' => array('jpg','gif','png','jpeg'),
+        ),
     ),
     
     'url' => array(

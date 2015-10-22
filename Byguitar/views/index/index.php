@@ -25,422 +25,82 @@
 
 <!-- flash模块 -->
 <div class="fr flashbox sflashbox">
-  
-
   <ul id="fbox">
-    <volist name="lunbo" id="vo" >
-    <li class="switch_item"><a target="_blank" href="{$vo.link}" title="{$vo.title}">
-    <img src="{$vo.img}" width="776" height="348"></a></li>
-    </volist>
-    <!-- <li class="switch_item"><a target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/sflash-2.jpg" width="776" height="348"></a></li>
-    <li class="switch_item"><a target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/sflash-1.jpg" width="776" height="348"></a></li>
-    <li class="switch_item"><a target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/sflash-2.jpg" width="776" height="348"></a></li> -->
+    <?php if($lunbo): ?>
+    <?php foreach($lunbo as $row): ?>
+    <li class="switch_item"><a target="_blank" href="<?php echo $row['link'];?>" title="<?php echo $row['title'];?>">
+    <img src="<?php echo $row['img'];?>" width="776" height="348"></a></li>
+    <?php endforeach; ?>
+    <?php endif; ?>
   </ul>
   <ul id="fbar">
-    <volist name="lunbo" id="vo">
-    <li class="fbar">{$key}</li>
-    </volist>
-    <!-- <li class="fbar">2</li>
-    <li class="fbar">3</li>
-    <li class="fbar">4</li> -->
+    <?php if($lunbo): ?>
+    <?php foreach($lunbo as $key => $row): ?>
+    <li class="fbar"><?php echo $key;?></li>
+    <?php endforeach; ?>
+    <?php endif; ?>
   </ul>
 
   <!--banner模块-->
   <div class="sbanner clearfix">
-    <volist name="banner" id="vo" mod="2">
-  	<a <eq name="mod" value="1">class="fr" <else/>class="fl" </eq> target="_blank" href="{$vo.link}" title="{$vo.title}">
-    <img src="{$vo.img}" width="380" height="172"></a>
-    </volist>
-    <!-- <a class="fr" target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/sbanner-2.jpg" width="380" height="172"></a> -->
+    <?php if($lunbo): ?>
+    <?php $bannerNum = 1; ?>
+    <?php foreach($banner as $key => $row): ?>
+  	<a <?php if($bannerNum == 1): ?>class="fr" <?php else: ?> class="fl" <?php endif;?> target="_blank" href="<?php echo $row['link'];?>" title="<?php echo $row['title'];?>">
+    <img src="<?php echo $row['img'];?>" width="380" height="172"></a>
+    <?php $bannerNum++; ?>
+    <?php endforeach; ?>
+    <?php endif; ?>
   </div>
 
 </div>
 <div class="clear"></div>
 
 
-<volist name="module" id="vo">
+<?php if($module): ?>
+<?php foreach($module as $row): ?>
 <div class="shopzone  clearfix">
-<h2>{$vo.title}</h2>
-	<a class="fl" target="_blank" href="{$vo.link}" title="{$vo.title}">
-    <img src="{$vo.img}" width="207" height="382"></a>
-
-    <volist name="vo.list" id="row">
-    <eq name="key" value="0">
+<h2><?php echo $row['title']; ?></h2>
+	<a class="fl" target="_blank" href="<?php echo $row['link']; ?>" title="<?php echo $row['title']; ?>">
+    <img src="<?php echo $row['img']; ?>" width="207" height="382"></a>
+    <?php if($row['list']): ?>
+    <?php $productNum = 1; ?>
+    <?php foreach($row['list'] as $key => $pInfo): ?>
+    <?php if($productNum == 1): ?>
     	<div class="fl pinbox bpinbox shadow">
             <div class="pinimg">
-                <span class="discount">{$row.discount}折</span>
+                <span class="discount"><?php echo $pInfo['discount']; ?>折</span>
                 <span class="pinlike"></span>
-                <a href="/shop/item/{$row.id}" title="{$row.product_name}">
-                    <img width="380" height="380" src="{$row.img.0.img_300}">
+                <a href="/shop/item/<?php echo $pInfo['id']; ?>" title="<?php echo $pInfo['product_name']; ?>">
+                    <img width="380" height="380" src="<?php echo $pInfo['images']['image_300']; ?>">
                 </a>
             </div>
             <div class="pininfo">
-                <h3><a href="/shop/item/{$row.id}" title="{$row.product_name}">{$row.product_name}</a></h3>
-                <p class="pinprice"><b>¥{$row.sell_price} </b> | <del>¥{$row.market_price}</del></p>
+                <h3><a href="/shop/item/<?php echo $pInfo['id']; ?>" title="<?php echo $pInfo['product_name']; ?>"><?php echo $pInfo['product_name']; ?></a></h3>
+                <p class="pinprice"><b>¥<?php echo $pInfo['sell_price']; ?> </b> | <del>¥<?php echo $pInfo['market_price']; ?></del></p>
             </div>
         </div>
-    <else/>
+    <?php else: ?>
         <div class="fl pinbox spinbox shadow">
             <div class="pinimg">
-                <span class="discount">7.5折</span>
+                <span class="discount"><?php echo $pInfo['discount']; ?>折</span>
                 <span class="pinlike"></span>
-                <a href="/shop/item/{$row.id}"><img width="180" height="180" src="{$row.img.0.img_300}"></a>
+                <a href="/shop/item/<?php echo $pInfo['id']; ?>"><img width="180" height="180" src="<?php echo $pInfo['images']['image_300']; ?>"></a>
             </div>
             <div class="pininfo">
-                <h3><a href="/shop/item/{$row.id}">{$row.product_name}</a></h3>
-                <p class="pinprice"><b>¥{$row.sell_price} </b> |  <del>¥{$row.market_price}</del></p>
+                <h3><a href="/shop/item/<?php echo $pInfo['id']; ?>"><?php echo $pInfo['product_name']; ?></a></h3>
+                <p class="pinprice"><b>¥<?php echo $pInfo['sell_price']; ?> </b> |  <del>¥<?php echo $pInfo['market_price']; ?></del></p>
             </div>
         </div>
-    </eq>
-    </volist>
-    
-    <!-- <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-3.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div> -->
-</div>
-</volist>
-
-
-<!-- <div class="shopzone  clearfix">
-<h2>热卖商品</h2>
-	<a class="fl" target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/szone-2.jpg" width="207" height="382"></a>
-    <div class="fl bzone">
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-3.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    </div>
-	<div class="fl pinbox bpinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="380" height="380" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
+    <?php endif; ?>
+    <?php $productNum++; ?>
+    <?php endforeach; ?>
+    <?php endif; ?>
     
 </div>
+<?php endforeach; ?>
+<?php endif; ?>
 
-
-<div class="shopzone  clearfix">
-<h2>品牌精选</h2>
-	<a class="fl" target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/szone-3.jpg" width="207" height="382"></a>
-    
-    <div class="fl szone">
-   
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-3.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    </div>
-	<div class="fl pinbox bpinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="380" height="380" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    <div class="fl szone" >    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-3.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    </div>
-    
-
-</div>
-
-
-<div class="shopzone  clearfix">
-<h2>热卖商品</h2>
-	<a class="fl" target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/szone-4.jpg" width="207" height="382"></a>
-    <div class="fl bzone">
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-3.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    </div>
-    	<div class="fl pinbox bpinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="380" height="380" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-
-</div>
-
-
-<div class="shopzone  clearfix">
-<h2>特卖商品</h2>
-	<a class="fl" target="_blank" href="" title=""><img src="__PUBLIC__/Images/shop/szone-5.jpg" width="207" height="382"></a>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-3.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-1.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-2.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-    
-    <div class="fl pinbox spinbox shadow">
-        <div class="pinimg">
-            <span class="discount">7.5折</span>
-            <span class="pinlike"></span>
-            <a href=""><img width="180" height="180" src="__PUBLIC__/Images/shop/zoompic-3.jpg"></a>
-        </div>
-        <div class="pininfo">
-            <h3><a href="">彼岸2014新款民谣吉他</a></h3>
-            <p class="pinprice"><b>¥599 </b> |  <del>¥799</del></p>
-        </div>
-    </div>
-</div> -->
-
-
-  
 </div>
 
 
