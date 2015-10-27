@@ -11,11 +11,11 @@
             <?php foreach($this->params['cateList'] as $row): ?>
             <volist name="cateTree" id="vo">
             <li class="catitem">
-                <h3><a href="<?php if($row['url']){ echo $row['url']; }else{ echo '/shop/category/'.$row['id'] ;} ?>" ><?php echo $row['cat_name']; ?></a></h3>
+                <h3><a href="<?php if($row['url']){ echo $row['url']; }else{ echo '/category/'.$row['id'] ;} ?>" ><?php echo $row['cat_name']; ?></a></h3>
                 <div class="subcatlist">
                     <?php if($row['child']): ?>
                     <?php foreach($row['child'] as $child): ?>
-                        <p><a href="<?php if($child['url']){ echo $child['url']; }else{ echo '/shop/category/'.$child['id'] ;} ?>"><?php echo $child['cat_name']; ?></a></p>  
+                        <p><a href="<?php if($child['url']){ echo $child['url']; }else{ echo '/category/'.$child['id'] ;} ?>"><?php echo $child['cat_name']; ?></a></p>
                     <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
@@ -67,7 +67,7 @@
         <a class="sortby <?php if($filter['sort']==2){ echo 'sortby_on'; } ?>" href="/shop/category/<?php echo $filter['id'].'-'.$filter['brand'].'-'.$filter['price'].'-'.$filter['size'].'-'.$filter['origin'].'-'.$filter['color'].'-2'; ?>">最新</a>
         <a class="sortby <?php if($filter['sort']==3){ echo 'sortby_on'; } ?>" href="/shop/category/<?php echo $filter['id'].'-'.$filter['brand'].'-'.$filter['price'].'-'.$filter['size'].'-'.$filter['origin'].'-'.$filter['color'].'-3'; ?>">价格</a>
         </p>
-        <div class="fr page_box"><?php echo $pageshort['str']; ?></div>
+        <div class="fr page_box"><?php echo $pageShort['str']; ?></div>
         <p class="fr">
         <span>共 <b><?php echo $count; ?></b> 件商品 |</span>    
         </p>
@@ -86,7 +86,7 @@
                     <div class="pinimg">
                         
                         <?php if($row['discount'] > 0): ?>
-                        <span class="discount">{$vo.discount}折</span>
+                        <span class="discount"><?php echo $row['discount']; ?>折</span>
                         <?php endif; ?> 
                         
                         <?php if($row['is_like']): ?>
@@ -95,10 +95,10 @@
                             <span class="pinlike" title="点击标记喜欢这个商品" pid="<?php echo $row['id']; ?>"></span>
                         <?php endif; ?>
 
-                        <a href="/shop/item/<?php echo $row['id']; ?>"><img width="320" height="320" src="{$vo.img.0.img_300}" alt="<?php echo $row['product_name']; ?>"></a>
+                        <a href="/item/<?php echo $row['id']; ?>"><img width="320" height="320" src="<?php echo $row['images']['image_300']; ?>" alt="<?php echo $row['product_name']; ?>"></a>
                     </div>
                     <div class="pininfo">
-                        <h3><a href="/shop/item/<?php echo $row['id']; ?>"><?php echo $row['product_name']; ?></a></h3>
+                        <h3><a href="/item/<?php echo $row['id']; ?>"><?php echo $row['product_name']; ?></a></h3>
                         <p class="fl pinprice">
                             <b>¥<?php echo $row['sell_price']; ?> </b> | <del><?php echo $row['market_price']; ?></del></p>
                         <p class="fr pinnums" id="like_num_<?php echo $row['id']; ?>">

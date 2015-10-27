@@ -9,11 +9,11 @@
         <?php foreach($this->params['cateList'] as $row): ?>
         <volist name="cateTree" id="vo">
         <li class="catitem">
-            <h3><a href="<?php if($row['url']){ echo $row['url']; }else{ echo '/shop/category/'.$row['id'] ;} ?>" ><?php echo $row['cat_name']; ?></a></h3>
+            <h3><a href="<?php if($row['url']){ echo $row['url']; }else{ echo '/category/'.$row['id'] ;} ?>" ><?php echo $row['cat_name']; ?></a></h3>
             <div class="subcatlist">
                 <?php if($row['child']): ?>
                 <?php foreach($row['child'] as $child): ?>
-                    <p><a href="<?php if($child['url']){ echo $child['url']; }else{ echo '/shop/category/'.$child['id'] ;} ?>"><?php echo $child['cat_name']; ?></a></p>  
+                    <p><a href="<?php if($child['url']){ echo $child['url']; }else{ echo '/category/'.$child['id'] ;} ?>"><?php echo $child['cat_name']; ?></a></p>
                 <?php endforeach; ?>
                 <?php endif; ?>
             </div>
@@ -71,12 +71,12 @@
             <div class="pinimg">
                 <span class="discount"><?php echo $pInfo['discount']; ?>折</span>
                 <span class="pinlike"></span>
-                <a href="/shop/item/<?php echo $pInfo['id']; ?>" title="<?php echo $pInfo['product_name']; ?>">
+                <a href="/item/<?php echo $pInfo['id']; ?>" title="<?php echo $pInfo['product_name']; ?>">
                     <img width="380" height="380" src="<?php echo $pInfo['images']['image_300']; ?>">
                 </a>
             </div>
             <div class="pininfo">
-                <h3><a href="/shop/item/<?php echo $pInfo['id']; ?>" title="<?php echo $pInfo['product_name']; ?>"><?php echo $pInfo['product_name']; ?></a></h3>
+                <h3><a href="/item/<?php echo $pInfo['id']; ?>" title="<?php echo $pInfo['product_name']; ?>"><?php echo $pInfo['product_name']; ?></a></h3>
                 <p class="pinprice"><b>¥<?php echo $pInfo['sell_price']; ?> </b> | <del>¥<?php echo $pInfo['market_price']; ?></del></p>
             </div>
         </div>
@@ -85,10 +85,10 @@
             <div class="pinimg">
                 <span class="discount"><?php echo $pInfo['discount']; ?>折</span>
                 <span class="pinlike"></span>
-                <a href="/shop/item/<?php echo $pInfo['id']; ?>"><img width="180" height="180" src="<?php echo $pInfo['images']['image_300']; ?>"></a>
+                <a href="/item/<?php echo $pInfo['id']; ?>"><img width="180" height="180" src="<?php echo $pInfo['images']['image_300']; ?>"></a>
             </div>
             <div class="pininfo">
-                <h3><a href="/shop/item/<?php echo $pInfo['id']; ?>"><?php echo $pInfo['product_name']; ?></a></h3>
+                <h3><a href="/item/<?php echo $pInfo['id']; ?>"><?php echo $pInfo['product_name']; ?></a></h3>
                 <p class="pinprice"><b>¥<?php echo $pInfo['sell_price']; ?> </b> |  <del>¥<?php echo $pInfo['market_price']; ?></del></p>
             </div>
         </div>

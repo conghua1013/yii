@@ -20,7 +20,7 @@
     <link href="/css/web/flow.css" type="text/css" rel="stylesheet">
     <link href="/css/web/index.css" type="text/css" rel="stylesheet">
 
-    <script type="text/javascript" src="/js/web/jquery.js?v={$Think.config.VER}"></script>
+    <script type="text/javascript" src="/js/web/jquery1.js?v={$Think.config.VER}"></script>
     <script type="text/javascript" src="/js/web/flashbox.js?v={$Think.config.VER}"></script>
     <script type="text/javascript" src="/js/web/common.js?v={$Think.config.VER}"></script>
     <script type="text/javascript" src="/js/web/reglog.js?v={$Think.config.VER}"></script>
@@ -29,7 +29,8 @@
     <script type="text/javascript" src="/js/web/shop.js"></script>
     <script type="text/javascript" src="/js/web/flow.js"></script>
     <script type="text/javascript" src="/js/web/region.js"></script>
-    <script type="text/javascript" src="/js/web/user.js"></script> 
+    <script type="text/javascript" src="/js/web/user.js"></script>
+    <script type="text/javascript" src="/js/web/common.js"></script>
 </head>
 <body style="background-image: none;">
 <!-- page start -->

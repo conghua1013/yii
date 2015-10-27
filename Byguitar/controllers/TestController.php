@@ -2,7 +2,20 @@
 
 class TestController extends ShopBaseController
 {
+
+    public function actionImage(){
+        $imagePath = '/www/test/images/test_product.jpg';
+        $newImagePath = '/www/test/images/test_product_200.jpg';
+        $image=Yii::app()->image->load($imagePath);
+        $flag = $image->resize(200,200)->save($newImagePath);
+        echo "<pre>";
+        echo "success";
+        var_dump($flag);
+    }
     public function actionTestRpc(){
+
+        echo Yii::getVersion();
+        exit;
         
         echo "<pre>";
         $config = Yii::app()->params['Rpc_Service'];
@@ -12,6 +25,7 @@ class TestController extends ShopBaseController
         $data = $obj->getInfoByUid(567);
         print_r($obj);
         print_r($data);
+        exit;
 
         $obj =  \PHPClient\Rpc::inst('test')->setClassName('User');
         $data = $obj->getEmail(57777);
@@ -42,6 +56,9 @@ class TestController extends ShopBaseController
     }
 
     public function actionIndex() {
+        echo "sssss";
+        // Common::instance()->test();
+        exit;
 
         //echo $this->getViewPath();
 

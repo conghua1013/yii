@@ -11,7 +11,7 @@ class IndexController extends ShopBaseController
         $module = $this->getIndexModule();
 
         // echo "<pre>";
-        // print_r($module);
+        // print_r($lunbo);
         // exit;
 
         $viewData = array();
@@ -35,9 +35,10 @@ class IndexController extends ShopBaseController
         if(empty($list)){return false;}
         $newList = array();
         $i = 1;//用于页面展示序号
+        $imageConfig = Yii::app()->params['image']['banner'];
         foreach ($list as $row) {
             $newList[$i] = $row->getAttributes();
-            //$newList[$i]['img'] = get_host('img').'/Public/Images/banner/'.$row['img'];
+            $newList[$i]['img'] = str_replace(ROOT_PATH, '', $imageConfig['path']).$row->img;
             $i++;
         }
         return $newList;
@@ -57,9 +58,10 @@ class IndexController extends ShopBaseController
         if(empty($list)){return false;}
         $newList = array();
         $i = 1;//用于页面展示序号
+        $imageConfig = Yii::app()->params['image']['banner'];
         foreach ($list as $row) {
             $newList[$i] = $row->getAttributes();
-            //$newList[$i]['img'] = get_host('img').'/Public/Images/banner/'.$row['img'];
+            $newList[$i]['img'] = str_replace(ROOT_PATH, '', $imageConfig['path']).$row->img;
             $i++;
         }
         return $newList;

@@ -31,11 +31,15 @@ class CategoryController extends ShopBaseController {
         
         $pages 		= '';//正常分页信息
         $pageShort 	= '';//短分页信息
-        //$urlStr = C('WEB').'/shop/category/'.getFormatUrl('category',$filter);
-//        if($count >0 ){
-//                $pages		= get_page_list($count, $filter['p'], $pagenum, $urlStr,'category');
-//                $pageShort	= get_page_short($count, $filter['p'], $pagenum, $urlStr,'category');
-//        };
+        $urlStr = 'category/'.Common::instance()->getFormatUrl('category',$filter);
+
+       if($count >0 ){
+               $pages		= Common::instance()->get_page_list($count, $filter['p'], $pagenum, $urlStr,'category');
+               $pageShort	= Common::instance()->get_page_short($count, $filter['p'], $pagenum, $urlStr,'category');
+       };
+
+//        echo "<pre>";
+//        print_r($pageShort);exit;
 
         //$cakeInfo 	= $this->getCakeInfo($filter);
 
@@ -50,7 +54,7 @@ class CategoryController extends ShopBaseController {
         $viewData['filter'] = $filter;
         $viewData['pages'] = $pages;
         $viewData['pageShort'] = $pageShort;
-        $viewData['cakeInfo'] = $cakeInfo;
+        //$viewData['cakeInfo'] = $cakeInfo;
         $this->render('category/index',$viewData);
     }
     
@@ -147,22 +151,24 @@ class CategoryController extends ShopBaseController {
                 ->limit($limit)
                 ->offset($offset)
                 ->queryAll();
-        
+
+
+        $product_ids = array();
+        if($list){
+            foreach($list as $row){
+                array_push($product_ids,$row['id']);
+            }
+            $image_list = Product::model()->getProductFaceImageByProductIds($product_ids);
+            if($image_list){
+                foreach($list as &$row){
+                    $row['images'] = isset($image_list[$row['id']]) ? $image_list[$row['id']]['images'] : '';
+                }
+            }
+        }
+
         $options = array();
         $options['brand'] 	= $this->getOptionBrands($filter,$optionWhere);	//品牌
         $options['price'] 	= $this->getOptionPrices($filter,$optionWhere);  	//价格
-//        $options['size'] 	= $this->getOptionSizes($filter,$where);	//尺寸
-//        $options['origin'] 	= $this->getOptionOrigins($filter,$where);	//原产地
-//        $options['color'] 	= $this->getOptionColors($filter,$where);	//原产地
-//        $newList = array();
-//        if(!empty($list)){
-//            foreach ($list as $row) {
-//                $pInfo = $this->product->getProductInfo($row['id']);
-//                unset($pInfo['detail']);
-//                array_push($newList, $pInfo);
-//            }
-//        }
-//
         return array('list'=>$list,'count'=>$count,'options'=>$options); 
     }
     

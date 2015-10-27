@@ -259,7 +259,7 @@ class ProductController extends ManageController {
         if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $model = ProductExtend::model()->findByAttributes(array('product_id'=>$_REQUEST['id']));
         }
-        if(empty($info)){
+        if(empty($model)){
             $model = new ProductExtend();
         }
 
@@ -313,43 +313,44 @@ class ProductController extends ManageController {
     * 保存商品的图片信息
     */
     protected function saveProductImage($productId){
+
         $imageConfig = Yii::app()->params['image']['product'];
         if(empty($imageConfig)){
             throw new exception('缺少商品图片配置');
         }
+
         $image = CUploadedFile::getInstanceByName('Filedata');
-        $path = $imageConfig['path'].date('Ym').'/';
+        $image_extension = $image->getExtensionName();
+        $path = $imageConfig['path'] . date('Ym') . '/';
         $this->createPath($path);
-        $imageName = date('YmdHis').rand(1,1000);
-        $imageNamePath = $path.$imageName.'.'.$image->getExtensionName();
-        $image->saveAs($imageNamePath,true);
+        $imageName = date('YmdHis') . rand(1, 1000);
+        $imageNamePath = $path . $imageName . '.' .$image_extension;
+        $flag = $image->saveAs($imageNamePath, true);
+        if(!$flag){
+            throw new exception('原图保存失败！');
+        }
 
         $images_arr = array();
-        Yii::import("ext.Thumb.CThumb");
-        foreach($imageConfig['sizes'] as $row){
-            $im = null;
-            $imagetype = strtolower($image->getExtensionName());
-            if($imagetype == 'gif')
-                $im = imagecreatefromgif($imageNamePath);
-            else if ($imagetype == 'jpg')
-                $im = imagecreatefromjpeg($imageNamePath);
-            else if ($imagetype == 'png')
-                $im = imagecreatefrompng($imageNamePath);
-
-            $newImagePath = $path.$imageName.'-'.$row.'.'.$image->getExtensionName();
-            CThumb::resizeImage($im,$row, $row, $newImagePath, $imagetype);
-            $images_arr['image_'.$row] = str_replace(ROOT_PATH,'',$newImagePath);
+        $image = Yii::app()->image->load($imageNamePath);
+        foreach ($imageConfig['sizes'] as $row) {
+            $newImagePath = $path . $imageName . '-' . $row . '.' . $image_extension;
+            $flag = $image->resize($row, $row)->save($newImagePath);
+            if(!$flag){
+                throw new exception('图片尺寸'.$row.'生成失败！');
+            }
+            $images_arr['image_' . $row] = str_replace(ROOT_PATH, '', $newImagePath);
         }
 
         //图片处理here
         $model = new ProductImage();
-        $model->product_id  = $productId;
-        $model->img         = str_replace(ROOT_PATH,'',$imageNamePath);
-        $model->add_time    = time();
+        $model->product_id = $productId;
+        $model->img = str_replace(ROOT_PATH, '', $imageNamePath);
+        $model->add_time = time();
         $flag = $model->save();
-        if(empty($flag)){
-            throw new exception('添加商品图片失败！');
+        if(!$flag){
+            throw new exception('保存记录失败！');
         }
+
         return array('imgid' => $model->id,'img' => $images_arr);
     }
 
@@ -404,10 +405,6 @@ class ProductController extends ManageController {
         $viewData['info']         = $info;
         $this->render('info', $viewData);
     }
-
-
-
-
 
 
 

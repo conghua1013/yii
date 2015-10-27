@@ -4,6 +4,9 @@
 class ShopBaseController extends CController 
 {
     public $params; //模板向叶面赋值通过此参数
+    public $user_id = '';
+    public $webUrl = 'www.byguitar.com';
+    public $webConfig;
     
     public function __construct(){
         //parent::__construct("Shop");
@@ -14,6 +17,11 @@ class ShopBaseController extends CController
 
         $cateList = Category::model()->getCategoryListForShopNavigation();
         $this->params['cateList'] = $cateList;
+        $this->user_id = Yii::app()->session['user_id'];
+
+        $config = Yii::app()->params;
+        $this->webConfig    = $config;
+        $this->webUrl       = $config['url']['web_url'];
     }
     
     public function getHeadMenuList(){

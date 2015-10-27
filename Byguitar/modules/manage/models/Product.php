@@ -1,12 +1,8 @@
 <?php
 
 /**
- * The followings are the available columns in table 'tbl_user':
- * @property integer $id
- * @property string $username
- * @property string $password
- * @property string $email
- * @property string $profile
+ * 商品model
+ * @auther mwq2020@163.com
  */
 class Product extends CActiveRecord
 {  
@@ -101,16 +97,41 @@ class Product extends CActiveRecord
 	}
 
 
-    public function getProductInfoById($id){
+    /**********  已上部分用于后台管理，以下部分用户前端页面展示  **********/
+
+
+    /**
+     * 获取商品的详情(用于详情页展示).
+     * @param $id
+     * @return array|bool
+     */
+    public function getProductInfoById($id,$info_type='simple'){
         if(empty($id)){return false;}
         $info = Product::model()->findByPk($id);
         if(empty($info)){return false;}
         $data = $info->getAttributes();
         $data['images'] = $this->getProductImagesByProductId($id);
+        if($info_type != 'simple'){
+            $extendInfo = $this->getProductExtendInfo($id);
+            if(!empty($extendInfo)){
+                $data['extend_attr_list'] = $extendInfo;
+            }
+        }
+
+        //商品的关键字
+        //if($info['tags']){
+        //    $info['tags'] = explode(',',$info['tags']);
+        //}
+
         return $data;
     }
 
-
+    /**
+     * 获取商品详情（用于列表类型的展示）
+     * @param $product_ids
+     * @param string $info_type
+     * @return array|string
+     */
     public function getProductInfoByIds($product_ids,$info_type='simple'){
         if(empty($product_ids)){return '';}
         $criteria = new CDbCriteria;
@@ -141,7 +162,11 @@ class Product extends CActiveRecord
         return $data;
     }
 
-    //获取商品封面图片（用于列表展示--单个）
+    /**
+     * 获取商品封面图片（用于列表展示--单个）
+     * @param $product_id
+     * @return array|string
+     */
     public function getProductFaceImageByProductId($product_id) {
         if(empty($product_id)){return '';}
         $info = ProductImage::model()->findByAttributes(array('product_id'=>$product_id));
@@ -149,7 +174,11 @@ class Product extends CActiveRecord
         return $this->getImageSizesByImageName($info->img);
     }
 
-    //获取商品封面图片（用于列表展示--批量）
+    /**
+     * 获取商品封面图片（用于列表展示--批量）
+     * @param $product_ids
+     * @return array|string
+     */
     public function getProductFaceImageByProductIds($product_ids) {
         if(empty($product_ids)){return '';}
         $criteria = new CDbCriteria;
@@ -166,7 +195,11 @@ class Product extends CActiveRecord
         return $data;
     }
 
-    //获取商品的图册
+    /**
+     * 获取单个商品的图片（不同图片尺寸合集）
+     * @param $product_id
+     * @return array|string
+     */
     public function getProductImagesByProductId($product_id) {
         if(empty($product_id)){return '';}
         $list = ProductImage::model()->findAllByAttributes(array('product_id'=>$product_id));
@@ -179,7 +212,11 @@ class Product extends CActiveRecord
         return $data;
     }
 
-
+    /**
+     * 获取多个商品的所有图片的（带不同尺寸路径的图片的合集）
+     * @param $product_ids
+     * @return array|string
+     */
     public function getProductImagesByProductIds($product_ids){
         if(empty($product_ids)){return '';}
         // $criteria = new CDbCriteria;
@@ -199,7 +236,11 @@ class Product extends CActiveRecord
         return $data;
     }
 
-    
+    /**
+     * 生成不同尺寸的商品图片
+     * @param $source_image
+     * @return array
+     */
     public function getImageSizesByImageName($source_image){
         $imageConfig = Yii::app()->params['image']['product'];
         $data = array();
@@ -210,6 +251,55 @@ class Product extends CActiveRecord
             $data['image_'.$row] = $tempPath;
         }
         return $data;
+    }
+
+    /**
+     * 获取商品的扩展属性.
+     * @param $id
+     * @return array|bool|mixed
+     */
+    public function getProductExtendInfo($id)
+    {
+        if(empty($id)){return false;}
+        $extendInfo = ProductExtend::model()->findByAttributes(array('product_id'=>$id));
+
+        $data = array();
+        if($extendInfo){
+            $data = unserialize($extendInfo->other_info);
+        }
+        return $data;
+    }
+
+    /**
+     * 商品扩展属性列表.
+     * @return array
+     */
+    public function getProductExtendAttrList()
+    {
+        $attrList = array(
+            'product_material'=>'商品物料',
+            'warranty'=>'质保',
+            'product_service'=>'服务',
+            'product_size'=>'尺寸',
+            'weight'=>'重量',
+            'make_date'=>'生产日期',
+            'use_life'=>'保质期',
+            'product_return'=>'退换货政策',
+            'product_maintain'=>'保养说明',
+            'use_notice'=>'使用说明',
+            'product_notice'=>'温馨提示',);
+        return $attrList;
+    }
+
+    /**
+     * 获取商品的库存属性
+     * @param $product_id
+     * @return array|mixed|null
+     */
+    public function getProductStock($product_id)
+    {
+        $list = ProductStock::model()->findAllByAttributes(array('product_id'=>$product_id));
+        return $list;
     }
 
 }

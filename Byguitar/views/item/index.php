@@ -1,11 +1,11 @@
 <div class="tip"></div>
 
 <div class="main">
-    <!--面包屑-->   
+  <!--面包屑-->
   <div class="topnav">
-    <a class="gray" href="/shop">彼岸商场</a> > 
-    <a class="gray" href="/shop/category/{$cake.catone.id}">{$cake.catone.cat_name}</a> > 
-    <a class="gray" href="/shop/category/{$cake.cattwo.id}">{$cake.cattwo.cat_name}</a>
+    <a class="gray" href="/shop">彼岸商场</a> >
+    <a class="gray" href="/shop/category/<?php echo $cake['catone']['id']; ?>"><?php echo $cake['catone']['cat_name']; ?></a>  >
+    <a class="gray" href="/shop/category/<?php echo $cake['cattwo']['id']; ?>"><?php echo $cake['cattwo']['cat_name']; ?></a>
   </div>
 
   <!--商品购买区域信息-->
@@ -15,7 +15,9 @@
       <p><?php echo $pInfo['subhead'];?></p>
       <p>
         <label>品牌</label>
-        <!-- <a class="gray" href="/shop/brand/{$pInfo.brand_id}" target="_blank"> --><?php echo $brandInfo['brand_name'];?></p><!-- </a> --></p>
+        <?php echo $brandInfo['brand_name'];?>
+      <!-- <a class="gray" href="/shop/brand/{$pInfo.brand_id}" target="_blank"><?php echo $brandInfo['brand_name'];?></a> -->
+      </p>
     </li>
     <li class="price">
       <p>
@@ -103,16 +105,20 @@
   <div class="pic">
     <div id="pic_box">
         <?php if(!empty($pInfo['images'])): ?>
+        <?php $imagaNum = 1; ?>
         <?php foreach($pInfo['images'] as $row): ?>
-        <a class="cloud-zoom" href="{$vo.img_url}" rel="position: 'inside' , showTitle: false, adjustX:-4, adjustY:-4" <neq name='key' value='0'>style="display:none;"</neq> >
-        <img width="600" height="600" src="<?php echo $row['img_800']; ?>" class="switch_item" <eq name="key" value="0">id="first_img"</eq> /></a>
+        <a class="cloud-zoom" href="<?php echo $row['images']['image_800']; ?>" rel="position: 'inside' , showTitle: false, adjustX:-4, adjustY:-4" <?php if($imagaNum ==1): ?>style="display:none;"<?php endif; ?> >
+        <img width="600" height="600" src="<?php echo $row['images']['image_300']; ?>" class="switch_item" <?php if($imagaNum == 1): ?>id="first_img"<?php endif; ?> /></a>
+        <?php $imagaNum++; ?>
         <?php endforeach; ?>
         <?php endif;?> 
     </div>
     <ul class="pic_index clearfix">
         <?php if(!empty($pInfo['images'])): ?>
+        <?php $imagaNum = 1; ?>
         <?php foreach($pInfo['images'] as $row): ?>
-        <li class="pic_li <eq name='key' value='0'>pic_on</eq>"><img width="80" height="80" title="" src="<?php echo $row['img_120']; ?>"></li>
+        <li class="pic_li <?php if($imagaNum == 1): ?>pic_on<?php endif; ?>"><img width="80" height="80" title="" src="<?php echo $row['images']['image_100']; ?>"></li>
+        <?php $imagaNum++; ?>
         <?php endforeach; ?>
         <?php endif;?>
     </ul>
@@ -126,10 +132,10 @@
     <!--商品分享出去时候的文案，需要程序生成url,title,content,img信息的变量-->
     <script language="javascript">
         var bgshare ={
-          url:'{$Think.config.WEB}/zine/49/',
+          url:'<?php $this->webUrl; ?>/zine/49/',
           title:'彼岸吉他商品分享',
           content: '商品名称等文案！',
-          img : '{$Think.config.WEB}__PUBLIC__/Images/zine/bg7year-2.jpg'
+          img : '<?php $this->webUrl; ?>__PUBLIC__/Images/zine/bg7year-2.jpg'
         }
       </script> 
   </div>
@@ -149,30 +155,31 @@
     <!--商品参数排练区-->
     <div class="pdetails">
       <dl class="clearfix">
-        <dt>{$pInfo.describtion}</dt>
-
-        <volist name="attrList" id="vo">
-          <dd>{$vo.attr_name}：{$vo.attr_content}</dd>
-        </volist>
+        <dt><?php echo $pInfo['describtion']; ?></dt>
+          <?php if(!empty($extendAttrList)): ?>
+          <?php foreach($extendAttrList as $row): ?>
+          <dd><?php echo $row['attr_name']."：".$row['attr_content']; ?></dd>
+          <?php endforeach; ?>
+          <?php endif;?>
         <dd>退换政策：查看详细规则»</dd>
       </dl>
     </div>
 
 
     <!--商品配视频介绍区，如果有的话-->
-    <notempty name="pInfo.vedio_url">
+    <?php if(!empty($pInfo['vedio_url'])): ?>
     <div class="pvideo">
-      <embed src="{$pInfo.vedio_url}" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+      <embed src="<?php echo $pInfo['vedio_url'];?>" allowFullScreen="true" quality="high" width="480" height="400" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
     </div>
-    </notempty>
+    <?php endif; ?>
 
 
     <!--商品详情长图区-->
-    <notempty name="pInfo.detail">
+    <?php if(!empty($pInfo['detail'])): ?>
     <div class="pimgs">
-        {$pInfo.detail}
+      <?php echo $pInfo['detail'];?>
     </div>
-    </notempty>
+    <?php endif; ?>
   </div>
 
   <!--商品详情区-货品评价以及推荐产品区-->
