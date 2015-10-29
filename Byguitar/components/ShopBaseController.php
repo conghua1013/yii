@@ -17,7 +17,7 @@ class ShopBaseController extends CController
 
         $cateList = Category::model()->getCategoryListForShopNavigation();
         $this->params['cateList'] = $cateList;
-        $this->user_id = Yii::app()->session['user_id'];
+        $this->user_id = Yii::app()->session['authId'];
 
         $config = Yii::app()->params;
         $this->webConfig    = $config;

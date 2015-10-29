@@ -151,7 +151,8 @@ class Product extends CActiveRecord
             foreach ($list as $row) {
                 $data[$row->id] = $row->getAttributes();
             }
-
+        }
+        if($info_type != 'simple') {
             $images_list = $this->getProductImagesByProductIds($product_ids);
             if($images_list){
                 foreach ($images_list as $key => $row) {

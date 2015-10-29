@@ -2,21 +2,43 @@
 
 class TestController extends ShopBaseController
 {
-
-    public function actionImage(){
-        $imagePath = '/www/test/images/test_product.jpg';
-        $newImagePath = '/www/test/images/test_product_200.jpg';
-        $image=Yii::app()->image->load($imagePath);
-        $flag = $image->resize(200,200)->save($newImagePath);
+    public function actionIndex()
+    {
         echo "<pre>";
-        echo "success";
-        var_dump($flag);
-    }
-    public function actionTestRpc(){
+
+        $list = ProductAttributes::model()->findAllByAttributes(array('id'=>2));
+
+        User::find()->where('status=:status', [':status' => User::STATUS_ACTIVATED])->indexBy('id')->all();
+
+        $zine_ids = array(1,2,3);
+        $list = Yii::app()->byguitar->createCommand()
+            ->select('*')
+            ->from('bg_zine')
+            ->where('id in ('.implode(',',$zine_ids).')')
+            ->queryAll();
+        print_r($list);
+        exit;
+
+
+
+        echo "this is a test page <br>";
 
         echo Yii::getVersion();
         exit;
-        
+    }
+
+    public function actionImage()
+    {
+        //$imagePath = '/www/test/images/test_product.jpg';
+        //$newImagePath = '/www/test/images/test_product_200.jpg';
+        //$image=Yii::app()->image->load($imagePath);
+        //$flag = $image->resize(200,200)->save($newImagePath);
+        echo "<pre>";
+        echo "success";
+        //var_dump($flag);
+    }
+    public function actionTestRpc()
+    {
         echo "<pre>";
         $config = Yii::app()->params['Rpc_Service'];
         \PHPClient\Rpc::config($config);
@@ -53,16 +75,6 @@ class TestController extends ShopBaseController
         //$config = $obj->getRpcClientByName('aa');
         //print_r($config);
         //exit;
-    }
-
-    public function actionIndex() {
-        echo "sssss";
-        // Common::instance()->test();
-        exit;
-
-        //echo $this->getViewPath();
-
-        $this->render('index/index');
     }
 
     public function actionError(){

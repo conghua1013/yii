@@ -82,4 +82,18 @@ class ProductAttributes extends CActiveRecord
         return $data;
     }
 
+    public function getProductAttrNameList(){
+        $list = Yii::app()->shop->createCommand()
+            ->select('*')
+            ->from('bg_product_attributes')
+            ->queryAll();
+        $newList = array();
+        if(!empty($list)){
+            foreach($list as $row){
+                $newList[$row['id']] = $row['attr_name'];
+            }
+        }
+        return $list;
+    }
+
 }

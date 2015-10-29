@@ -63,4 +63,27 @@ class Coupon extends CActiveRecord
         return implode('', $newNumber);
     }
 
+    /**
+     * 获取用户名下的优惠券
+     * @param $userId
+     */
+    public function getCouponList($userId){
+        if(empty($userId)){return '';}
+        //todo 优惠券条件限制
+        $criteria = new CDbCriteria();
+        $criteria->compare('user_id',$userId);
+        $criteria->compare('order_id',0);
+        $criteria->compare('use_time',0);
+        $criteria->compare('start_time','<='.time());
+        $criteria->compare('end_time', '>=' .time());
+        $criteria->order = 'end_time asc';
+        $list = Coupon::model()->findAll($criteria);
+        $newList = array();
+        if(!empty($list)){
+            foreach($list as $row){
+                $newList[$row->id] = $row->getAttribute();
+            }
+        }
+        return $newList;
+    }
 }
