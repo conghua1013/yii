@@ -3,9 +3,9 @@
 <div class="main">
   <!--面包屑-->
   <div class="topnav">
-    <a class="gray" href="/shop">彼岸商场</a> >
-    <a class="gray" href="/shop/category/<?php echo $cake['catone']['id']; ?>"><?php echo $cake['catone']['cat_name']; ?></a>  >
-    <a class="gray" href="/shop/category/<?php echo $cake['cattwo']['id']; ?>"><?php echo $cake['cattwo']['cat_name']; ?></a>
+    <a class="gray" href="/">彼岸商场</a> >
+    <a class="gray" href="/category/<?php echo $cake['catone']['id']; ?>"><?php echo $cake['catone']['cat_name']; ?></a>  >
+    <a class="gray" href="/category/<?php echo $cake['cattwo']['id']; ?>"><?php echo $cake['cattwo']['cat_name']; ?></a>
   </div>
 
   <!--商品购买区域信息-->
@@ -16,7 +16,7 @@
       <p>
         <label>品牌</label>
         <?php echo $brandInfo['brand_name'];?>
-      <!-- <a class="gray" href="/shop/brand/{$pInfo.brand_id}" target="_blank"><?php echo $brandInfo['brand_name'];?></a> -->
+      <!-- <a class="gray" href="/shop/brand/{$pInfo.brand_id}" target="_blank"><?php //echo $brandInfo['brand_name']; ?></a> -->
       </p>
     </li>
     <li class="price">
@@ -37,7 +37,7 @@
     <li class="mates">
       <label>同款</label>
       <volist name="sameColors" id="vo">
-      <a href="/shop/item/{$vo.id}"><img class="mateson" width="48" height="48" title="" src="{$vo.img.img_50}"></a>
+      <a href="/item/{$vo.id}"><img class="mateson" width="48" height="48" title="" src="{$vo.img.img_50}"></a>
       </volist>
     </li>
     <?php endforeach; ?>
@@ -45,20 +45,20 @@
     
     
     <!-- 商品的规格属性 -->
-    <?php if(!empty($pInfo['sizes'])): ?>
+    <?php if(!empty($stock)): ?>
     <li class="style"> 
-        <?php foreach($pInfo['sizes'] as $row): ?>
-            <eq name="k" value="1">  <!-- 默认选中第一个 -->
-            <span class="guige guige_on" size="{$vo.id}" quantity="{$vo.quantity}">{$vo.attr_name}</span>
-            <else/>
-            <span class="guige" size="{$vo.id}" quantity="{$vo.quantity}">{$vo.attr_name}</span>
-            </eq>
+        <?php foreach($stock as $key => $row): ?>
+            <?php if($key == 0): ?>  <!-- 默认选中第一个 -->
+            <span class="guige guige_on" size="<?php echo $row['attr_id']; ?>" quantity="<?php echo $row['quantity']; ?>"><?php echo $attrList[$row['attr_id']]; ?></span>
+            <?php else: ?>
+            <span class="guige" size="<?php echo $row['attr_id']; ?>" quantity="<?php echo $row['quantity']; ?>"><?php echo $attrList[$row['attr_id']]; ?></span>
+            <?php endif; ?>
         <?php endforeach; ?>
       <span id="error-style" class="error-tip" style="display:none">请选择规格</span>
     </li>
-    <else/> <!-- 没有库存写入隐藏的库存值 -->
+    <?php else: ?> <!-- 没有库存写入隐藏的库存值 -->
     <li class="style" style="display:none;">
-        <span class="guige guige_on" size="none" quantity="{$pInfo.quantity}">{$vo.attr_name}</span>
+        <span class="guige guige_on" size="none" quantity="<?php echo $pInfo['quantity']; ?>">xx</span>
     </li>
     <?php endif;?>
 
@@ -94,7 +94,7 @@
     <li class="ptag">
       <label>标签</label>
       <?php foreach($pInfo['tags'] as $row): ?>
-      <a href="#"><?php echo $row;?></a>
+      <a href="#"><?php echo $row; ?></a>
       <?php endforeach; ?>
     </li>
     <?php endif;?>
@@ -221,4 +221,4 @@
 </div>
 
 <!--购买按钮弹出层-包含在了公共弹出层模板public下的regloginpopups模板里了！只要是商品也就判断调用-->
-<include file="Home:Public:regloginpopups" /> 
+<?php $this->beginContent('/public/publicpops'); ?> <?php $this->endContent(); ?>

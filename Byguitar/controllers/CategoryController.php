@@ -39,7 +39,7 @@ class CategoryController extends ShopBaseController {
        };
 
 //        echo "<pre>";
-//        print_r($pageShort);exit;
+//        print_r($pages);exit;
 
         //$cakeInfo 	= $this->getCakeInfo($filter);
 

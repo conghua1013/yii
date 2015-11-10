@@ -21,8 +21,7 @@
             </tr>
 
             <?php if(empty($list)): ?>
-
-                <?php if($this->user_id): ?>
+                <?php if(empty($this->user_id)): ?>
                     <tr>
                         <td colspan="8" align="center" valign="middle"><p><img src="/images/public/cart_empty.gif" />&nbsp;&nbsp;如果您之前在购物车保存过商品，请 <a class="qing" href="/public/login" target="_blank">登录&gt;&gt;</a> 后取出</p></td>
                     </tr>
@@ -93,3 +92,5 @@
     </div>
 
 </div>
+
+<?php $this->beginContent('/public/publicpops'); ?> <?php $this->endContent(); ?>

@@ -116,6 +116,13 @@ class Product extends CActiveRecord
             if(!empty($extendInfo)){
                 $data['extend_attr_list'] = $extendInfo;
             }
+
+            $stocks = $this->getProductStock($id,$data['is_multiple']);
+            if(empty($data['is_multiple'])){
+                $data['quantity'] = $stocks;
+            } else {
+                $data['sizes'] = $stocks;
+            }
         }
 
         //商品的关键字
@@ -297,10 +304,22 @@ class Product extends CActiveRecord
      * @param $product_id
      * @return array|mixed|null
      */
-    public function getProductStock($product_id)
+    public function getProductStock($product_id,$stock_type)
     {
+        if(empty($product_id)){ return ''; }
+        if(empty($stock_type)){
+            $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$product_id));
+            return empty($stockInfo) ? 0 : $stockInfo->quantity;
+        }
+
         $list = ProductStock::model()->findAllByAttributes(array('product_id'=>$product_id));
-        return $list;
+        $newList = array();
+        if(!empty($list)){
+            foreach($list as $row){
+                $newList[$row->attr_id] = $row->getAttributes();
+            }
+        }
+        return $newList;
     }
 
 }

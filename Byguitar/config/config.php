@@ -39,8 +39,14 @@ return array(
             '<controller:\w+>/<id:\d+>' => '<controller>/index',
             '<controller:\w+>/<id:\d+>-<brand:\d+>-<price:\d+>-<size:\d+>-<origin:\d+>-<color:\d+>-<sort:\d+>' => '<controller>/index',
             '<controller:\w+>/<id:\d+>-<brand:\d+>-<price:\d+>-<size:\d+>-<origin:\d+>-<color:\d+>-<sort:\d+>-<p:\d+>' => '<controller>/index',
-            
-            '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+            '<controller:order>/<ordersn:BG\d+>' => '<controller>/index',
+            '<controller:order>/<action:pay>/<ordersn:BG\d+>' => '<controller>/<action>',
+            '<controller:user>/order/<ordersn:BG\d+>' => '<controller>/order',
+
+
+//            array('/^shop\/order\/(BG\d+)$/','Shop/cart/finish','ordersn'),
+//            array('/^shop\/pay\/(BG\d+)$/','shop/pay/redirectAlipay','ordersn'),
+//            array('/^shop\/pay\/alipay\/(BG\d+)$/','shop/pay/alipay','ordersn'),
             )
         ),
 
@@ -55,6 +61,11 @@ return array(
             'class'=>'application.extensions.image.CImageComponent',
             'driver'=>'GD',
             //'params'=>array('directory'=>'/opt/local/bin'),
+        ),
+
+        'alipay' => array(
+            'class'=>'application.extensions.payment.alipay',
+            //'alipay'=> array(),
         ),
 
 

@@ -93,7 +93,7 @@ class ProductAttributes extends CActiveRecord
                 $newList[$row['id']] = $row['attr_name'];
             }
         }
-        return $list;
+        return $newList;
     }
 
 }

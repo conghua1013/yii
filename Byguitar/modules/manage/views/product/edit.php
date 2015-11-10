@@ -269,7 +269,7 @@ $(function() {
         'onUploadSuccess' : function(file, data, response) {
             var obj = jQuery.parseJSON(data);
             if (obj.status == 200) {
-             	var image = '<div imgid="'+obj.imgid+'" id="imgid_'+obj.imgid+'">'+'<img width="50" alt="'+obj.imgid+'" src="' + obj.img.image_100 + '" /><br/>'+
+             	var image = '<div imgid="'+obj.imgid+'" id="imgid_'+obj.imgid+'">'+'<img width="50" alt="'+obj.imgid+'" src="' + obj.img.image_120 + '" /><br/>'+
              		'<input type="button" value="删除" class="delImg"/></div>';
             	$("#product_Imgs").append(image); 
             }else{
@@ -281,8 +281,8 @@ $(function() {
 		}
     });
 
-	//删除图片
-	$('.delImg').live('click',function(){
+	//删除图片(注意button 本身的click事件，导致重复提交)
+	$('.delImg').die().live('click',function(){
 		var id = $(this).parent().attr('imgid');
 		$.ajax({
 			type: "POST",

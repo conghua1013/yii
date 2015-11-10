@@ -45,4 +45,24 @@ class Payment extends CActiveRecord
         	);
 	}
 
+    //获取可用支付的列表(购物车用)
+    public function getPaymentList()
+    {
+        $map = array('is_valid' => 1);
+        $list = Payment::model()->findAllByAttributes($map);
+        if(empty($list)){
+            return false;
+        }
+
+        $newList = array();
+        foreach ($list as $row) {
+            if($row['is_plat'] == 1){
+                $newList['plat'][] = $row->getAttributes();
+            }else{
+                $newList['bank'][] = $row->getAttributes();
+            }
+        }
+        return $newList;
+    }
+
 }

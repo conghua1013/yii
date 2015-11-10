@@ -15,7 +15,9 @@ class ItemController extends ShopBaseController
         if($pInfo['brand_id']){
             $brandInfo = Brand::model()->findByPk($pInfo['brand_id']);
         }
-        $stock = Product::model()->getProductStock($product_id);
+        $stock = Product::model()->getProductStock($product_id,$pInfo['is_multiple']);
+        $attrList = ProductAttributes::model()->getProductAttrNameList();
+
         $extendAttrList = $this->getProductExtendAttrs($product_id);
         $is_like    = $this->getLikeStatus($product_id);
         $cake       = $this->getCakeLine($pInfo['cat_id']); //获取商品的面包屑
@@ -31,6 +33,7 @@ class ItemController extends ShopBaseController
         $viewData['is_like']    = $is_like;
         $viewData['cake']       = $cake;
         $viewData['stock']      = $stock;
+        $viewData['attrList']      = $attrList;
         $viewData['extendAttrList']  = $extendAttrList;
 		$this->render('item/index',$viewData);
 	}

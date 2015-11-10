@@ -67,7 +67,7 @@
         <a class="sortby <?php if($filter['sort']==2){ echo 'sortby_on'; } ?>" href="/shop/category/<?php echo $filter['id'].'-'.$filter['brand'].'-'.$filter['price'].'-'.$filter['size'].'-'.$filter['origin'].'-'.$filter['color'].'-2'; ?>">最新</a>
         <a class="sortby <?php if($filter['sort']==3){ echo 'sortby_on'; } ?>" href="/shop/category/<?php echo $filter['id'].'-'.$filter['brand'].'-'.$filter['price'].'-'.$filter['size'].'-'.$filter['origin'].'-'.$filter['color'].'-3'; ?>">价格</a>
         </p>
-        <div class="fr page_box"><?php echo $pageShort['str']; ?></div>
+        <div class="fr page_box"><?php echo isset($pageShort['str']) ? $pageShort['str'] : ''; ?></div>
         <p class="fr">
         <span>共 <b><?php echo $count; ?></b> 件商品 |</span>    
         </p>

@@ -154,7 +154,7 @@ $(document).ready(function(){
 
 
 	//立即购买按钮事件
-	$('.pbtn-buy').click(function(){											  
+	$('.pbtn-buy').click(function(){
 		var guige 	= $('.guige_on');
 
 		if(guige.length==0){
@@ -409,7 +409,7 @@ $(document).ready(function(){
 		var data = 'id='+cid
 		$.ajax({
 			type: "POST",
-			url: "/shop/cart/delCart",
+			url: "/cart/delCart",
 			dataType:"json",
 			cache: false,
 			data: data+"&ajax=1&m=" + Math.random(),
@@ -441,7 +441,7 @@ function addToCart(pid, num, size, buynow,type){
 		'&type='+type;
 	$.ajax({
 		type: "POST",
-		url: "/shop/cart/addCart",
+		url: "/cart/addCart",
 		dataType:"json",
 		cache: false,
 		data: data+"&ajax=1&m=" + Math.random(),
@@ -477,13 +477,13 @@ function addToCart(pid, num, size, buynow,type){
 function getMiniCart(){
 	$.ajax({
 		type: "POST",
-		url: "/shop/cart/miniCart",
+		url: "/cart/miniCart",
 		dataType:"json",
 		cache: false,
 		data: "m=" + Math.random(),
 		success:function(re){
 			if(re.status == 1){
-				$('#navcartpop').html(re.html);
+				//$('#navcartpop').html(re.html);
 				if(re.total){
 					$('#navcartnum').show().html(re.total.quantity);
 				}else{
@@ -519,7 +519,7 @@ function addLike(id,btn,type) {
 	var data = 'id='+ id;
 	$.ajax({
 		type: "POST",
-		url: "/shop/item/addLike",
+		url: "/item/addLike",
 		dataType:"json",
 		cache: false,
 		data: data+"&m=" + Math.random(),

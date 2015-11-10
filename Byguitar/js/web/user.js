@@ -7,16 +7,16 @@
 		var this_hander = $(this);
 		$.ajax({
 			type: "POST",
-			url: "/shop/cart/couponBand",
+			url: "/user/couponBand",
 			dataType:"json",
 			cache: false,
 			data: "sn="+sn+"&m=" + Math.random(),
 			success:function(re){
 				if(re.status == 1){
 					this_hander.prev().html('绑定成功').show();
+					setTimeout("location.reload()",3000);
 				}else if(re.status == 2){
 					popdiv("#login_pop","570","auto",0.2);
-					//window.location.href= "/public/login"; 
 				}else{
 					this_hander.prev().html(re.msg).show();
 				}
@@ -194,8 +194,7 @@
 				$('#addr_modify').find('span').html('添加新地址');
 				 
 			}
-			
-			
+
 			$('#usaddrid').val('');
 			$('#isdefaultaddr').val(0);
 			$('#usname').val('');
@@ -204,8 +203,6 @@
 			$('#uscity').val(0);
 			$('#usdistrict').val(0);
 			$('#usaddr').val('');
-			//$('#addr_list').find('li:last').after(newaddhtml);
-			//$('#addr_list').append();
 		}
 	});
 
@@ -470,7 +467,7 @@ function saveAddress(id){
 	var resData = '';
 	$.ajax({
 		type: "POST",
-		url: "/shop/user/saveAddress",
+		url: "/user/saveAddress",
 		dataType:"json",
 		cache: false,
 		data: data+"&ajax=1&m=" + Math.random(),
@@ -489,7 +486,7 @@ function delAddress(id){
 	var resData = '';
 	$.ajax({
 		type: "POST",
-		url: "/shop/user/delAddress",
+		url: "/user/delAddress",
 		dataType:"json",
 		cache: false,
 		data: data+"&ajax=1&m=" + Math.random(),
@@ -508,7 +505,7 @@ function setDefaultAddress(id){
 	var resData = '';
 	$.ajax({
 		type: "POST",
-		url: "/shop/user/setDefaultAddress",
+		url: "/user/setDefaultAddress",
 		dataType:"json",
 		cache: false,
 		data: data+"&ajax=1&m=" + Math.random(),

@@ -3763,7 +3763,7 @@ function initShowArea(){
 	var oCity=document.getElementById("uscity");
 	var oArea=document.getElementById("usdistrict");
 
-	if(oProvince.value!=''){
+	if(oProvince.value != ''){
 		showprovince(1,oProvince.value);
 		if(oCity.value!=''){
 			showCity(oProvince.value,oCity.value);

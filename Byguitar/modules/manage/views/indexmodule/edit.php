@@ -1,6 +1,6 @@
 <div class="pageContent">
 
-    <form method="post" action="manage/indexModule/edit" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this,navTabAjaxDone);">
+    <form method="post" action="/manage/indexModule/edit" enctype="multipart/form-data" class="pageForm required-validate" onsubmit="return iframeCallback(this,navTabAjaxDone);">
 
         <div class="pageFormContent" layoutH="58">
 
@@ -11,7 +11,7 @@
 
             <div class="unit">
                 <label>图片：</label>
-                <input type="file" class="required"  name="img" />
+                <input type="file"  name="img" />
             </div>
 
             <div class="unit">

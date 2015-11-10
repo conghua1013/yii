@@ -31,29 +31,29 @@
             <div class="clear"></div>
         </div>
 
-        <?php if(isset(Yii::app()->session['user_id']) && Yii::app()->session['user_id']): ?>
+        <?php if(isset($this->user_id) && $this->user_id): ?>
         	<div class="fr info">
                 <div class="mface">
-                	<eq name="_SESSION['face']" value="0">
-                        <a class="qing" href="__APP__/user/"><img src="__PUBLIC__/Images/avatar/small/0.jpg" width="45" height="45" /></a>
-                    <else/>
-						<a class="qing" href="__APP__/user/"><img src="__PUBLIC__/Images/avatar/small/{$_SESSION['face']}" width="45" height="45" /></a>
-                     </eq>
+                	<?php if(!Yii::app()->session['face']): ?>
+                        <a class="qing" href="/user/"><img src="/images/avatar/small/0.jpg" width="45" height="45" /></a>
+                    <?php else: ?>
+						<a class="qing" href="/user/"><img src="/images/avatar/small/{$_SESSION['face']}" width="45" height="45" /></a>
+                     <?php endif; ?>
 				</div>
                 <ul class="uinfolist shadow">
-                    <li><a class="qing" href="__APP__/user/">{@loginUserName}</a></li>
-                    <li><gt name="_SESSION['msg']" value="0"><b><a class="qing" href="__APP__/user/mailspull/"><span class="hasmsgs">{@msg}</span>条消息</a></b></gt></li>
-                    <li><a class="brown" href="__APP__/player/{@authId}">我的主页</a></li>
-                    <li><a class="brown" href="__APP__/shop/user/orderlist/">我的订单</a></li>
-                    <li><a class="brown" href="__APP__/user/set/">设置中心</a></li>
-                    <li><a class="brown" href="__APP__/user/setface/">头像设置</a></li>
+                    <li><a class="qing" href="/user/"><?php echo 'test'; ?></a></li>
+                    <li><gt name="_SESSION['msg']" value="0"><b><a class="qing" href="/user/mailspull/"><span class="hasmsgs">{@msg}</span>条消息</a></b></gt></li>
+                    <li><a class="brown" href="/player/{@authId}">我的主页</a></li>
+                    <li><a class="brown" href="/shop/user/orderlist/">我的订单</a></li>
+                    <li><a class="brown" href="/user/set/">设置中心</a></li>
+                    <li><a class="brown" href="/user/setface/">头像设置</a></li>
                     <li></li>
-                    <li><a class="gray" href="__APP__/public/logout">退出</a></li>
+                    <li><a class="gray" href="/user/logout">退出</a></li>
                 </ul> 
                 <gt name="_SESSION['msg']" value="0"><div class="hasmsg-tip"></div></gt>
         	</div>
             <div class="fr navcart"> 
-                <a class="navcart_a" title="点击进入购物车" href="/shop/cart"><img src="__PUBLIC__/Images/public/cart_empty.gif"></a>
+                <a class="navcart_a" title="点击进入购物车" href="/shop/cart"><img src="/images/public/cart_empty.gif"></a>
                 <span class="navcartnum" id="navcartnum"></span>
                 <div class="navcartpop" id="navcartpop">
                     <p class="empty">您的购物车中还没有商品！<a class="qing" href="/shop/">去商城逛逛！</a></p>

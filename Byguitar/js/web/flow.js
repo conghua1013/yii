@@ -95,15 +95,16 @@
 
         $.ajax({
             type: "POST",
-            url: "/shop/cart/checkCoupon",
+            url: "/cart/checkCoupon",
             dataType:"json",
             cache: false,
             data: "sn="+sn+"&m=" + Math.random(),
             success:function(re){
                 if(re.status == 1){
+					couponListHtml = getCouponList(re.couponlist,sn);
                     $('#couponAmount').html('-¥' +re.couponAmount);
                     $('#finalAmount').html('¥' +re.finalAmount);
-                    $('.yhq_list').eq(0).html(re.couponHtml);
+                    $('.yhq_list').eq(0).html(couponListHtml);
                     $('#yhq_input').val($('.yhq_selected').html()); 
                     $('#yhqbox1').hide();
                     $('#yhqbox2').show();
@@ -180,7 +181,7 @@
 		var data =  "sn="+couponsn;
 		$.ajax({
 			type: "POST",
-			url: "/shop/cart/checkCoupon",
+			url: "/cart/checkCoupon",
 			dataType:"json",
 			cache: false,
 			data: data+"&ajax=1&m=" + Math.random(),
@@ -288,10 +289,11 @@
 						"&usprovince="+$('#usprovince').val()+
 						"&uscity="+$('#uscity').val()+
 						"&usdistrict="+$('#usdistrict').val()+
-						"&usaddr="+$('#usaddr').val()
+						"&usaddr="+$('#usaddr').val();
+			var addressHtml = '';
 			$.ajax({
 				type: "POST",
-				url: "/shop/cart/saveAddress",
+				url: "/user/saveAddress",
 				dataType:"json",
 				cache: false,
 				data: data+"&ajax=1&m=" + Math.random(),
@@ -299,15 +301,15 @@
 					if(re.status != 1){
 						$('#modaddr_alert').html(re.msg);
 					}else{
-						$('#addr_list').html(re.html);
-
+						addressHtml = getAddressHtml(re.list);
 						$('#usname').val('');
 						$('#usmob').val('');
-						$('#usprovince').val(0);  
+						$('#usprovince').val(0);
 						$('#uscity').val(0);
 						$('#usdistrict').val(0);
 						$('#usaddr').val('');
-						//$('#addr_list').find('li:last').after(newaddhtml);
+						$('#addr_list').html(addressHtml);
+						//$('#addr_list').find('li:last').after(addressHtml);
 						//$('#addr_list').append();
 					}
 				},error:function(){
@@ -389,20 +391,14 @@ function checkaddr()
 		$('#usaddr').focus();
 		return false; 
 	}else{
-
-
 		var filter=/^[\u4e00-\u9fa5a-zA-Z0-9_]+$/;
-		if (!filter.test($('#usaddr').val())) 
-			{ 
-				$('#usaddr').next().addClass('alert').html("输入了非法字符!");	
-				$('#usaddr').focus();
-				return (false); 
-			}else {
-				$('#usaddr').next().removeClass().empty();
-			}
-
-
-		
+		if (!filter.test($('#usaddr').val())) {
+			$('#usaddr').next().addClass('alert').html("输入了非法字符!");
+			$('#usaddr').focus();
+			return (false);
+		}else {
+			$('#usaddr').next().removeClass().empty();
+		}
 	}
 			
 	//判断手机号码格式
@@ -437,7 +433,7 @@ function upCartNum(cid,num,action){
 				"&action="+action;
 	$.ajax({
 		type: "POST",
-		url: "/shop/cart/upCartNum",
+		url: "/cart/upCartNum",
 		dataType:"json",
 		cache: false,
 		data: data+"&ajax=1&m=" + Math.random(),
@@ -481,7 +477,7 @@ function deleteCart(cid){
 	var data =  "id="+cid
 	$.ajax({
 		type: "POST",
-		url: "/shop/cart/delCart",
+		url: "/cart/delCart",
 		dataType:"json",
 		cache: false,
 		async:false,
@@ -532,14 +528,14 @@ function checkout(){
 
 	$.ajax({
 		type: "POST",
-		url: "/shop/cart/createOrder",
+		url: "/cart/createOrder",
 		dataType:"json",
 		cache: false,
 		data: data+"&ajax=1&m=" + Math.random(),
 		success:function(re){
 			if(re.status == 1){
 				$('#post_alert').removeClass().addClass('alert').html('提交成功！');
-				window.location.href= "/shop/order/"+re.ordersn;
+				window.location.href= "/order/"+re.ordersn;
 			}else{
 				$('#post_alert').removeClass().addClass('alert').html(re.msg);
 			}
@@ -548,4 +544,32 @@ function checkout(){
 		}
 	  });
 
+}
+
+function getAddressHtml(list){
+	if(!list){return '';}
+	var addressHtml = '';
+	for (x in list)
+	{
+		addressHtml += '<li ' + (list[x].is_default == 1 ? 'class="addr_on"' : '') + 'id="addr-'+list[x].id +'" aid="'+list[x].id +'" >';
+		addressHtml += '<div>';
+		addressHtml += '<input checked="checked" type="radio" name="addr" id="addr_'+list[x].id +'" value="'+list[x].id +'" />';
+		addressHtml += '<p><span><b>'+list[x].consignee +'</b></span><span>'+list[x].mobile +'</span></p>';
+		addressHtml += '<p><span>'+list[x].province_name +'-'+list[x].city_name +'-'+list[x].district_name +'</span>';
+		addressHtml += '<span>'+list[x].address +'</span></p>';
+		addressHtml += '</div>';
+		addressHtml += '</li>';
+	}
+	return addressHtml;
+}
+
+function getCouponList(list,coupon_sn){
+	if(!list){return '';}
+	var couponHtml = '';
+	for (x in list)
+	{
+		couponHtml += '<li class="yhq_on '+ (coupon_sn && coupon_sn == list[x].coupon_sn ? 'yhq_selected' : '') +'" couponsn="'+list[x].coupon_sn +'"'+
+			+ (list[x].coupon_type ? 'type="'+list[x].coupon_type+'"' : '')+' >¥'+list[x].coupon_amount+'（满¥'+list[x].satisfied_amount+'可用）有效期至'+list[x].end_time+'['+list[x].coupon_name+']</li>';
+	}
+	return couponHtml;
 }

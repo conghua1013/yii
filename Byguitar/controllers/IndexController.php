@@ -5,11 +5,11 @@ class IndexController extends ShopBaseController
      
 
     public function actionIndex() {
-        echo "<pre>";
-        echo $this->user_id."<br>";
-        echo Yii::app()->request->userHostAddress."<br>";
-        print_r($_SESSION);
-        exit;
+//        echo "<pre>";
+//        echo $this->user_id."<br>";
+//        echo Yii::app()->request->userHostAddress."<br>";
+//        print_r($_SESSION);
+//        exit;
 
 
         $lunbo = $this->getLunboBanner();

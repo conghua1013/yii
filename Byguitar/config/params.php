@@ -16,7 +16,7 @@ return array(
 
     'image' => array(
         'product' => array(
-            'sizes' => array(100,300,600),
+            'sizes' => array(50,120,300,600,800),
             'path' => '/www/www/yii/Byguitar/images/product/',
             'types' => array('jpg','gif','png','jpeg'),
         ),

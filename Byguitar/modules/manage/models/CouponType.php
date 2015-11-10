@@ -40,4 +40,21 @@ class CouponType extends CActiveRecord
         );
     }
 
+    /**
+     * 获取优惠券类型
+     * @param $coupon_type_ids
+     */
+    public function getCouponTypeInfoByIds($coupon_type_ids)
+    {
+        if(empty($coupon_type_ids)){return false;}
+        $list = CouponType::model()->findAllByAttributes(array('id'=>$coupon_type_ids));
+        $newList = array();
+        if(!empty($list)){
+            foreach($list as $row){
+                $newList[$row->id] = $row->getAttributes();
+            }
+        }
+        return $newList;
+    }
+
 }
