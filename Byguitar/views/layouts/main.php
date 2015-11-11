@@ -17,9 +17,8 @@
     <link href="/css/web/global.css" type="text/css" rel="stylesheet">
     <link href="/css/web/reglog.css" type="text/css" rel="stylesheet">
     <link href="/css/web/shop.css" type="text/css" rel="stylesheet">
-    <link href="/css/web/flow.css" type="text/css" rel="stylesheet">
-    <link href="/css/web/index.css" type="text/css" rel="stylesheet">
-    <link href="/css/web/user.css" type="text/css" rel="stylesheet">
+
+
 
     <script type="text/javascript" src="/js/web/jquery1.js?v={$Think.config.VER}"></script>
     <script type="text/javascript" src="/js/web/flashbox.js?v={$Think.config.VER}"></script>
@@ -28,8 +27,6 @@
     <!--上线前需要对js调用进行细分判断-->
     <script type="text/javascript" src="/js/web/zoom.js"></script>
     <script type="text/javascript" src="/js/web/shop.js"></script>
-    <script type="text/javascript" src="/js/web/flow.js"></script>
-    <script type="text/javascript" src="/js/web/user.js"></script>
     <script type="text/javascript" src="/js/web/common.js"></script>
 </head>
 <body style="background-image: none;">

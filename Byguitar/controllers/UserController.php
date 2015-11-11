@@ -4,14 +4,14 @@ class UserController extends ShopBaseController
 {
 
 	/**
-	 * 用户登录
+	 * 用户登录【登录页面、弹出层登录】
 	 */
 	public function actionLogin()
 	{
 		//已登录跳转到首页
 		$user_id = Yii::app()->session['authId'];
 		if($user_id){
-			$this->redirect('/');exit;
+			$this->redirect('/?from=is_login');exit;
 		}
 
 		// 未登录的显示登录页面
@@ -19,81 +19,20 @@ class UserController extends ShopBaseController
 			$this->render('user/login',array());exit;
 		}
 
-		// 发送登录信息的进行登录验证
+		//登录操作的验证
 		try {
-			// 支持使用绑定帐号登录
-			$map = array();
-			if (preg_match('/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/', trim($_POST['account']))) {
-				$map['email'] = trim($_POST['account']);
-			} else {
-				$map['username'] = trim($_POST['account']);
-			}
-			$authInfo = $User = User::model()->findByAttributes($map);
-			if (empty($authInfo)) {
-				throw new exception('帐号不存在或已禁用!');
-			}
-
-			//大于限制时间解除锁定-目前定为半时
-			if (time() - $authInfo->logfailtime > (60 * 30)) {
-				$authInfo->logfail = 0;
-				$authInfo->logfailtime = 0;
-			}
-
-			if($authInfo > 2){
-				//失败次数超过三
-				//检查时间，如果上次登录失败在半个小时前，则解锁，给用户一次重新登录机会。只有一次机会
-				$datetime = time() - (60 * 30);
-				if ($authInfo->logfailtime < $datetime)  //半个小时以前
-				{
-					$authInfo->logfail = 0;
-					$authInfo->save();
-					throw new exception('你可以再重新登录一次！');
-				} else {
-					//半个小时内，则锁定帐户，返回到登录页面，半个小时后解锁
-					$authInfo->logfailtime = time();
-					$authInfo->save();
-					throw new exception('您的账号目前被锁定，半个小时后自动解锁。请解锁后登录！');
-				}
-			}
-
-			if ($authInfo->salt == '0') {
-				$turePassword = substr(md5($_POST['password']), 8, 16);
-			} else {
-				$turePassword = md5(md5($_POST['password']) . $authInfo->salt);
-			}
-
-			//密码错误，登录失败
-			if ($authInfo->password != $turePassword) {
-				//检查上次登录失败时间是否在10秒之内，如果不是，则登录失败次数增加1
-				$datetime = time() - (10);//获取10秒以前的时间
-				$timenow = time();//获取现在的时间
-				//不在5min之内
-				if ($authInfo->logfailtime < $datetime) {
-					//登录失败次数加1时间更新
-					$authInfo->logfail += 1;
-					$authInfo->logfailtime = $timenow;
-					$authInfo->save();
-				} else  //在5min之内，只修改登录失败时间
-				{
-					$authInfo->logfailtime = $timenow;
-					$authInfo->save();
-				}
-				//返回到登录页面
-				throw new exception('密码或账号错误，请重新输入!');
-			}
-			$where = 'msgtoid = '.$authInfo->id.' and new = 1 and related = 1';
-			$msgCount = Yii::app()->byguitar->createCommand()->select('count(1)')->from('bg_pms')->where($where)->queryScalar();
+			$request = $_REQUEST;
+			$authInfo = User::model()->userAuthCheck($request);
 
 			Yii::app()->session['authId'] 			= $authInfo->id;
 			Yii::app()->session['email'] 			= $authInfo->email;
 			Yii::app()->session['loginUserName'] 	= $authInfo->username;
 			Yii::app()->session['face'] 			= $authInfo->avatar;
 			Yii::app()->session['isadmin'] 			= $authInfo->adminid;
-			Yii::app()->session['msg'] 				= $msgCount;
+			Yii::app()->session['msg'] 				= User::model()->getUserNoticeMessageNum($authInfo->id);
 			Yii::app()->session['isoldman'] 		= time() - $authInfo->regtime > (3600 * 24 * 7) ? true : false;
 
-
-			if (!empty($_POST['remember']) && ($_POST['remember'] == "1")) {
+			if (!empty($request['remember']) && ($request['remember'] == "1")) {
 				//写入Cookie
 				$user_id = new CHttpCookie('identifier',$authInfo->id);
 				$user_id -> expire = time()+(3600*24*7);//保存一周
@@ -103,33 +42,24 @@ class UserController extends ShopBaseController
 				$token -> expire = time()+(3600*24*7);//保存一周
 				Yii::app()->request->cookies['token'] = $token;
 			}
-
-			$authInfo->lastlogin 	= time();
-			$authInfo->logins 		= array('exp', 'logins+1');
-			$authInfo->lastip 		= Yii::app()->request->userHostAddress;
-			$authInfo->logfail 		= 0;
-			$authInfo->logfailtime 	= 0;
-			$flag = $authInfo->save();
-			if (empty($flag)) {
-				throw new exception('登录失败！');
-			}
-
 		}catch (exception $e){
 			$viewData = array();
 			$viewData['msg'] = $e->getMessage();
 			$this->render('/user/login',$viewData);
 		}
 
-		$this->redirect('/');
+		$this->redirect('/?from=login');
 	}
 
-	//用户登录
+	/*
+	 * 用户的注册【注册页面、弹出层注册】
+	 */
 	public function actionRegister()
 	{
 		//已登录跳转到首页
 		$user_id = Yii::app()->session['authId'];
 		if($user_id){
-			$this->redirect('/');exit;
+			$this->redirect('/?from=is_login');exit;
 		}
 
 		// 未登录的显示登录页面
@@ -139,34 +69,8 @@ class UserController extends ShopBaseController
 		}
 
 		try{
-			//同一ip注册限制
-			$user = new User();
-
-			$userip			= Yii::app()->request->userHostAddress;
-			$salt			= substr(uniqid(rand()), -6);
-			$password		= md5(md5($_POST['password']).$salt);
-
-			$registerInfo = User::model()->findByAttributes(array('regip'=>$userip));
-			if($registerInfo && (time()-$registerInfo->regtime) < 3600*24){
-				throw new exception('同一ip每天只能注册一个账号！');
-			}
-			//验证码
-			//$this->checkverify();
-			$user->username = $_POST['email'];
-			$user->password = $password;
-			$user->salt 	= $salt;
-			$user->regip = $userip;
-
-			//写入注册所在ip
-			$user->regip 	=$userip;
-			$user->lastip 	=$userip;
-			$user->password =$password;
-			$user->salt 	=$salt;
-			$regok = $user->save();
-			if(empty($regok)){
-				header("Content-Type:text/html; charset=utf-8");
-				throw new exception('注册失败！');
-			}
+			$request = $_REQUEST;
+			$user = User::model()->userRegister($request);
 
 			Yii::app()->session['authId'] 			= $user->id;
 			Yii::app()->session['email'] 			= $user->email;
@@ -176,11 +80,19 @@ class UserController extends ShopBaseController
 			Yii::app()->session['msg'] 				= $user;
 			Yii::app()->session['isoldman'] 		= time() - $user->regtime > (3600 * 24 * 7) ? true : false;
 
+			$user_id = new CHttpCookie('identifier',$user->id);
+			$user_id -> expire = time()+(3600*24*7);//保存一周
+			Yii::app()->request->cookies['identifier'] = $user_id;
+
+			$token = new CHttpCookie('token',$user->password);
+			$token -> expire = time()+(3600*24*7);//保存一周
+			Yii::app()->request->cookies['token'] = $token;
+
 		}catch (exception $e){
 			$viewData = array();
 			$this->render('user/register',$viewData);exit;
 		}
-		$this->redirect('/');
+		$this->redirect('/?from=register');
 	}
 
 	/**
@@ -411,5 +323,97 @@ class UserController extends ShopBaseController
 		$viewData['orderProduct'] 	= $orderProduct;
 		$this->render('/user/order',$viewData);
 	}
+
+
+	/**
+	 * 订单确认收货
+	 */
+	public function actionReceivedOrder()
+	{
+		$result = array('status'=>1,'msg'=>'订单确认收货成功!');
+		$request = $_REQUEST;
+		$order_sn = trim($request['orderSn']);
+		try{
+			$userId = $this->user_id;
+			if(empty($userId)){
+				throw new exception('用户未登陆！', 2);
+			}
+			Order::model()->receivedOrder($userId,$order_sn);
+		} catch(exception $e) {
+			$result['status'] = 0;
+			$result['msg']    = '订单确认收货失败!';
+			exit(json_encode($result));
+		}
+		exit(json_encode($result));
+	}
+
+
+	/**
+	 * 取消订单接口
+	 */
+	public function actionCancelOrder()
+	{
+		$result = array('status'=>1,'msg'=>'取消成功!');
+		$request = $_REQUEST;
+		$order_sn = trim($request['orderSn']);
+
+		try {
+			$userId = $this->user_id;
+			if(empty($userId)){
+				throw new exception('用户未登陆！', 2);
+			}
+			Order::model()->cancelOrder($userId,$order_sn);
+		} catch(exception $e){
+			$result['status'] = 0;
+			$result['msg'] = '取消失败!';
+		}
+		exit(json_encode($result));
+	}
+
+	/**
+	 * 删除喜欢
+	 */
+	public function actionDelLike()
+	{
+		$result = array('status'=>1,'msg'=>'取消喜欢成功!');
+		$request = $_REQUEST;
+		$product_id = trim($request['id']);
+
+		try {
+			$userId = $this->user_id;
+			if(empty($userId)){
+				throw new exception('用户未登陆！', 2);
+			}
+			Like::model()->delLike($userId,$product_id);
+		} catch(exception $e){
+			$result['status'] = $e->getMessage();
+			$result['msg'] = '取消失败!';
+		}
+		exit(json_encode($result));
+	}
+
+	/**
+	 * 添加喜欢.
+	 */
+	public function actionAddLike()
+	{
+		$result = array('status'=>1,'msg'=>'添加喜欢成功!');
+		$request = $_REQUEST;
+		$product_id = trim($request['id']);
+
+		try {
+			$userId = $this->user_id;
+			if(empty($userId)){
+				throw new exception('用户未登陆！', 2);
+			}
+			Like::model()->addLike($userId,$product_id);
+		} catch(exception $e){
+			$result['status'] = $e->getCode();
+			$result['msg'] = '添加喜欢失败!';
+		}
+		exit(json_encode($result));
+	}
+
+
 
 }

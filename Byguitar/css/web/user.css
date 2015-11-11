@@ -10,12 +10,12 @@
 	.item { margin-bottom:15px;font-family:Tahoma; }
 	.item label { display:block; float:left; width:65px; padding-right:15px; text-align:right; font-size:14px; line-height:28px;}
 	.item span { display:block; float:left; line-height:28px;}	
-	.alert { background:url(../Images/public/alertbar.gif) no-repeat 8px 8px; background-color:#fff1cc; color:#e30000; padding:0 10px 0 25px;}
-	.tieshi {background:url(../Images/public/tieshibar.gif) no-repeat 8px 8px; padding:0 10px 0 25px;color:#999;}
+	.alert { background:url(../../images/public/alertbar.gif) no-repeat 8px 8px; background-color:#fff1cc; color:#e30000; padding:0 10px 0 25px;}
+	.tieshi {background:url(../../images/public/tieshibar.gif) no-repeat 8px 8px; padding:0 10px 0 25px;color:#999;}
 	.item label,.okitem label{ width:75px; }
 	
 		/*star*/
-	.star {background-image:url(../Images/public/star.gif); background-repeat:no-repeat; width:79px; height:15px; display:inline-block; margin:0 5px 0 0;}
+	.star {background-image:url(../../images/public/star.gif); background-repeat:no-repeat; width:79px; height:15px; display:inline-block; margin:0 5px 0 0;}
 	.star a{ float:left;height:15px; width:15px; padding:0; margin:0; cursor:pointer; line-height:0; font-size:0; }
 	.star font { display:block; font-size:12px; line-height:14px; position:absolute; top:1px;*top:3px !important; *top:3px;  left:83px;}
 		.s0 {background-position:0 1px;}
@@ -124,7 +124,7 @@
 			.packed_list { display:none; position:absolute;  top:-20px; left:150px; padding:10px;  background-color:#fff; border:3px solid #666; z-index:999;}						
 				.packed_ul { width:60px;line-height:18px; }
 				.packed_ul li { padding-bottom:4px;}
-				.add { float:left; height:20px; width:20px;background:url(../Images/public/add.gif) no-repeat 0 0; margin:0 15px; margin-top:22px; }	
+				.add { float:left; height:20px; width:20px;background:url(../../images/public/add.gif) no-repeat 0 0; margin:0 15px; margin-top:22px; }
 	.couponhbox .btn { margin-left:15px;}			
 	.couponlist { padding-top:40px;}
 	.couponlist table p { text-align:left; line-height:20px; padding-left:40px;}
@@ -139,7 +139,7 @@
 	.pinbox .pinimg { position:relative; }
 	.pinbox .pinimg img { border-top-left-radius:3px; border-top-right-radius:3px;}
 	.pinbox .discount { position:absolute; top:-1px; left:10px; height:20px; width:40px; color:#fff; text-align:center; background-color:#c93718;border-bottom-left-radius:100px; border-bottom-right-radius:100px; padding:10px 5px; font-weight:bold;}
-	.pinbox .pinlike {position:absolute; bottom:10px; right:10px; height:40px; width:40px;background:url(../Images/public/plike.png) no-repeat 10px 12px; background-color:#dfdfdf; background-color:rgba(223,223,223,0.42);border-radius:45px;}
+	.pinbox .pinlike {position:absolute; bottom:10px; right:10px; height:40px; width:40px;background:url(../../images/public/plike.png) no-repeat 10px 12px; background-color:#dfdfdf; background-color:rgba(223,223,223,0.42);border-radius:45px;}
 	.pinbox .pinlike_on { background-position:-30px 12px;}
 	.pinbox .pininfo { padding:0 10px;}
 	.pinbox .pininfo h3 { line-height:40px;font-size:14px;}
@@ -147,7 +147,7 @@
 	.pinbox .pininfo del { color:#999;}
 	.pinbox .pinprice { font-size:12px; color:#666;}
 	.pinbox .pinprice b { font-size:14px; color:#c53b2e;}
-	.pinbox .pinnums {background: url(../Images/public/plike.png) no-repeat -80px 1px; padding-left: 17px; color:#999;}
+	.pinbox .pinnums {background: url(../../images/public/plike.png) no-repeat -80px 1px; padding-left: 17px; color:#999;}
 	
 	.spinbox {width:180px; height:180px; margin-left:15px;position: relative;}
 	.spinbox .pininfo { margin-top:-30px; position:absolute; bottom:0;background-color:#fff; background-color:rgba(255,255,255,0.9);width:160px;padding-top:7px; height:38px;}

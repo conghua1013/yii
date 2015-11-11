@@ -178,7 +178,7 @@ class Order extends CActiveRecord
 
 
 	/**
-	 * 用户订单数据分页【用户中心】
+	 *【用户中心】用户订单数据分页
 	 * @param $userId
 	 * @return array
 	 */
@@ -217,7 +217,7 @@ class Order extends CActiveRecord
 	}
 
 	/**
-	 * 用户中心获取订单详情【用户中心订单展示】.
+	 *【用户中心】获取订单详情【用户中心订单展示】.
 	 * @param $userId
 	 * @param $order_sn
 	 */
@@ -325,6 +325,98 @@ class Order extends CActiveRecord
 			$res['receive']['status'] 	=  true;
 		}
 		return $res;
+	}
+
+	/**
+	 * 订单确认收货
+	 */
+	public function receivedOrder($userId,$order_sn)
+	{
+		if(empty($userId)){
+			throw new exception('用户未登陆！', 2);
+		}
+		if(empty($order_sn)){
+			throw new exception('参数错误！');
+		}
+		$oInfo = Order::model()->findByAttributes(array('order_sn'=>$order_sn));
+		if(empty($oInfo)){
+			throw new exception('订单错误！');
+		} elseif($oInfo['user_id'] != $userId) {
+			throw new exception('订单错误！');
+		} elseif(!in_array($oInfo['order_status'], array(5))) {
+			throw new exception('订单状态错误！');
+		}
+
+		//更新订单状态
+		$oInfo->order_status 	= 6;
+		$oInfo->receive_time 	= time();
+		$oInfo->update_time 	= time();
+		$flag = $oInfo->save();
+		if(empty($flag)){
+			throw new exception('订单保存错误！', 500);
+		}
+
+		//添加订单日志
+		$m = new OrderLog();
+		$m->order_id 	= $oInfo->id;
+		$m->admin_id 	= '管理员';
+		$m->admin_name 	= '管理员';
+		$m->phone 		= '';
+		$m->type 		= 'UserReceived';
+		$m->msg 		= '您的订单已经确认签收！';
+		$m->is_show 	= 1;
+		$m->add_time 	= time();
+		$flag = $m->save();
+		if(empty($flag)){
+			throw new exception('确认收货失败！', 6);
+		}
+		return true;
+	}
+
+
+	/**
+	 * 取消订单接口
+	 */
+	public function cancelOrder($userId,$order_sn)
+	{
+		if(empty($userId)){
+			throw new exception('用户未登陆！', 2);
+		}
+		if(empty($order_sn)){
+			throw new exception('参数错误！');
+		}
+		$oInfo = Order::model()->findByAttributes(array('order_sn'=>$order_sn));
+		if(empty($oInfo)){
+			throw new exception('订单不存在！');
+		} elseif($oInfo['user_id'] != $userId) {
+			throw new exception('订单错误！');
+		} elseif(!in_array($oInfo['order_status'], array(0,1))) {
+			throw new exception('订单状态错误！');
+		}
+
+		//更新订单状态
+		$oInfo->order_status 	= 9;
+		$oInfo->update_time 	= time();
+		$flag = $oInfo->save();
+		if(empty($flag)){
+			throw new exception('订单保存错误！', 500);
+		}
+
+		//添加订单日志
+		$m = new OrderLog();
+		$m->order_id 	= $oInfo->id;
+		$m->admin_id 	= '管理员';
+		$m->admin_name 	= '管理员';
+		$m->phone 		= '';
+		$m->type 		= 'UserCanced';
+		$m->msg 		= '您的订单已取消！';
+		$m->is_show 	= 1;
+		$m->add_time 	= time();
+		$flag = $m->save();
+		if(empty($flag)){
+			throw new exception('订单取消失败！',500);
+		}
+		return false;
 	}
 
 }

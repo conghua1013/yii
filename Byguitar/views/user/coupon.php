@@ -1,3 +1,6 @@
+<link href="/css/web/user.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="/js/web/user.js"></script>
+
 <div class="tip">
     <div class="arrow"></div>
 </div>

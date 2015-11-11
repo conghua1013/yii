@@ -1,4 +1,6 @@
+<link href="/css/web/flow.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="/js/web/region.js"></script>
+<script type="text/javascript" src="/js/web/flow.js"></script>
 <div class="tip"></div>
 <div class="main">
 

@@ -1,6 +1,5 @@
 ﻿$(document).ready(function(){ 
 
-
 	//绑定优惠券事件
 	$('#bandcoupon-btn').click(function(){			  
 		var sn = $('#input_name1').val();
@@ -23,7 +22,7 @@
 			},error:function(){
 					return;
 			}
-		  });		
+		  });
 	});	 
 	
 	//商品列表页喜欢按钮事件-将来放到common.js做为公共方法
@@ -435,7 +434,7 @@
 		var data = 'orderSn='+ $('#orderInfo').attr('orderSn');
 		$.ajax({
 			type: "POST",
-			url: "/shop/user/changeOrderReceived",
+			url: "/user/receivedOrder",
 			dataType:"json",
 			cache: false,
 			data: data+"&ajax=1&m=" + Math.random(),
@@ -1099,7 +1098,7 @@ function delLike(id){
 	var data = 'id='+ id;
 	$.ajax({
 		type: "POST",
-		url: "/shop/item/delLike",
+		url: "/user/delLike",
 		dataType:"json",
 		cache: false,
 		data: data+"&m=" + Math.random(),
@@ -1123,7 +1122,7 @@ function cancel_order(orderSn){
 	var data = 'orderSn='+ orderSn;
 	$.ajax({
 		type: "POST",
-		url: "/shop/user/cancelOrder",
+		url: "/user/cancelOrder",
 		dataType:"json",
 		cache: false,
 		data: data+"&m=" + Math.random(),

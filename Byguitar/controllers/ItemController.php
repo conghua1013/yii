@@ -3,13 +3,13 @@
 class ItemController extends ShopBaseController 
 {
 
-	public function actionIndex(){
+	public function actionIndex()
+    {
         $product_id = intval($_REQUEST['id']);
         $pInfo = Product::model()->getProductInfoById($product_id);
         if(empty($pInfo)){
             $this->redirect('/');//跳转到首页
         }
-
 
         $brandInfo = '';
         if($pInfo['brand_id']){
@@ -17,15 +17,9 @@ class ItemController extends ShopBaseController
         }
         $stock = Product::model()->getProductStock($product_id,$pInfo['is_multiple']);
         $attrList = ProductAttributes::model()->getProductAttrNameList();
-
-        $extendAttrList = $this->getProductExtendAttrs($product_id);
-        $is_like    = $this->getLikeStatus($product_id);
-        $cake       = $this->getCakeLine($pInfo['cat_id']); //获取商品的面包屑
-        // $sameColors = $this->getSameColorProducts($pInfo['same_color_products']);//同款不同色商品详情
-
-//        echo "<pre>";
-//        print_r($pInfo);exit;
-//        exit;
+        $extendAttrList = ProductExtend::model()->getProductExtendAttrs($product_id);
+        $is_like    = Like::model()->getLikeStatus($this->user_id,$product_id);
+        $cake       = Category::model()->getCakeLine($pInfo['cat_id']); //获取商品的面包屑
 
         $viewData = array();
         $viewData['pInfo']      = $pInfo;
@@ -38,24 +32,11 @@ class ItemController extends ShopBaseController
 		$this->render('item/index',$viewData);
 	}
 
-    //面包屑
-    protected function getCakeLine($catId=0){
-        if(empty($catId)){return false;}
-
-        $catList = Category::model()->getCategoryList();
-
-        $lineArr = array();
-        $catTwoInfo = $catList[$catId];
-        $lineArr['cattwo'] = array('id'=>$catId,'cat_name'=>$catTwoInfo['cat_name']);
-
-        $catOneInfo = $catList[$catTwoInfo['parent_id']];
-        $lineArr['catone'] = array('id'=>$catOneInfo['id'],'cat_name'=>$catOneInfo['cat_name']);
-        return $lineArr;
-    }
 
 
     //获取同款商品的列表信息
-    protected function getSameColorProducts($ids){
+    protected function getSameColorProducts($ids)
+    {
         if(empty($ids)){return false;}
         $idArr = explode(',', $ids);
 
@@ -69,131 +50,10 @@ class ItemController extends ShopBaseController
         return $list;
     }
 
-    /**
-     * 获取商品的扩展属性
-     * @param $product_id
-     * @return array|bool
-     */
-    protected function getProductExtendAttrs($product_id){
-        if(empty($product_id)){return false;}
-
-        $extendInfo = Product::model()->getProductExtendInfo($product_id);
-        $productAttrNameList = Product::model()->getProductExtendAttrList();
-
-        $attrArr = array();
-        if(!empty($extendInfo)){
-            foreach($productAttrNameList as $k => $v){
-                if(empty($extendInfo[$k])){ continue; }
-                $temp = array();
-                $temp['attr']           = $k;
-                $temp['attr_name']      = $productAttrNameList[$k];
-                $temp['attr_content']   = $extendInfo[$k];
-                array_push($attrArr, $temp);
-            }
-        }
-        return $attrArr;
-    }
-
-    //获取商品的喜欢状态
-    protected function getLikeStatus($product_id)
-    {
-        if(empty($product_id)){return false;}
-        $user_id = $this->user_id;
-        if(empty($user_id)){
-            return false;
-        }
-
-        $likeInfo = Like::model()->findByAttributes(array('product_id'=>$product_id));
-        if(empty($likeInfo)){
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 我喜欢的商品添加数据
-     */
-    public function addLike(){
-        $request = $_REQUEST;
-        $request['id'] = intval($request['id']);
-        $res = array();
-        $userId = $this->userid;
-        if (empty($userId)) {
-            $res['status']  = 2;
-            $res['msg']     = '未登录！';
-        }elseif(empty($request['id'])){
-            $res['status']  = 0;
-            $res['msg']     = '商品id不能为空！';
-        }
-        if(!empty($res['msg']) && isset($res['msg'])){
-            exit(json_encode($res));
-        }
-
-        $m = M('Like');
-        if($request['action'] == 'droplike'){
-            $map = array();
-            $map['product_id']  = $request['id'];
-            $map['user_id']     = $userId;
-            $m->where($map)->delete();
-            $res['msg']     = '取消喜欢成功！';
-        }else{
-            $likeInfo = $m->where('product_id= '.$request['id'])->find();
-            if(empty($likeInfo)){
-                $m->product_id  = $request['id'];
-                $m->user_id     = $userId;
-                $m->add_time    = time();
-                $m->add();
-
-                //此处商品表的喜欢个数添加1
-                $this->product->setInc('like_num', "id = ".$request['id'] , 1);
-            }
-            $res['msg']     = '喜欢成功！';
-        }
-
-        $res['status']  = 1;
-        exit(json_encode($res));
-    }
 
 
     /**
-     +
-     * 我喜欢的商品添加数据
-     +
-     */
-    public function delLike(){
-        $request = $_REQUEST;
-        $request['id'] = intval($request['id']);
-        $res = array();
-        $userId = $this->userid;
-        if (empty($userId)) {
-            $res['status']  = 2;
-            $res['msg']     = '未登录！';
-        }elseif(empty($request['id'])){
-            $res['status']  = 0;
-            $res['msg']     = '商品id不能为空！';
-        }
-        if(!empty($res['msg']) && isset($res['msg'])){
-            exit(json_encode($res));
-        }
-
-        $m = M('Like');
-
-        $map = array();
-        $map['product_id']  = $request['id'];
-        $map['user_id']     = $userId;
-        $m->where($map)->delete();
-        
-        $res['msg']     = '取消喜欢成功！';
-        $res['status']  = 1;
-        exit(json_encode($res));
-    }
-
-
-
-    /**
-     +
      * 商品评论
-     +
      */
     public function addComment(){
         $request = $_REQUEST;

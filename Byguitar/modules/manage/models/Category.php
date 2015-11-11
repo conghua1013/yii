@@ -171,4 +171,25 @@ class Category extends CActiveRecord
         return $a;
     }
 
+
+    /**
+     * 面包屑
+     * @param int $catId
+     * @return array|bool
+     */
+    public function getCakeLine($catId=0)
+    {
+        if(empty($catId)){return false;}
+
+        $catList = Category::model()->getCategoryList();
+
+        $lineArr = array();
+        $catTwoInfo = $catList[$catId];
+        $lineArr['cattwo'] = array('id'=>$catId,'cat_name'=>$catTwoInfo['cat_name']);
+
+        $catOneInfo = $catList[$catTwoInfo['parent_id']];
+        $lineArr['catone'] = array('id'=>$catOneInfo['id'],'cat_name'=>$catOneInfo['cat_name']);
+        return $lineArr;
+    }
+
 }

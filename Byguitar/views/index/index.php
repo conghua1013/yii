@@ -1,3 +1,4 @@
+<link href="/css/web/index.css" type="text/css" rel="stylesheet">
 <div class="tip"></div>
 <div class="main">
 
@@ -81,7 +82,7 @@
             </div>
         </div>
     <?php else: ?>
-        <div class="fl pinbox spinbox shadow">
+        <div class="fr pinbox spinbox shadow">
             <div class="pinimg">
                 <span class="discount"><?php echo $pInfo['discount']; ?>折</span>
                 <span class="pinlike"></span>

@@ -278,26 +278,7 @@ class Product extends CActiveRecord
         return $data;
     }
 
-    /**
-     * 商品扩展属性列表.
-     * @return array
-     */
-    public function getProductExtendAttrList()
-    {
-        $attrList = array(
-            'product_material'=>'商品物料',
-            'warranty'=>'质保',
-            'product_service'=>'服务',
-            'product_size'=>'尺寸',
-            'weight'=>'重量',
-            'make_date'=>'生产日期',
-            'use_life'=>'保质期',
-            'product_return'=>'退换货政策',
-            'product_maintain'=>'保养说明',
-            'use_notice'=>'使用说明',
-            'product_notice'=>'温馨提示',);
-        return $attrList;
-    }
+
 
     /**
      * 获取商品的库存属性

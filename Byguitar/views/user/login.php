@@ -1,3 +1,5 @@
+<link href="/css/web/user.css" type="text/css" rel="stylesheet">
+
 <div class="tip">
 	<div class="arrow"><?php echo $msg; ?></div>
 </div>

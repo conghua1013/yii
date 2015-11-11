@@ -400,7 +400,7 @@ $(document).ready(function(){
 
 	$('#gotocart').live('click',function(){
 		checkSelectProduct();
-		window.location.href= "/shop/cart"; 
+		window.location.href= "/cart";
 	})
 
 	$('.minicart_li').live('click',function(){
@@ -519,7 +519,7 @@ function addLike(id,btn,type) {
 	var data = 'id='+ id;
 	$.ajax({
 		type: "POST",
-		url: "/item/addLike",
+		url: "/user/addLike",
 		dataType:"json",
 		cache: false,
 		data: data+"&m=" + Math.random(),

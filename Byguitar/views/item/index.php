@@ -1,3 +1,4 @@
+<!-- <link href="/css/web/item.css" type="text/css" rel="stylesheet"> -->
 <div class="tip"></div>
 
 <div class="main">
@@ -77,19 +78,12 @@
     <li class="pbuy">
       <div class="fl btn btn-large btn-brown pbtn-buy">立即购买</div>
       <div class="fl btn btn-large btn-primary pbtn-shopping">加入购物车</div>
-      <div class="pbtn pbtn-like <notempty name='is_like'> xinon pbtn-like_on</notempty> " title="点击标记喜欢这个商品"><span><?php echo $pInfo['like_num'];?></span></div>
+      <div class="pbtn pbtn-like <?php if($is_like): ?>xinon pbtn-like_on<?php endif; ?>" title="点击标记喜欢这个商品">
+        <span><?php echo $pInfo['like_num'];?></span>
+      </div>
       <div class="clear"></div>
     </li>
-    <!-- <li class="pbuy">
-      <p class="pbuy-empty"><span>抱歉，暂时卖光了。</span><br />
-        选择到货通知，到货后您将收到免费短信提醒。</p>
-        <div class="clear"></div>
-    </li>  -->
-    <!-- <li class="pben">
-      <p style="padding-top:10px;">●　该商品参加 <a class="qing" href="#">满199元包邮</a> 活动</p>
-      <p>●　全场满59全场满59元赠元赠 <a class="qing" href="#">满199元包邮</a> 数量有限赠完即止</p>
-    </li> -->
-    
+
     <?php if(!empty($pInfo['tags'])): ?>
     <li class="ptag">
       <label>标签</label>
@@ -117,7 +111,7 @@
         <?php if(!empty($pInfo['images'])): ?>
         <?php $imagaNum = 1; ?>
         <?php foreach($pInfo['images'] as $row): ?>
-        <li class="pic_li <?php if($imagaNum == 1): ?>pic_on<?php endif; ?>"><img width="80" height="80" title="" src="<?php echo $row['images']['image_100']; ?>"></li>
+        <li class="pic_li <?php if($imagaNum == 1): ?>pic_on<?php endif; ?>"><img width="80" height="80" title="" src="<?php echo $row['images']['image_120']; ?>"></li>
         <?php $imagaNum++; ?>
         <?php endforeach; ?>
         <?php endif;?>
@@ -195,13 +189,13 @@
         </ul>
       </dt> -->
       <!--商品评论列表区-->
-      <include file="*item-comments" />
+
       <!--商品咨询列表-->
-      <include file="*item-consults" />
+
 
     </dl>
     <!--商品推荐区-->
-    <include file="*item-recommend" />
+
     <div class="clear"></div>
   </div>
 
@@ -214,7 +208,7 @@
     <img src="__PUBLIC__/Images/shop/service2.jpg"><br />
     <br /> -->
     <h3>服务承诺</h3>
-    <img src="__PUBLIC__/Images/shop/services.jpg"><br />
+    <img src="/images/shop/services.jpg"><br />
     <br />
   </div>
 

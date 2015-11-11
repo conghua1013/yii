@@ -4,21 +4,11 @@ class IndexController extends ShopBaseController
 {
      
 
-    public function actionIndex() {
-//        echo "<pre>";
-//        echo $this->user_id."<br>";
-//        echo Yii::app()->request->userHostAddress."<br>";
-//        print_r($_SESSION);
-//        exit;
-
-
+    public function actionIndex()
+    {
         $lunbo = $this->getLunboBanner();
         $banner = $this->getBanner();
         $module = $this->getIndexModule();
-
-        // echo "<pre>";
-        // print_r($lunbo);
-        // exit;
 
         $viewData = array();
         $viewData['lunbo'] = $lunbo;
@@ -27,8 +17,12 @@ class IndexController extends ShopBaseController
         $this->render('index/index',$viewData);
     }
 
-    //获取轮播的图片
-    public function getLunboBanner(){
+    /**
+     * 获取轮播的图片
+     * @return array|bool
+     */
+    public function getLunboBanner()
+    {
         $criteria = new CDbCriteria(); 
         $criteria->compare('station',1);
         $criteria->compare('is_show',1);
@@ -50,8 +44,12 @@ class IndexController extends ShopBaseController
         return $newList;
     }
 
-    //获取轮播下面的两个banner
-    public function getBanner(){
+    /**
+     * 获取轮播下面的两个banner
+     * @return array|bool
+     */
+    public function getBanner()
+    {
         $criteria = new CDbCriteria(); 
         $criteria->compare('station',2);
         $criteria->compare('is_show',1);
@@ -75,7 +73,8 @@ class IndexController extends ShopBaseController
 
 
     //获取首页的显示模块
-    public function getIndexModule(){
+    public function getIndexModule()
+    {
         $criteria = new CDbCriteria();
         $criteria->compare('is_show',1);
         $criteria->compare('start_time','<='.time());
@@ -109,13 +108,14 @@ class IndexController extends ShopBaseController
     
 
     //获取模块下面的商品
-    protected function getModuleProduct($info){
+    protected function getModuleProduct($info)
+    {
         $list = array();
         if(empty($info['type'])){
             $pids = $info['product_ids'];
             if(empty($pids)){return false;}
             $pidArr = explode(',', $pids);
-            $list = Product::model()->getProductInfoByIds($pidArr);
+            $list = Product::model()->getProductInfoByIds($pidArr,'all');
         }else{
             $list = $this->getModuleProductAuto($info);
         }
@@ -124,7 +124,8 @@ class IndexController extends ShopBaseController
 
 
     //通过自动策略获取商品
-    protected function getModuleProductAuto($info){
+    protected function getModuleProductAuto($info)
+    {
         $list = array();
         //热销商品
         if($info['type'] == 1){
@@ -142,9 +143,7 @@ class IndexController extends ShopBaseController
     
 
     /**
-     +
      *自动策略抓取商品1（新品）
-     +
      */
     protected function getNewProducts(){
         $criteria = new CDbCriteria();
@@ -167,11 +166,10 @@ class IndexController extends ShopBaseController
 
 
     /**
-     +
      *自动策略抓取商品1（热卖）销量最高的5个商品
-     +
      */
-    protected function getHotProducts(){
+    protected function getHotProducts()
+    {
         $criteria = new CDbCriteria();
         $criteria->compare('status',2);
         $criteria->compare('is_show',1);
@@ -192,11 +190,10 @@ class IndexController extends ShopBaseController
 
 
     /**
-     +
      *自动策略抓取商品2（特卖）折扣最高的5个
-     +
      */
-    protected function getPromoteProducts(){
+    protected function getPromoteProducts()
+    {
         $criteria = new CDbCriteria();
         $criteria->compare('status',2);
         $criteria->compare('is_show',1);
@@ -223,7 +220,8 @@ class IndexController extends ShopBaseController
      *自动策略抓取商品3（精选）售出个数最高按照品牌取出5个
      +
      */
-    protected function getBestProducts(){
+    protected function getBestProducts()
+    {
         $criteria = new CDbCriteria();
         $criteria->compare('status',2);
         $criteria->compare('is_show',1);
