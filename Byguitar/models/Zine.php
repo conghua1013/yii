@@ -34,6 +34,7 @@ class Zine extends CActiveRecord
         if(empty($list)){return false;}
         $newList = array();
         foreach($list as $row){
+            $row['images']['cover'] = '/images/zine/'.$row['mcover'];
             $newList[$row['id']] = $row;
         }
         return $newList;

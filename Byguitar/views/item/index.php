@@ -46,17 +46,19 @@
     
     
     <!-- 商品的规格属性 -->
-    <?php if(!empty($stock)): ?>
-    <li class="style"> 
-        <?php foreach($stock as $key => $row): ?>
-            <?php if($key == 0): ?>  <!-- 默认选中第一个 -->
-            <span class="guige guige_on" size="<?php echo $row['attr_id']; ?>" quantity="<?php echo $row['quantity']; ?>"><?php echo $attrList[$row['attr_id']]; ?></span>
-            <?php else: ?>
-            <span class="guige" size="<?php echo $row['attr_id']; ?>" quantity="<?php echo $row['quantity']; ?>"><?php echo $attrList[$row['attr_id']]; ?></span>
-            <?php endif; ?>
-        <?php endforeach; ?>
-      <span id="error-style" class="error-tip" style="display:none">请选择规格</span>
-    </li>
+    <?php if($pInfo['is_multiple']): ?>
+        <?php if(!empty($stock)): ?>
+        <li class="style">
+            <?php foreach($stock as $key => $row): ?>
+                <?php if($key == 0): ?>  <!-- 默认选中第一个 -->
+                <span class="guige guige_on" size="<?php echo $row['attr_id']; ?>" quantity="<?php echo $row['quantity']; ?>"><?php echo $attrList[$row['attr_id']]; ?></span>
+                <?php else: ?>
+                <span class="guige" size="<?php echo $row['attr_id']; ?>" quantity="<?php echo $row['quantity']; ?>"><?php echo $attrList[$row['attr_id']]; ?></span>
+                <?php endif; ?>
+            <?php endforeach; ?>
+          <span id="error-style" class="error-tip" style="display:none">请选择规格</span>
+        </li>
+          <?php endif; ?>
     <?php else: ?> <!-- 没有库存写入隐藏的库存值 -->
     <li class="style" style="display:none;">
         <span class="guige guige_on" size="none" quantity="<?php echo $pInfo['quantity']; ?>">xx</span>

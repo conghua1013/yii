@@ -247,7 +247,10 @@ class UserController extends ShopBaseController
 		$count = $result['count'];
 		$list = $result['list'];
 		$product_ids = $result['product_ids'];
-		$productList = Product::model()->getProductInfoByIds($product_ids);
+		$productList = Product::model()->getProductInfoByIds($product_ids,'all');
+//		echo "<pre>";
+//		print_r($productList);
+//		exit;
 
 		$baseUrl = '/user/like?';
 		$pages = '';
@@ -291,8 +294,6 @@ class UserController extends ShopBaseController
 		$this->render('/user/orderlist',$viewData);
 	}
 
-	// todo 未完待续
-
 	/**
 	 * 订单详情
 	 */
@@ -313,6 +314,7 @@ class UserController extends ShopBaseController
 			$status = Order::model()->getOrderStatusForUserPage($oInfo);
 			$logs = OrderLog::model()->findAllByAttributes(array('order_id'=>$oInfo['id']));
 		} catch (exception $e){
+			//echo ''.$e;exit;
 			$this->redirect('/?from=order_error');
 		}
 

@@ -34,6 +34,7 @@ class Tab extends CActiveRecord
         if(empty($list)){return false;}
         $newList = array();
         foreach($list as $row){
+            $row['images']['cover'] = '/images/public/tab.png';
             $newList[$row['id']] = $row;
         }
         return $newList;

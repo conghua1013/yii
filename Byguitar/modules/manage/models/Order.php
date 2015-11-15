@@ -237,7 +237,7 @@ class Order extends CActiveRecord
 		$oInfo['order_status_txt'] = $this->getOrderStatus($oInfo['order_status']);
 
 		$addressData = array($oInfo['province'],$oInfo['city'],$oInfo['district']);
-		$addData = Address::model()->getAddressInfoByIds($addressData);
+		$addData = Region::model()->getRegionInfoByIds($addressData);
 		if(!empty($addData)){
 			$oInfo['province_name'] = isset($addData[$oInfo['province']]) ? $addData[$oInfo['province']]['region_name'] : '';
 			$oInfo['city_name'] = isset($addData[$oInfo['city']]) ? $addData[$oInfo['city']]['region_name'] : '';

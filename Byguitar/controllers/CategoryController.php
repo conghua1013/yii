@@ -5,7 +5,8 @@ class CategoryController extends ShopBaseController {
     /**
      * 分类页面默认控制器
      */
-    public function actionIndex(){
+    public function actionIndex()
+    {
 //        echo "<pre>";
         
         $condition = $this->parseInput();
@@ -61,7 +62,8 @@ class CategoryController extends ShopBaseController {
     /**
      * 初始化和预处理输入参数
      */
-    private function parseInput(){
+    private function parseInput()
+    {
         $filter = array();
         $where 	= '';
         $pagenum = 20;//每页的个数
@@ -131,7 +133,8 @@ class CategoryController extends ShopBaseController {
     /**
      * 获取分类数据
      */
-    private function getCateResult($filter,$where,$order,$offset,$limit,$optionWhere){
+    private function getCateResult($filter,$where,$order,$offset,$limit,$optionWhere)
+    {
         $pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
         $numPerPage = empty($_REQUEST['numPerPage']) ? 20 : $_REQUEST['numPerPage'];
         
@@ -172,7 +175,8 @@ class CategoryController extends ShopBaseController {
         return array('list'=>$list,'count'=>$count,'options'=>$options); 
     }
     
-    public function getOptionBrands($filter,$optionWhere){
+    public function getOptionBrands($filter,$optionWhere)
+    {
         $list = array();
         $group = 'p.brand_id';
         $field = 'p.brand_id as id';
@@ -192,7 +196,8 @@ class CategoryController extends ShopBaseController {
         return $list;
     }
     
-    protected function getOptionPrices($filter,$optionWhere){
+    protected function getOptionPrices($filter,$optionWhere)
+    {
         $priceRange = Category::model()->getPriceRange('','array');//获取价格区间数组
         if(empty($priceRange)){return false;}
 

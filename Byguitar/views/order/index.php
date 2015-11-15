@@ -1,3 +1,5 @@
+<link href="/css/web/flow.css" type="text/css" rel="stylesheet">
+
 <div class="tip"></div>
 <div class="main">
     <div class="flowbox">
@@ -22,7 +24,7 @@
                         <!-- <th width="25%" align="center" valign="middle">获得积分</th> -->
                     </tr>
                     <tr>
-                        <td width="25%" align="center" valign="middle" style="border-left:1px solid #fff;"><a href="/user/order/orderSn/<?php echo $oInfo['order_sn']; ?>" class="blue"><?php echo $oInfo['order_sn']; ?></a></td>
+                        <td width="25%" align="center" valign="middle" style="border-left:1px solid #fff;"><a href="/user/order/<?php echo $oInfo['order_sn']; ?>" class="blue"><?php echo $oInfo['order_sn']; ?></a></td>
                         <td width="25%" align="center" valign="middle"><code>¥<?php echo $oInfo['need_pay_amount']; ?></code></td>
                         <td width="25%" align="center" valign="middle">支付宝</td>
                         <!-- <td width="25%" align="center" valign="middle"><code>{$oInfo.order_amount}</code></td> -->

@@ -37,7 +37,7 @@
                                 <td align="center" valign="middle"><?php echo date('Y-m-d H:i:s',$row['add_time']); ?></td>
                                 <td align="center" valign="middle"><?php echo $row['order_status_txt']; ?></td>
                                 <td align="center" valign="middle">
-                                    <a class="qing" href="/shop/user/order/orderSn/<?php echo $row['order_sn']; ?>">查看详情</a>
+                                    <a class="qing" href="/user/order/<?php echo $row['order_sn']; ?>">查看详情</a>
                                     <?php if($row['order_status'] == 0): ?>
                                         <a class="btn btn-small btn-primary white" href="/shop/pay/<?php echo $row['order_sn']; ?>">
                                             立即付款</a>

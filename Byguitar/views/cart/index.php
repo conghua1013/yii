@@ -41,11 +41,11 @@
                     <tr class="g1" cid="<?php echo $row['id']; ?>" id="cart-<?php echo $row['id']; ?>">
                         <td align="center">
                             <?php if($row['type'] == 1): ?>
-                                <a href="/tab/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['id']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
+                                <a href="/tab/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['cover']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
                             <?php elseif($row['type'] == 2): ?>
-                                <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['id']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
+                                <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['images']['cover']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
                             <?php else: ?>
-                                <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['pInfo']['image']['img_120']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
+                                <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['image_120']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
                             <?php endif; ?>
                         </td>
                         <td align="left">

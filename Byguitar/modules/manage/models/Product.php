@@ -105,7 +105,8 @@ class Product extends CActiveRecord
      * @param $id
      * @return array|bool
      */
-    public function getProductInfoById($id,$info_type='simple'){
+    public function getProductInfoById($id,$info_type='simple')
+    {
         if(empty($id)){return false;}
         $info = Product::model()->findByPk($id);
         if(empty($info)){return false;}
@@ -139,7 +140,8 @@ class Product extends CActiveRecord
      * @param string $info_type
      * @return array|string
      */
-    public function getProductInfoByIds($product_ids,$info_type='simple'){
+    public function getProductInfoByIds($product_ids,$info_type='simple')
+    {
         if(empty($product_ids)){return '';}
         $criteria = new CDbCriteria;
         if(empty($info_type) || $info_type == 'simple'){
@@ -175,7 +177,8 @@ class Product extends CActiveRecord
      * @param $product_id
      * @return array|string
      */
-    public function getProductFaceImageByProductId($product_id) {
+    public function getProductFaceImageByProductId($product_id)
+    {
         if(empty($product_id)){return '';}
         $info = ProductImage::model()->findByAttributes(array('product_id'=>$product_id));
         if(empty($info)){return '';}
@@ -302,5 +305,47 @@ class Product extends CActiveRecord
         }
         return $newList;
     }
+
+    /**
+     * 获取商品的库存属性【暂时还未启用】
+     * @param $product_id
+     * @param bool|false $stock_type
+     * @return array|string
+     */
+    public function getProductStockInfo($product_id,$stock_type = false)
+    {
+        if(empty($product_id)){ return ''; }
+        if($stock_type === false){
+            $pInfo = Product::model()->findByPk($product_id);
+            if(empty($pInfo)){
+                return '';
+            }
+            $stock_type = $pInfo->is_multiple;
+        }
+
+        $data = array();
+        $data['stock_type'] = $stock_type;
+        $quantity = 0;
+        if($stock_type){
+            $list = ProductStock::model()->findAllByAttributes(array('product_id'=>$product_id));
+            $temp = array();
+
+            if($list){
+                foreach($list as $row){
+                    $temp[$row->attr_id] = $row->getAttributes();
+                    $quantity += $row->quantity;
+                }
+            }
+            $data['list'] = $temp;
+        } else {
+            $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$product_id));
+            $quantity = $stockInfo->quantity;
+            //$quantity = $pInfo['quantity'];
+        }
+
+        $data['quantity'] = $quantity;
+        return $data;
+    }
+
 
 }

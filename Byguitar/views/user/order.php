@@ -163,11 +163,11 @@
                             <tr>
                                 <td width="10%">
                                     <?php if($row['type'] == 1): ?>
-                                        <a href="/tab/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['images']['image_100']; ?>" width="60" /></a>
+                                        <a href="/tab/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['images']['cover']; ?>" width="60" /></a>
                                     <?php elseif($row['type'] == 2): ?>
-                                        <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['images']['image_100']; ?>" width="60" /></a>
+                                        <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['images']['cover']; ?>" width="60" /></a>
                                     <?php else: ?>
-                                        <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['image_100']; ?>" width="60" /></a>
+                                        <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['image_120']; ?>" width="60" /></a>
                                     <?php endif; ?>
                                 </td>
                                 <td width="30%">

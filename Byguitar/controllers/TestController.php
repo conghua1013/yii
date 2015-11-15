@@ -4,6 +4,7 @@ class TestController extends ShopBaseController
 {
     public function actionIndex()
     {
+        $this->render('/test/index');exit;
         echo "<pre>";
 
         $list = ProductAttributes::model()->findAllByAttributes(array('id'=>2));

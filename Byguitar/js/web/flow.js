@@ -446,8 +446,9 @@ function upCartNum(cid,num,action){
 				$('#pnum_'+cid).val(parseInt(num));
 				$('#cart-'+cid).find('.num_tip').remove();
 				var eachPrice = $('#pnum_'+cid).parent().parent().prev().html().replace('¥','');
-					eachPrice = parseFloat(eachPrice).toFixed(2);
-				$('#pprice_'+cid).html('¥'+eachPrice*num);
+				var updatePrice = eachPrice*num;
+				updatePrice = parseFloat(updatePrice).toFixed(2);
+				$('#pprice_'+cid).html('¥'+updatePrice);
 				//同时更新 应付商品金额 部分的金额    
 				updatetotalPrice();
 				

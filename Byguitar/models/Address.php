@@ -171,23 +171,22 @@ class Address extends CActiveRecord
     }
 
     /**
-     *
-     * @param $ids
-     * @return bool|string
+     * 保存用户的最后地址信息为默认信息
+     * @param $userId
+     * @param $add_id
+     * @return bool
      */
-    public function getAddressInfoByIds($ids)
+    protected function saveUserLastAddressDefault($userId,$add_id)
     {
-        if(empty($ids) || !is_array($ids)){return false;}
+        if(empty($add_id) || empty($userId)){return false;}
 
-        $list = Region::model()->findAllByAttributes(array('id'=>$ids));
-        if(empty($list)){return false;}
-
-        $data = array();
-        foreach ($list as $row) {
-            $data[$row->id] = $row->getAttributes();
+        $info = Address::model()->findByPk($add_id);
+        if($info && $info->is_default != 1){
+            $info->is_default = 1;
+            $info->save();
         }
 
-        return $data;
+        //吧其他的地址设为非默认地址
+        return true;
     }
-
 }

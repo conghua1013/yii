@@ -43,12 +43,19 @@ class OrderProduct extends CActiveRecord
 		foreach($list as $row){
 			$temp = $row->getAttributes();
 			if($row->type == 1){
-				$temp['images'] = '';
+				$temp['images']['cover'] = '/images/public/tab.png';
 			} elseif($row->type == 2) {
-				$temp['images'] = '';
+				$zineInfo = Zine::model()->findByPk($row['product_id']);
+				if($zineInfo){
+					$temp['images']['cover'] = '/images/zine/'.$zineInfo['mcover'];
+				} else {
+					$temp['images']['cover'] = '';
+				}
+
 			} else {
 				$temp['images'] = Product::model()->getProductFaceImageByProductId($row->product_id);
 			}
+			$temp['total_price'] = $temp['sell_price'] * $temp['quantity'];
 
 			$newList[$row->id] = $temp;
 		}

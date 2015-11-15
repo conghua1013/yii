@@ -45,4 +45,24 @@ class Region extends CActiveRecord
         	);
 	}
 
+	/**
+	 * 根据id获取地区名详细数组.
+	 * @param $ids
+	 * @return bool|string
+	 */
+	public function getRegionInfoByIds($ids)
+	{
+		if(empty($ids) || !is_array($ids)){return false;}
+
+		$list = Region::model()->findAllByAttributes(array('id'=>$ids));
+		if(empty($list)){return false;}
+
+		$data = array();
+		foreach ($list as $row) {
+			$data[$row->id] = $row->getAttributes();
+		}
+
+		return $data;
+	}
+
 }

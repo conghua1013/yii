@@ -2,6 +2,7 @@
 
 class Cart extends CActiveRecord
 {
+    public $product_type =  array('product' => 0,'tab' => 1, 'zine' => 2);
 
     public function getDbConnection() {
         return Yii::app()->shop;
@@ -18,12 +19,235 @@ class Cart extends CActiveRecord
     }
 
     /**
+     * 添加商品到购物车
+     * @param $request
+     */
+    public function addToCart($userId,$request)
+    {
+        if(empty($request) || empty($request)){
+            throw new exception('传输数据错误，请重试');
+        }
+        if($request['type'] == 'product'){
+            $pInfo = Product::model()->findByPk($request['id']);//商品详情
+        } elseif($request['type'] == 'tab') {
+            $pInfo = Tab::model()->findByPk($request['id']);
+        } elseif($request['type'] == 'zine') {
+            $pInfo = Zine::model()->findByPk($request['id']);
+        }
+
+        //校验数量和所选尺寸等信息
+        //查找购物车里面的商品
+        $map = array();
+        $map['user_id'] 	= $userId;
+        $map['product_id'] 	= $request['id'];
+        $map['size_id'] 	= $request['size'];
+        $map['type'] 		= $this->product_type[$request['type']];
+        $cartInfo = Cart::model()->findByAttributes($map);
+
+        $this->addToCartBeforeCheck($request,$pInfo,$cartInfo);
+
+        $time = time();
+        if(empty($cartInfo)){
+            $cartInfo = new Cart();
+            $cartInfo->user_id 		= $userId ;
+            $cartInfo->product_id 		= $request['id'];
+            $cartInfo->type 			= $this->product_type[$request['type']];
+            $cartInfo->size_id 		= $request['size'];
+            $cartInfo->shop_price 		= $pInfo['sell_price'];
+            $cartInfo->sell_price 		= $pInfo['sell_price'];
+            $cartInfo->quantity 		= $request['num'];
+            $cartInfo->add_time 		= $time;
+            $cartInfo->update_time 	= $time;
+            $cartInfo->is_pay 			= isset($request['buynow'])&&(!empty($request['buynow'])) ? 1 : 0;
+            $flag = $cartInfo->save();
+        } else {
+            //若立即购买的P在购物车中已经存在
+            $cartInfo->shop_price 		= $pInfo['sell_price'];
+            $cartInfo->sell_price 		= $pInfo['sell_price'];
+            $cartInfo->quantity 	+= $request['num'];
+            $cartInfo->is_pay       = isset($request['buynow'])&&(!empty($request['buynow'])) ? 1 : 0;
+            $cartInfo->update_time  = $time;
+            $flag = $cartInfo->save();
+        }
+
+        if(empty($flag)){
+            throw new exception('添加购物车失败，请重试！');
+        }
+        return true;
+    }
+
+    /**
+     * 添加购物车前，检查商品是否有误 todo 0元单的问题怎么处理
+     * @param $request
+     * @param $pInfo
+     * @return bool
+     * @throws exception
+     */
+    protected function addToCartBeforeCheck($request,$pInfo,$cartInfo)
+    {
+        if(empty($pInfo)){ throw new exception('商品出现错误！'); }
+        $buyNum = $request['num'] + ($cartInfo ? $cartInfo->quantity : 0);
+
+        if ($request['type'] == 'tab' || $request['type'] == 'zine') {
+
+            if($request['type'] == 'tab'){
+                $productName = '谱子【'.$pInfo['tabname'].'】';
+            } else {
+                $productName = '杂志【'.$pInfo['name'].'】';
+            }
+            if($pInfo['sell_price'] <= 0){
+                throw new exception('该'.$productName.'不用付费',500);
+            } elseif(empty($pInfo['quantity'])) {
+                throw new exception('该'.$productName.'已经没有库存了',500);
+            } else{
+                if($buyNum > $pInfo['quantity']){
+                    throw new exception('该'.$productName.'库存不足，添加失败！',500);
+                }
+            }
+        }  else {
+            if(empty($pInfo['is_multiple'])){
+                $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$pInfo['id'],'attr_id'=>0));
+                if(empty($stockInfo)){
+                    throw new exception('库存错误，请重试！',500);
+                } elseif($stockInfo->quantity < $buyNum){
+                    throw new exception('库存不足，添加失败！',500);
+                }
+            } else {
+                if(empty($request['size'])){
+                    throw new exception('请选择尺寸后再提交！',500);
+                }
+                $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$pInfo['id'],'attr_id'=>$request['size']));
+                if(empty($stockInfo)){
+                    throw new exception('库存错误，请重试！',500);
+                } elseif($stockInfo->quantity < $buyNum) {
+                    throw new exception('库存不足，添加失败！',500);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 更新购物车商品的数量
+     * @param $userId
+     * @param $request
+     * @param $cartInfo
+     */
+    public function updateCartNum($userId,$request)
+    {
+        $cartInfo = Cart::model()->findByPk($request['id']);
+        if(empty($cartInfo) || $userId != $cartInfo['user_id']) {
+            throw new exception('数据错误！',500);
+        }elseif ($request['action'] == 'edit' && empty($request['num'])) {
+            throw new exception('商品个数不能为0！');
+        } elseif($request['action'] == 'reduse' && $cartInfo['quantity'] <= 1) {
+            throw new exception('已经不能再少了！',500);
+        }
+
+        if($request['action'] == 'edit'){
+            $cartInfo->quantity = $request['num'];
+        }elseif($request['action'] == 'reduse'){
+            $cartInfo->quantity -= 1;
+        }else{
+            $cartInfo->quantity += 1;
+        }
+
+        if($cartInfo['type'] == '0'){
+            $pInfo = Product::model()->findByPk($cartInfo['product_id']);//商品详情
+        } elseif($cartInfo['type'] == '1') {
+            $pInfo = Tab::model()->findByPk($cartInfo['product_id']);
+        } elseif($cartInfo['type'] == '2') {
+            $pInfo = Zine::model()->findByPk($cartInfo['product_id']);
+        }
+        $this->updateCartBeforeCheck($pInfo,$cartInfo);
+
+        $cartInfo->shop_price 		= $pInfo['sell_price'];
+        $cartInfo->sell_price 		= $pInfo['sell_price'];
+        $flag = $cartInfo->save();
+        if(empty($flag)){
+            throw new exception('修改失败！');
+        }
+        return true;
+    }
+
+    /**
+     * 更新购物车时检查库存等。
+     * @param $pInfo
+     * @param $cartInfo
+     * @return bool
+     * @throws exception
+     */
+    protected function updateCartBeforeCheck($pInfo,$cartInfo)
+    {
+        if(empty($pInfo)){ throw new exception('商品出现错误！'); }
+
+        if ($cartInfo['type'] == '1' || $cartInfo['type'] == '2') {
+            if($cartInfo['type'] == '1'){
+                $productName = '谱子【'.$pInfo['tabname'].'】';
+            } else {
+                $productName = '杂志【'.$pInfo['name'].'】';
+            }
+            if($pInfo['sell_price'] <= 0){
+                throw new exception('该'.$productName.'不用付费',500);
+            } elseif(empty($pInfo['quantity'])) {
+                throw new exception('该'.$productName.'已经没有库存了',500);
+            } else{
+                if($cartInfo->quantity > $pInfo['quantity']){
+                    throw new exception('该'.$productName.'库存不足，添加失败！',500);
+                }
+            }
+        }  else {
+            if(empty($pInfo['is_multiple'])){
+                $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$pInfo['id'],'attr_id'=>0));
+                if(empty($stockInfo)){
+                    throw new exception('库存错误，请重试！',500);
+                } elseif($stockInfo->quantity < $cartInfo->quantity){
+                    throw new exception('库存不足，修改失败！',500);
+                }
+            } else {
+                $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$pInfo['id'],'attr_id'=>$cartInfo['size_id']));
+                if(empty($stockInfo)){
+                    throw new exception('库存错误，请重试！',500);
+                } elseif($stockInfo->quantity < $cartInfo->quantity) {
+                    throw new exception('库存不足，修改失败！',500);
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 删除购物车中的商品.
+     * @param $userId
+     * @param $request
+     */
+    public function deleteProductFromCart($userId,$request)
+    {
+        if (empty($request['cid'])) {
+            throw new exception('数据错误',500);
+        }
+        $info = Cart::model()->findByPk($request['cid']);
+        if(empty($info)){
+            return true;
+        }
+        if($info->user_id !== $userId){
+            throw new exception('数据错误刷新页面重试',500);
+        }
+
+        $flag = Cart::model()->deleteByPk($request['cid']);
+        if(empty($flag)){
+            throw new exception('数据错误刷新页面重试',500);
+        }
+        return true;
+    }
+
+
+    /**
      * 获取购物车里面的商品
      */
-    public function getCartList($userId){
-        if(!$userId){
-            return '';
-        }
+    public function getCartList($userId)
+    {
+        if(!$userId){ return ''; }
 
         $map = array();
         $map['user_id'] = $userId ;
@@ -59,7 +283,7 @@ class Cart extends CActiveRecord
         }
         //商品列表
         if($productIds){
-            $productList = Product::model()->getProductInfoByIds($productIds);
+            $productList = Product::model()->getProductInfoByIds($productIds,'all');
         }
 
         $total = array();
@@ -78,16 +302,16 @@ class Cart extends CActiveRecord
                 $val['product_name'] .=  '-'.$productAttrs[$val['size_id']];
             }
 
-            $val['pInfo']            = $product;
-            $val['sell_price']      = $product['sell_price'];
-            $val['product_sn'] 	  = $product['product_sn'];
-            $val['brand_id'] 	      = $product['brandid'];
-            $val['img'] 		      = $product['img'];
-            $val['weight'] 		  = $product['weight'];
-            $val['size'] 		      = $product['size'];
+            $val['pInfo']       = $product;
+            $val['sell_price']  = $product['sell_price'];
+            $val['product_sn'] 	= $product['product_sn'];
+            $val['brand_id'] 	= $product['brandid'];
+            $val['weight'] 		= $product['weight'];
+            $val['size'] 	    = $product['size'];
+            $val['images']      = $product['images'];
+            $val['storage'] 	= $product['quantity']; //总库存
             //$val['shipping'] 	= $product['shipping'];
             //$val['cost'] 		= $product['currentcost'];//当前成本
-            //$val['storage'] 	= $product['quantity'];
             //$val['status'] 		= $product['status'];
             //$val['iscoupon'] 	= $product['iscoupon'];
             //$val['isfree'] 		= $product['isfree'];
@@ -117,7 +341,7 @@ class Cart extends CActiveRecord
         if (empty($productAmount)) {
             return 0;
         }
-        $config = $this->getShopConfig();
+        $config = ShopConfig::model()->getShopConfig();
         $freeAmount = isset($config['FREE_SHIPPING_AMOUNT']) ? $config['FREE_SHIPPING_AMOUNT']: 69;
         $shippingFee = isset($config['SHIPPING_FEE']) ? $config['SHIPPING_FEE']: 6;
 
@@ -126,23 +350,6 @@ class Cart extends CActiveRecord
             $finalShippingFee = $shippingFee;
         }
         return $finalShippingFee;
-    }
-
-    /**
-     * 获取商店配置（免运费金额等配置）
-     * @return array|bool
-     */
-    public function getShopConfig(){
-        $list = Yii::app()->shop->createCommand()
-            ->select('*')
-            ->from('bg_shop_config')
-            ->queryAll();
-        if(empty($list)){return false;}
-        $newList = array();
-        foreach($list as $row){
-            $newList['attribute'] = $row['value'];
-        }
-        return $newList;
     }
 
     /**
@@ -185,7 +392,7 @@ class Cart extends CActiveRecord
     public function createOrder($userId,$request)
     {
         $data = array();
-        $cartinfo 	= Cart::model()->getCartList($userId);				//购物车物品的详细情况
+        $cartinfo 	= $this->getCartList($userId); //购物车物品的详细情况
         if(empty($cartinfo) || empty($cartinfo['list'])){
             throw new exception('购物车商品为空，请刷新页面后提交！');
         }
@@ -288,19 +495,24 @@ class Cart extends CActiveRecord
      * @return bool
      * @throws Exception
      */
-    protected function saveOrderProduct($userId, $order_id, $cartinfo)
+    protected function saveOrderProduct($userId, $order_id, $cartInfo)
     {
-        $list = $cartinfo['list'];
+        $list = $cartInfo['list'];
+
         foreach ($list as  $row) {
             if($row['type'] == 1){
                 $pInfo = Tab::model()->findByPk($row['product_id']);
-                if(empty($pInfo)){ throw new Exception("谱子不存在！", 1);}
+                if(empty($pInfo)){ throw new Exception("谱子不存在！", 500);}
             }elseif($row['type'] == 2){
                 $pInfo = Zine::model()->findByPk($row['product_id']);
-                if(empty($pInfo)){ throw new Exception("杂志商品不存在！", 1);}
+                if(empty($pInfo)){ throw new Exception("杂志商品不存在！", 500);}
             }else{
                 $pInfo = Product::model()->findByPk($row['product_id']);
-                if(empty($pInfo)){ throw new Exception("订单商品不存在！", 1);}
+                if(empty($pInfo)){ throw new Exception("订单商品不存在！", 500);}
+            }
+
+            if($row['sell_price'] != $pInfo['sell_price']){
+                throw new exception('价格错误，请重试');
             }
 
             $m = new OrderProduct();
@@ -311,7 +523,7 @@ class Cart extends CActiveRecord
             $m->product_sn 	    = empty($row['type']) ? $pInfo['product_sn'] : '';
             $m->product_name    = empty($row['type']) ? $pInfo['product_name'] : ($row['type'] == 1 ? $pInfo['tabname'] : $pInfo['name']);
             $m->size_id 	    = $row['size_id'];
-            $m->brand_id 	    = $pInfo['brand_id'];
+            $m->brand_id 	    = $row['type'] == 0 ? $pInfo['brand_id'] : 0;
             $m->sell_price 	    = $row['sell_price'];
             $m->quantity 	    = $row['quantity'];
             //$m->shipping_id 	= 0;
@@ -322,31 +534,30 @@ class Cart extends CActiveRecord
                 throw new Exception("订单商品生成失败！", 1);
             }
 
-            $this->updateProductStock($row['type'],$pInfo,$row['quantity']);//更新商品的库存
+            $this->updateProductStock($pInfo,$row);//更新商品的库存
         }
         return true;
     }
 
-    protected function updateProductStock($type,$pInfo,$num)
+    protected function updateProductStock($pInfo,$cartInfo)
     {
         if(empty($pInfo)){ throw new Exception("商品信息不能为空！", 1); }
-
         //谱子的库存检查及操作
-        if($type == 1){
-            if($pInfo['quantity'] < $num){
+        if($cartInfo['type'] == 1){
+            if($pInfo['quantity'] < $cartInfo['quantity']){
                 throw new Exception("谱子【{$pInfo['tabname']}】库存不足！", 1);
             }
-            $pInfo->quantity = $pInfo['quantity'] - $num;
+            $pInfo->quantity -= $cartInfo['quantity'];
             $flag = $pInfo->save();
             if(empty($flag)){
                 throw new exception('谱子库存更新失败！');
             }
             return true;
-        } elseif($type == 2){
-            if($pInfo < $num){
+        } elseif($cartInfo['type'] == 2){
+            if($pInfo < $cartInfo['quantity']){
                 throw new Exception("杂志【{$pInfo['name']}】库存不足！", 1);
             }
-            $pInfo->quantity = $pInfo['quantity'] - $num;
+            $pInfo->quantity -= $cartInfo['quantity'];
             $flag = $pInfo->save();
             if(empty($flag)){
                 throw new exception('杂志库存更新失败！');
@@ -354,38 +565,42 @@ class Cart extends CActiveRecord
             return true;
         }
 
-        //商品库存检查 todo (待完成)
-        /*
-        if(empty($cartInfo['size_id'])){
-            if($cartInfo['quantity'] > $pInfo['quantity']){
+        //商品库存检查
+        if(empty($pInfo['is_multiple'])){
+            $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$pInfo['id'],'attr_id'=>0));
+            if(empty($stockInfo)){
+                throw new exception('库存异常');
+            }
+            if($stockInfo['quantity'] < $cartInfo['quantity']){
                 throw new Exception("商品【{$pInfo['product_name']}】库存不足！", 1);
             }
-            $data = array();
-            $data['id']			= $pInfo['id'];
-            $data['quantity']	= $pInfo['quantity']-$cartInfo['quantity'];
-            $flag = $this->product->save($data);
+            $stockInfo->quantity -= $cartInfo['quantity'];
+            $flag = $stockInfo->save();
             if(empty($flag)){
                 throw new exception('商品库存更新失败！');
             }
         }else{
-            $map = array('product_id' => $cartInfo['product_id'], 'size_id' =>  $cartInfo['size_id']);
-            $stock_m = M('ProductStock');
-            $stockInfo = $stock_m->where($map)->find();
+            $stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$pInfo['id'],'attr_id'=>$cartInfo['size_id']));
             if(empty($stockInfo)){
                 throw new Exception("商品【{$pInfo['product_name']}】库存错误！", 1);
             }elseif($stockInfo['quantity'] < $cartInfo['quantity']){
                 throw new Exception("商品【{$pInfo['product_name']}】库存不足！", 1);
             }
 
-            $data = array();
-            $data['id'] = $stockInfo['id'];
-            $data['quantity'] = $stockInfo['quantity'] - $cartInfo['quantity'];
-            $flag = $stock_m->save($data);
+            $stockInfo->quantity -= $cartInfo['quantity'];
+            $flag = $stockInfo->save();
             if(empty($flag)){
                 throw new exception('商品库存更新失败！');
             }
         }
-        */
+
+        //更新商品总的库存
+        $pInfo->quantity -= $cartInfo['quantity'];
+        $flag = $pInfo->save();
+        if(empty($flag)){
+            throw new exception('商品库存更新失败！');
+        }
+
         return true;
     }
 
@@ -460,10 +675,6 @@ class Cart extends CActiveRecord
         }
         return $info->value;
     }
-
-
-
-
 
 
 }

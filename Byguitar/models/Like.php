@@ -71,6 +71,11 @@ class Like extends CActiveRecord
         if(!$flag){
             throw new exception('取消喜欢失败!');
         }
+        $pInfo = Product::model()->findByPk($product_id);
+        if($pInfo && $pInfo->like_num >= 1){
+            $pInfo->like_num -= 1;
+            $pInfo->save();
+        }
         return true;
     }
 
@@ -97,6 +102,12 @@ class Like extends CActiveRecord
         $m->user_id 	= $userId;
         $m->add_time 	= time();
         $flag = $m->save();
+
+        $pInfo = Product::model()->findByPk($product_id);
+        if($pInfo){
+            $pInfo->like_num += 1;
+            $pInfo->save();
+        }
         if(!$flag){
             throw new exception('添加喜欢失败!');
         }

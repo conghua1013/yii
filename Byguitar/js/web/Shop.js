@@ -356,7 +356,7 @@ $(document).ready(function(){
 		} else {   //alert($('input[name=__hash__]').val()+'地方sss');return;
 			$.ajax({
 				   type: "post",
-				   url: "/shop/item/"+action,
+				   url: "/item/"+action,
 				   data: 'comment=' + pcomment.val() + "&id=" + pid.val() + "&type=" + pform.val() + "&__hash__=" + $('input[name=__hash__]').val(),
 				   dataType: 'json',
 				   success:function(msg){
@@ -447,7 +447,7 @@ function addToCart(pid, num, size, buynow,type){
 		data: data+"&ajax=1&m=" + Math.random(),
 		success:function(re){
 			if(re.status == 1 && re.buynow == '1'){ //直接购买成功后 跳转到结账页面
-				window.location.href= "/shop/cart/checkout";
+				window.location.href= "/cart/checkout";
 			}else if(re.status == 1){
 				var sell_price = $('#sell_price').html();
 				var price_amount = num * (sell_price.substring(1,sell_price.length-1));

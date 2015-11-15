@@ -45,4 +45,21 @@ class ShopConfig extends CActiveRecord
         	);
 	}
 
+	/**
+	 * 获取商店配置（免运费金额等配置）
+	 * @return array|bool
+	 */
+	public function getShopConfig(){
+		$list = Yii::app()->shop->createCommand()
+			->select('*')
+			->from('bg_shop_config')
+			->queryAll();
+		if(empty($list)){return false;}
+		$newList = array();
+		foreach($list as $row){
+			$newList['attribute'] = $row['value'];
+		}
+		return $newList;
+	}
+
 }
