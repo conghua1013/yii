@@ -359,13 +359,19 @@ class UserController extends ShopBaseController
 		$request = $_REQUEST;
 		$order_sn = trim($request['orderSn']);
 
+		$tran1 = Yii::app()->shop->beginTransaction();
+		$tran2 = Yii::app()->byguitar->beginTransaction();
 		try {
 			$userId = $this->user_id;
 			if(empty($userId)){
 				throw new exception('用户未登陆！', 2);
 			}
 			Order::model()->cancelOrder($userId,$order_sn);
+			$tran1->commit();
+			$tran2->commit();
 		} catch(exception $e){
+			$tran1->rollback();
+			$tran2->rollback();
 			$result['status'] = 0;
 			$result['msg'] = '取消失败!';
 		}

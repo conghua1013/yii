@@ -440,8 +440,9 @@
 			data: data+"&ajax=1&m=" + Math.random(),
 			success:function(re){
 				if(re.status == 1) {
-					alert('确认收货成功!');
 					location.reload();
+				}else if(re.status == 2){
+					popdiv("#login_pop","570","auto",0.2);
 				}else{
 					alert(re.msg +' 请联系客服处理！');
 				}

@@ -187,7 +187,8 @@ class CartController extends ShopBaseController
         $res['ordersn'] = '';
 
         $userId = $this->user_id;
-        $transaction = Yii::app()->shop->beginTransaction();
+        $tran1 = Yii::app()->shop->beginTransaction();
+        $tran2 = Yii::app()->byguitar->beginTransaction();
         try{
             if(empty($userId)){
                 throw new exception('用户未登录',2);
@@ -195,9 +196,11 @@ class CartController extends ShopBaseController
 
             $oInfo 	= Cart::model()->createOrder($userId,$request);				//购物车物品的详细情况
             $res['ordersn'] = $oInfo['ordersn'];//返回动态显示订单成功页面信息
-            $transaction->commit();
+            $tran1->commit();
+            $tran2->commit();
         }catch(exception $e){
-            $transaction->rollback();
+            $tran1->rollback();
+            $tran2->rollback();
             $res['status'] = 0;
             $res['msg'] = $e->getMessage();
         }

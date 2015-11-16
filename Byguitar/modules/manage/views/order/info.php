@@ -62,11 +62,11 @@
 			</tr>
 			<tr>
 				<td colspan="6">
-					<a href="/Manage/order/addshipping/id/{$oinfo.id}" target="dialog" width="600" height="370" title="添加物流信息,通知支付宝发货">
+					<a href="/manage/order/sendOrder?id=<?php echo $oInfo->id; ?>" target="dialog" width="600" height="370" title="添加物流信息,普通发货">
 						<img src="/css/dwz/images/pencil.png" alt="添加物流信息"/>
 					</a>
 					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a href="/Manage/order/notifyTaobaoSended/id/{$oinfo.id}" target="dialog" width="600" height="370" title="通知淘宝发货接口">
+					<a href="/manage/order/shippingAndNotifyAlipay?id=<?php echo $oInfo->id; ?>" target="dialog" width="600" height="370" title="通知淘宝发货接口">
 						通知淘宝发货接口
 					</a>
 				</td>

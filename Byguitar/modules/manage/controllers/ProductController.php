@@ -31,11 +31,9 @@ class ProductController extends ManageController {
             $this->render('add',$viewData);exit;
         }
 
+        $res = array('statusCode' => 200,'message' => '添加成功！');
         $transaction = Yii::app()->shop->beginTransaction();
         try{
-            $status = 200;
-            $message = '添加成功!';
-
             $productId = $this->saveProduct(); //保存商品的基本信息
             $this->saveProductCategory($productId); //保存商品的分类信息
             $this->saveProductExtend($productId); //保存商品的扩展信息
@@ -45,12 +43,13 @@ class ProductController extends ManageController {
             $transaction->commit();
         } catch(exception $e){
             $transaction->rollback();
-            $status = 200;
-            $message = '添加失败!【'.$e->getMessage().'】';
+            $res['statusCode'] = 500;
+            $res['message'] = '添加失败!【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode']      = $status;
-        $res['message']         = $message;
+
+        $res['navTabId'] = 'productList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/product/index';
         $this->ajaxDwzReturn($res);
     }
 
@@ -81,11 +80,9 @@ class ProductController extends ManageController {
             $viewData['productAttributes']  = $productAttributes;
             $this->render('edit',$viewData);exit;
         }
-
+        $res = array('statusCode' => 200,'message' => '添加成功！');
         $transaction = Yii::app()->shop->beginTransaction();
         try{
-            $status = 200;
-            $message = '修改成功!';
             $productId = $this->saveProduct(); //保存商品的基本信息
             $this->saveProductCategory($productId); //保存商品的分类信息
             $this->saveProductExtend($productId); //保存商品的扩展信息
@@ -95,12 +92,12 @@ class ProductController extends ManageController {
             $transaction->commit();
         } catch(exception $e){
             $transaction->rollback();
-            $status = 200;
-            $message = '修改失败!【'.$e->getMessage().'】';
+            $res['statusCode'] = 500;
+            $res['message'] = '修改失败!【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode']      = $status;
-        $res['message']         = $message;
+        $res['navTabId'] = 'productList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/product/index';
         $this->ajaxDwzReturn($res);
     }
 
@@ -398,15 +395,78 @@ class ProductController extends ManageController {
         $this->displayJson($result);
     }
 
-
-    public function actionInfo(){
+    /**
+     * 线上商品详情页面
+     */
+    public function actionInfo()
+    {
         $info = Product::model()->findByPk($_REQUEST['id']);
         $viewData = array();
         $viewData['info']         = $info;
         $this->render('info', $viewData);
     }
 
+    /**
+     * 修改商品的上架状态.
+     */
+    public function actionGrounding()
+    {
+        $id = intval($_REQUEST['id']);
+        $result = array('statusCode' => 200 ,'message' => '修改成功！');
+        try{
+            if(empty($id) || !in_array($_REQUEST['status'],array(2,3))){
+                throw new exception('参数错误');
+            }
+            $pInfo = Product::model()->findByPk($id);
+            if(empty($pInfo)){
+                throw new exception('商品不存在');
+            }
+            if($pInfo->status != $_REQUEST['status']){
+                $pInfo->status = intval($_REQUEST['status']);
+                $flag = $pInfo->save();
+                if(empty($flag)){
+                    throw new exception('修改状态失败！');
+                }
+            }
+        } catch(exception $e){
+            $result['statusCode'] = 500;
+            $result['message'] = '删除失败!【'.$e->getMessage().'】';
+        }
+        $result['callbackType'] = 'reloadTab';
+        $result['forwardUrl'] = '/manage/product/index';
+        $this->displayJson($result);
+    }
 
+    /**
+     * 修改商品的显示状态
+     */
+    public function actionShow()
+    {
+        $id = intval($_REQUEST['id']);
+        $result = array('statusCode' => 200 ,'message' => '修改成功！');
+        try{
+            if(empty($id)){
+                throw new exception('参数错误');
+            }
+            $pInfo = Product::model()->findByPk($id);
+            if(empty($pInfo)){
+                throw new exception('商品不存在');
+            }
+            if($pInfo->is_show != $_REQUEST['show']){
+                $pInfo->is_show = intval($_REQUEST['show']);
+                $flag = $pInfo->save();
+                if(empty($flag)){
+                    throw new exception('修改状态失败！');
+                }
+            }
+        } catch(exception $e){
+            $result['statusCode'] = 500;
+            $result['message'] = '删除失败!【'.$e->getMessage().'】';
+        }
+        $result['callbackType'] = 'reloadTab';
+        $result['forwardUrl'] = '/manage/product/index';
+        $this->displayJson($result);
+    }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 商品属性页面 start <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
     

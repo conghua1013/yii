@@ -124,6 +124,7 @@ class alipayNotify {
      * @return 支付宝处理结果
      */
 	function buildRequestHttp($para_temp) {
+
 		$sResult = '';
 
 		$para_temp['partner'] = $this->payment['alipay_partner'];

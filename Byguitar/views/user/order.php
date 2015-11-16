@@ -47,18 +47,19 @@
                 <?php if(!empty($status)): ?>
                 <?php foreach($status as $key => $row): ?>
                     <div class="fl order_step">
-
                         <?php if($row['status']): ?>
                             <div class="ordstep_line ordstep_lineed  <?php if($key == 'create'): ?>ordstep_f<?php elseif($key == 'receive'): ?>ordstep_l<?php endif; ?>">&nbsp;</div>
                             <div class="ordstep_arrow ordstep_arrowed">&nbsp;</div>
-                            <div class="ordstep_txt ordstep_txton"></div>
+                            <div class="ordstep_txt ordstep_txton">
+                                <p><strong><?php echo $row['name']; ?></strong></p><?php echo $row['time']; ?>
+                            </div>
                         <?php else: ?>
                             <div class="ordstep_line <?php if($key == 'create'): ?>ordstep_f<?php elseif($key == 'receive'): ?>ordstep_l<?php endif; ?>">&nbsp;</div>
                             <div class="ordstep_arrow">&nbsp;</div>
-                            <div class="ordstep_txt "></div>
+                            <div class="ordstep_txt ">
+                                <p><strong><?php echo $row['name']; ?></strong></p><?php echo $row['time']; ?>
+                            </div>
                         <?php endif; ?>
-                            <p><strong><?php echo $row['name']; ?></strong></p>
-                        <?php echo $row['time']; ?>
                 </div>
             <?php endforeach; ?>
             <?php endif; ?>

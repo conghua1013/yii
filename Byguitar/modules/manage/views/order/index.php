@@ -37,14 +37,17 @@
         <thead>
         <tr>
             <th width="30"></th>
-            <th width="80">订单号</th>
-            <th width="40">收货人</th>
-            <th width="100">电话</th>
-            <th width="150">地址</th>
-            <th width="80">订单金额</th>
-            <th width="80">商品金额</th>
-            <th width="80">运费</th>
-            <th width="80">下单时间</th>
+            <th width="50">订单编号</th>
+            <th width="100">订单状态</th>
+            <th width="60">客户名称</th>
+            <th width="60">客户电话</th>
+            <th width="160">客户地址</th>
+            <th width="60">商品总金额</th>
+            <th width="50">订单运费</th>
+            <th width="60">优惠券金额</th>
+            <th width="50">订单金额</th>
+            <th width="100">下单时间</th>
+            <th width="100">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -53,13 +56,43 @@
                 <tr target="sid_user" rel="<?php echo $row->id; ?>">
                     <td><?php echo $row->id; ?></td>
                     <td><?php echo $row->order_sn; ?></td>
+                    <td><?php echo Order::model()->getOrderStatus($row->order_status).'-'.Order::model()->getPayStatus($row->pay_status).'-'.Order::model()->getShippingStatus($row->shipping_status); ?></td>
                     <td><?php echo $row->consignee; ?></td>
                     <td><?php echo $row->mobile; ?></td>
                     <td><?php echo $row->address; ?></td>
                     <td><?php echo $row->order_amount; ?></td>
                     <td><?php echo $row->product_amount; ?></td>
                     <td><?php echo $row->shipping_fee; ?></td>
+                    <td><?php echo $row->order_amount; ?></td>
                     <td><?php echo $row->add_time > 0 ? date('Y-m-d H:i:s',$row->add_time) : ''; ?></td>
+                    <td>
+                        <a href="/manage/order/info?id=<?php echo $row->id; ?>" target="navTab" class="edit" title="查看订单性情"><img src="/images/dwz/view.gif" alt="查看订单性情" /></a>
+
+                        <?php if(in_array($row['order_status'],array(1,2))): ?>
+                            <a title="审核通过" target="ajaxTodo" href="/manage/order/checkOrder?id=<?php echo $row->id; ?>&status=2" fresh="true" >审</a>
+                        <?php endif; ?>
+
+                        <?php if(in_array($row['order_status'],array(0,1))): ?>
+                            <a title="取消订单" target="ajaxTodo" href="/manage/order/cancelOrder?id=<?php echo $row->id; ?>" fresh="true" ><img src="/images/dwz/del.gif" alt="取消订单"  /></a>
+                        <?php endif; ?>
+
+                        <?php if($row['order_status'] == 5): ?>
+                            <a title="确认收货" target="ajaxTodo" href="/manage/order/ReceiveOrder?id=<?php echo $row->id; ?>" fresh="true" >收</a>
+                        <?php endif; ?>
+
+                        <?php if(in_array($row['order_status'],array(1,2,3))): ?>
+                            <a title="待发货" target="ajaxTodo" href="/manage/order/prepareOrder?id=<?php echo $row->id; ?>" fresh="true" >备</a>
+                        <?php endif; ?>
+
+                        <?php if(in_array($row['order_status'],array(4))): ?>
+                            <a title="发货" target="ajaxTodo" href="/manage/order/shippingAndNotifyAlipay?id=<?php echo $row->id; ?>" fresh="true" >发</a>
+                        <?php endif; ?>
+
+                        <?php if($row['order_status'] == 6): ?>
+                            <a title="关闭订单" target="ajaxTodo" href="/manage/order/closeOrder?id=<?php echo $row->id; ?>" fresh="true" >关</a>
+                        <?php endif; ?>
+
+                    </td>
                 </tr>
             <?php endforeach; ?>
             <?php endif; ?>

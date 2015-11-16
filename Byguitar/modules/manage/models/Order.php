@@ -402,6 +402,9 @@ class Order extends CActiveRecord
 			throw new exception('订单保存错误！', 500);
 		}
 
+		//库存恢复
+		$this->dealWithCancelOrderProductStock($oInfo['id']);
+
 		//添加订单日志
 		$m = new OrderLog();
 		$m->order_id 	= $oInfo->id;
@@ -417,6 +420,55 @@ class Order extends CActiveRecord
 			throw new exception('订单取消失败！',500);
 		}
 		return false;
+	}
+
+	/**
+	 * 处理取消订单的库存
+	 * @param $orderId
+	 */
+	public function dealWithCancelOrderProductStock($orderId)
+	{
+		if(!$orderId){
+			throw new exception('订单的id不能为空！');
+		}
+
+		$list = OrderProduct::model()->findAllByAttributes(array('order_id' => $orderId));
+		if(empty($list)){
+			throw new exception('订单商品为空！');
+		}
+
+		foreach($list as $row){
+			if($row['type'] == 1){
+				$pInfo = Tab::model()->findByPk($row['product_id']);
+			} elseif($row['type'] == 2){
+				$pInfo = Zine::model()->findByPk($row['product_id']);
+			}else {
+				$pInfo = Product::model()->findByPk($row['product_id']);
+			}
+
+			if(empty($pInfo)){
+				throw new exception('商品【'.$row['product_name'].'】不存在！');
+			}
+			$pInfo->quantity += $row['quantity'];
+			$flag = $pInfo->save();
+			if(empty($flag)){
+				throw new exception('商品【'.$row['product_name'].'】库存恢复失败！');
+			}
+
+			if(!$row['type']){
+				$stockInfo = ProductStock::model()->findByAttributes(array('product_id'=>$row['product_id'],'attr_id'=>$row['size_id']));
+				if(empty($stockInfo)){
+					throw new exception('商品【'.$row['product_name'].'】库存不存在！');
+				}
+				$stockInfo->quantity += $row['quantity'];
+				$flag = $stockInfo->save();
+
+				if(empty($flag)){
+					throw new exception('订单【'.$row['product_name'].'】库存恢复失败！');
+				}
+			}
+		}
+		return true;
 	}
 
 }

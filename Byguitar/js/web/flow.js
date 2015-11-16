@@ -465,13 +465,12 @@ function upCartNum(cid,num,action){
 function updatetotalPrice(){
 	var totalprice=0;
 	$('.itemprice').each(function(){
-
 		totalprice=totalprice+parseFloat(parseFloat($(this).html().replace('¥','')).toFixed(2));
 
 	});
 
-	$('#cart_sumnum').html('¥'+totalprice);
-	$('#sum_num').html('¥'+totalprice);
+	$('#cart_sumnum').html('¥'+totalprice.toFixed(2));
+	$('#sum_num').html('¥'+totalprice.toFixed(2));
 }
 
 function deleteCart(cid){

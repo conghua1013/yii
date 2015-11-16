@@ -4,6 +4,10 @@ class TestController extends ShopBaseController
 {
     public function actionIndex()
     {
+        Yii::import("application.extensions.payment.alipayNotify",true);
+        $alipaySubmit = new alipayNotify();
+        $html_text = $alipaySubmit->buildRequestHttp(aaa);
+
         $this->render('/test/index');exit;
         echo "<pre>";
 

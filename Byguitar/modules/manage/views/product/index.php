@@ -49,6 +49,7 @@
 				<th width="30">市场价</th>
 				<th width="20" align="center">状态</th>
 				<th width="80">添加时间</th>
+				<th width="80">操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -65,6 +66,21 @@
 				<td><?php echo $row->market_price; ?></td>
 				<td><?php echo Product::model()->getProductStatus($row->status); ?></td>
 				<td><?php echo $row->add_time ? date('Y-m-d H:i:s',$row->add_time) : ''; ?></td>
+				<td>
+					<?php if($row['status'] == 3): ?>
+						<a title="上架" target="ajaxTodo" href="/manage/product/grounding?id=<?php echo $row['id']; ?>&status=2" ><img src="/images/dwz/up.gif" alt="上架" /></a>
+					<?php else: ?>
+						<a title="下架" target="ajaxTodo" href="/manage/product/grounding?id=<?php echo $row['id']; ?>&status=3" ><img src="/images/dwz/down.gif" alt="下架" /></a>
+					<?php endif; ?>
+
+					&nbsp;
+					<?php if($row['is_show'] == 0): ?>
+						<a title="显示" target="ajaxTodo" href="/manage/product/show?id=<?php echo $row['id']; ?>&show=1" fresh="true" ><img src="/images/dwz/ok.gif" aSt="显示"  /></a>
+					<?php else: ?>
+						<a title="不显示" target="ajaxTodo" href="/manage/product/show?id=<?php echo $row['id']; ?>&show=0" fresh="true" ><img src="/images/dwz/del.gif" alt="不显示" /></a>
+					<?php endif; ?>
+
+				</td>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>
