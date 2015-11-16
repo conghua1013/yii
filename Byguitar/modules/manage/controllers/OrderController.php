@@ -25,28 +25,38 @@ class OrderController extends ManageController
 		$opList = OrderProduct::model()->findAllByAttributes(array('order_id'=>$_REQUEST['id']));
 		$oLog = OrderLog::model()->findAllByAttributes(array('order_id'=>$_REQUEST['id']));
 		$oShipping = OrderShipping::model()->findAllByAttributes(array('order_id'=>$_REQUEST['id']));
+		$shippingList = Shipping::model()->getShippingList();
 		$viewData = array();
 		$viewData['oInfo'] = $oInfo;
 		$viewData['opList'] = $opList;
 		$viewData['oLog'] = $oLog;
 		$viewData['oShipping'] = $oShipping;
+		$viewData['shippingList'] = $shippingList;
 		$this->render('info', $viewData);
 	}
 
 	/**
 	 * 通知淘宝发货页面及处理【通知支付宝发货，并修改订单的发货状态】【支付宝担保交易用到】
 	 */
-	public function actionShippingAndNotifyAlipay(){
+	public function actionShippingAndNotifyAlipay()
+	{
 		if(empty($_POST)){
 			$oInfo = Order::model()->findByPk($_REQUEST['id']);
 			$viewData = array();
 			$viewData['oInfo'] = $oInfo;
-			$this->render('index', $viewData);exit;
+			$this->render('shippingAndNotifyAlipay', $viewData);exit;
 		}
 
 		// 处理淘宝的发货过程
 		$res = array('statusCode' => 200,'message' => '通知淘宝发货成功！');
 		try{
+			$oInfo = Order::model()->findByPk($_REQUEST['id']);
+			if(empty($oInfo)){
+				throw new exception('订单不存在！');
+			}elseif(!in_array($oInfo['order_status'], array(1,2,4))) {
+				throw new exception('订单状态错误！');
+			}
+
 			$parameter = array(
 				"trade_no"			=> $_REQUEST['trade_no'],
 				"logistics_name"	=> $_REQUEST['shipping_name'],
@@ -64,11 +74,43 @@ class OrderController extends ManageController
 				throw new exception('支付宝返回结果异常！');
 			}
 
+			//保存发货信息到订单中
+			$oInfo->shipping_id 	= 0;
+			$oInfo->shipping_sn 	= intval($_REQUEST['shipping_number']);
+			$oInfo->shipping_time 	= time();
+			$oInfo->order_status 	= 5;//已发货
+			$oInfo->shipping_status = 1;//已发货
+			$flag = $oInfo->save();
+			if(empty($flag)){
+				throw new exception('保存运单信息到订单错误！',500);
+			}
+
+			//保存订单的发货信息
+			$m = new OrderShipping();
+			$m->order_id 		= $oInfo->id;
+			$m->shipping_id 	= 0;
+			$m->shipping_sn 	= $_REQUEST['shipping_number'];
+			$m->shipping_fee 	= 0;
+			$m->weight 			= 0;
+			$m->remark 			= '支付宝发货成功';
+			$m->add_time 		= time();
+			$flag = $m->save();
+			if(empty($flag)){
+				throw new exception('保存发货信息错误！',500);
+			}
+
+			$logData = array();
+			$logData['order_id'] = $oInfo->id;
+			$logData['type'] 	 = 'AdminSend';
+			$logData['msg'] 	 = '您的订单已发货!';
+			OrderLog::model()->addOrderLog($logData);
+
 		}catch(exception $e){
 			$res['statusCode'] = 500;
-			$res['message'] = '取消失败!【'.$e->getMessage().'】';
+			$res['message'] = '发货失败!【'.$e->getMessage().'】';
 		}
-		$res['callbackType'] = 'reloadTab';
+		$res['navTabId'] = 'orderList';
+		$res['callbackType'] = 'closeCurrent';
 		$res['forwardUrl'] = '/manage/order/index';
 		$this->ajaxDwzReturn($res);
 	}
@@ -79,7 +121,8 @@ class OrderController extends ManageController
 	 * @return 支付宝处理结果
 	 * @throws exception
 	 */
-	private function sendNotifyToAlipay($data) {
+	private function sendNotifyToAlipay($data)
+	{
 
 		//构造要请求的参数数组，无需改动
 		$parameter = array(
@@ -125,19 +168,12 @@ class OrderController extends ManageController
 			}
 			Order::model()->dealWithCancelOrderProductStock($oInfo['id']);//库存恢复
 			//添加订单日志
-			$m = new OrderLog();
-			$m->order_id 	= $oInfo->id;
-			$m->admin_id 	= '管理员';
-			$m->admin_name 	= '管理员';
-			$m->phone 		= '';
-			$m->type 		= 'AdminCanced';
-			$m->msg 		= '您的订单已取消！';
-			$m->is_show 	= 1;
-			$m->add_time 	= time();
-			$flag = $m->save();
-			if(empty($flag)){
-				throw new exception('订单取消失败！',500);
-			}
+
+			$logData = array();
+			$logData['order_id'] = $oInfo->id;
+			$logData['type'] 	 = 'AdminCanced';
+			$logData['msg'] 	 = '您的订单已取消！';
+			OrderLog::model()->addOrderLog($logData);
 
 		}catch(exception $e){
 			$res['statusCode'] = 500;
@@ -186,19 +222,11 @@ class OrderController extends ManageController
 				throw new exception('订单审核失败！',500);
 			}
 
-			$m = new OrderLog();
-			$m->order_id 	= $oInfo->id;
-			$m->admin_id 	= '管理员';
-			$m->admin_name 	= '管理员';
-			$m->phone 		= '';
-			$m->type 		= 'AdminChecked';
-			$m->msg 		= '您的订单已审核通过！！';
-			$m->is_show 	= 1;
-			$m->add_time 	= time();
-			$flag = $m->save();
-			if(empty($flag)){
-				throw new exception('审核日志添加失败！',500);
-			}
+			$logData = array();
+			$logData['order_id'] = $oInfo->id;
+			$logData['type'] 	 = 'AdminChecked';
+			$logData['msg'] 	 = '您的订单已审核通过！';
+			OrderLog::model()->addOrderLog($logData);
 
 		} catch(exception $e){
 			$res['statusCode'] = 500;
@@ -216,9 +244,11 @@ class OrderController extends ManageController
 	{
 		if(empty($_POST)){
 			$oInfo = Order::model()->findByPk($_REQUEST['id']);
+			$shippingList = Shipping::model()->getShippingList();
 			$viewData = array();
 			$viewData['oInfo'] = $oInfo;
-			$this->render('index', $viewData);exit;
+			$viewData['shippingList'] = $shippingList;
+			$this->render('sendOrder', $viewData);exit;
 		}
 
 		$res = array('statusCode' => 200,'message' => '发货成功！');
@@ -254,23 +284,18 @@ class OrderController extends ManageController
 				throw new exception('保存运单信息错误！',500);
 			}
 
-			//记录订单日志
-			$m = new OrderLog();
-			$m->order_id 	= $oInfo['id'];
-			$m->admin_id 	= 0;
-			$m->admin_name = '管理员';
-			$m->phone 		= '';
-			$m->msg 		= $_REQUEST['remark'];
-			$m->add_time 	= time();
-			$flag = $m->save();
-			if(empty($flag)){
-				throw new exception('保存订单日志错误！',500);
-			}
+			$logData = array();
+			$logData['order_id'] = $oInfo->id;
+			$logData['type'] 	 = 'AdminSend';
+			$logData['msg'] 	 = $_REQUEST['remark'];
+			OrderLog::model()->addOrderLog($logData);
+
 		} catch(exception $e){
 			$res['statusCode'] = 500;
 			$res['message'] = '发货失败!【'.$e->getMessage().'】';
 		}
-		$res['callbackType'] = 'reloadTab';
+		$res['navTabId'] = 'orderList';
+		$res['callbackType'] = 'closeCurrent';
 		$res['forwardUrl'] = '/manage/order/index';
 		$this->ajaxDwzReturn($res);
 	}
@@ -296,17 +321,11 @@ class OrderController extends ManageController
 			$flag = $oInfo->save();
 			if(empty($flag)){ throw new exception('订单状态修改失败！'); }
 
-			$m = new OrderLog();
-			$m->order_id 	= $oInfo->id;
-			$m->admin_id 	= '管理员';
-			$m->admin_name 	= '管理员';
-			$m->phone 		= '';
-			$m->type 		= 'AdminPrepared';
-			$m->msg 		= '您的订单已经进入仓库！！';
-			$m->is_show 	= 1;
-			$m->add_time 	= time();
-			$flag = $m->save();
-			if(empty($flag)){ throw new exception('待备货日志添加失败！'); }
+			$logData = array();
+			$logData['order_id'] = $oInfo->id;
+			$logData['type'] 	 = 'AdminPrepared';
+			$logData['msg'] 	 = '您的订单已经进入仓库!';
+			OrderLog::model()->addOrderLog($logData);
 
 		} catch(exception $e){
 			$res['statusCode'] = 500;
@@ -335,22 +354,17 @@ class OrderController extends ManageController
 			$oInfo->order_status 	= 6;
 			$oInfo->receive_time 	= time();
 			$oInfo->update_time 	= time();
-			$res = $oInfo->save();
-			if(empty($res)){ throw new exception('订单状态修改失败！'); }
-
-			$m = new OrderLog();
-			$m->order_id 	= $oInfo->id;
-			$m->admin_id 	= '管理员';
-			$m->admin_name 	= '管理员';
-			$m->phone 		= '';
-			$m->type 		= 'AdminReceived';
-			$m->msg 		= '您的订单已经确认签收！';
-			$m->is_show 	= 1;
-			$m->add_time 	= time();
-			$flag = $m->save();
+			$flag = $oInfo->save();
 			if(empty($flag)){
-				throw new exception('确认收货失败！',500);
+				throw new exception('订单状态修改失败！');
 			}
+
+			$logData = array();
+			$logData['order_id'] = $oInfo->id;
+			$logData['type'] 	 = 'AdminReceived';
+			$logData['msg'] 	 = '您的订单已经确认签收!';
+			OrderLog::model()->addOrderLog($logData);
+
 		}catch(exception $e){
 			$res['statusCode'] = 500;
 			$res['message'] = '确认收货失败!【'.$e->getMessage().'】';
@@ -381,19 +395,12 @@ class OrderController extends ManageController
 				throw new exception('订单关闭失败！',500);
 			}
 
-			$m = new OrderLog();
-			$m->order_id 	= $oInfo->id;
-			$m->admin_id 	= '管理员';
-			$m->admin_name 	= '管理员';
-			$m->phone 		= '';
-			$m->type 		= 'AdminClosed';
-			$m->msg 		= '您的订单已经超过退换货时间，已关闭该交易！';
-			$m->is_show 	= 1;
-			$m->add_time 	= time();
-			$flag = $m->save();
-			if(empty($flag)){
-				throw new exception('添加订单关闭日志失败！',500);
-			}
+			$logData = array();
+			$logData['order_id'] = $oInfo->id;
+			$logData['type'] 	 = 'AdminClosed';
+			$logData['msg'] 	 = '您的订单已经超过退换货时间，已关闭该交易!';
+			OrderLog::model()->addOrderLog($logData);
+
 		} catch(exception $e){
 			$res['statusCode'] = 500;
 			$res['message'] = '关闭失败!【'.$e->getMessage().'】';

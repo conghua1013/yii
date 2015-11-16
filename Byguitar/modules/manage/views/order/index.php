@@ -77,7 +77,7 @@
                         <?php endif; ?>
 
                         <?php if($row['order_status'] == 5): ?>
-                            <a title="确认收货" target="ajaxTodo" href="/manage/order/ReceiveOrder?id=<?php echo $row->id; ?>" fresh="true" >收</a>
+                            <a title="确认收货" target="ajaxTodo" href="/manage/order/receiveOrder?id=<?php echo $row->id; ?>" fresh="true" >收</a>
                         <?php endif; ?>
 
                         <?php if(in_array($row['order_status'],array(1,2,3))): ?>

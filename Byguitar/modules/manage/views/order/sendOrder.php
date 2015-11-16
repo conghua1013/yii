@@ -1,7 +1,7 @@
 <!-- 实时到账，不用通知支付宝的发货界面 -->
 <div class="pageContent">
 
-    <form method="post" action="/Manage/order/sendOrder" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
+    <form method="post" action="/manage/order/sendOrder" class="pageForm required-validate" onsubmit="return validateCallback(this, dialogAjaxDone)">
 
         <div class="pageFormContent" layoutH="58">
 
@@ -14,9 +14,11 @@
                 <label>快递公司：</label>
                 <select name="shipping_id">
                     <option value="0" selected >请选择</option>
-                    <volist name="list" id="vo">
-                        <option value="{$vo.id}" >{$vo.shipping_name}</option>
-                    </volist>
+                    <?php if($shippingList): ?>
+                    <?php foreach($shippingList as $row): ?>
+                        <option value="<?php echo $row['id']; ?>" ><?php echo $row['shipping_name']; ?></option>
+                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </select>
 
                 <input type="hidden" name="order_id" value="<?php echo $oInfo['id']; ?>" />

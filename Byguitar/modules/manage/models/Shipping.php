@@ -45,4 +45,15 @@ class Shipping extends CActiveRecord
         	);
 	}
 
+	public function getShippingList(){
+		$data = Shipping::model()->findAll();
+		if(empty($data)){return '';}
+
+		$list = array();
+		foreach($data as $row){
+			$list[$row->id] = $row->getAttributes();
+		}
+		return $list;
+	}
+
 }

@@ -7,17 +7,17 @@
 
             <div class="unit">
                 <label>支付宝交易号：</label>
-                <input type="text" name="trade_no" />
+                <input type="text" name="trade_no" class="required" value="<?php echo $oInfo['trade_no']; ?>"/>
             </div>
 
             <div class="unit">
                 <label>物流公司名称：</label>
-                <input type="text" name="shipping_name" />
+                <input type="text" name="shipping_name" class="required" />
             </div>
 
             <div class="unit">
                 <label>物流发货单号：</label>
-                <input type="text" name="shipping_number"  />
+                <input type="text" name="shipping_number" class="required" />
             </div>
 
             <div class="unit">

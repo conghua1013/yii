@@ -67,7 +67,7 @@
 					</a>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<a href="/manage/order/shippingAndNotifyAlipay?id=<?php echo $oInfo->id; ?>" target="dialog" width="600" height="370" title="通知淘宝发货接口">
-						通知淘宝发货接口
+						发货并通知
 					</a>
 				</td>
 			</tr>
@@ -82,7 +82,7 @@
 			<?php if($oShipping): ?>
 			<?php foreach($oShipping as $row): ?>
 			<tr>
-				<td><?php //echo $row->shipping_name; ?></td>
+				<td><?php echo isset($shippingList[$row['shipping_id']]) ? $shippingList[$row['shipping_id']]['shipping_name'] : '未知快递'; ?></td>
 				<td><?php echo $row->shipping_sn; ?></td>
 				<td><?php echo $row->shipping_fee; ?></td>
 				<td><?php echo $row->weight; ?></td>
@@ -119,11 +119,12 @@
 	<div class=" ordercontent">
 		<table>
 			<tr>
-				<th colspan="8">订单商品信息</th>
+				<th colspan="9">订单商品信息</th>
 			</tr>
 			<tr>
 				<td>商品编号</td>
 				<td>商品名称</td>
+				<td>商品类型</td>
 				<td>商品品牌</td>
 				<td>商品售价</td>
 				<td>商品个数</td>
@@ -137,18 +138,19 @@
 			<tr>
 				<td><?php echo $row->product_sn; ?></td>
 				<td><?php echo $row->product_name; ?></td>
+				<td><?php if($row->type == 1){ echo '谱子'; } elseif ($row->type == 2) { echo '杂志';} else { echo '商品';} ?></td>
 				<td><?php echo $row->brand_id; ?></td>
 				<td><?php echo $row->sell_price; ?></td>
 				<td><?php echo $row->quantity; ?></td>
 				<td><?php echo $row->sell_price*$row->quantity; ?></td>
-				<td><?php //echo $row->shipping_id; ?></td>
-				<td><?php //echo $row->shipping_code; ?></td>
+				<td>无</td>
+				<td>无</td>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>
 			
 			<tr>
-				<th colspan="8">
+				<th colspan="9">
 					商品金额（<?php echo $oInfo->product_amount; ?>）
 					+ 运费（<?php echo $oInfo->shipping_fee; ?>）
 					- 优惠券金额（<?php echo $oInfo->coupon_amount; ?>）
