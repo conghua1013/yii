@@ -7,7 +7,7 @@
 	});
 
 	$('#tocheck,#tocheck-1').click(function(){
-		// window.location.href= "/shop/cart/checkout";			 
+		// window.location.href= "/cart/checkout";
 	});
 
 

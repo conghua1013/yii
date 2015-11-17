@@ -134,7 +134,7 @@ $(document).ready(function(){
 	// 	var data = 'id='+$('#pInfo').attr('pid')+'content'+comment_content;
 	// 	$.ajax({
 	// 		type: "POST",
-	// 		url: "/shop/item/addComment",
+	// 		url: "/user/addComment",
 	// 		dataType:"json",
 	// 		cache: false,
 	// 		data: data+"&m=" + Math.random(),
@@ -483,7 +483,7 @@ function getMiniCart(){
 		data: "m=" + Math.random(),
 		success:function(re){
 			if(re.status == 1){
-				//$('#navcartpop').html(re.html);
+				$('#navcartpop').html(getMiniCartHtml(re.data));
 				if(re.total){
 					$('#navcartnum').show().html(re.total.quantity);
 				}else{
@@ -493,8 +493,43 @@ function getMiniCart(){
 		},error:function(){
 				return;
 		}
-	  });
+	});
+}
 
+function getMiniCartHtml(data){
+	if(!data.list){return '<p class="empty">您的购物车中还没有商品！<a class="qing" href="/">去商城逛逛！</a></p>';}
+	var cartHtml = '';
+	for (x in data.list)
+	{
+		cartHtml += '<dl>'
+		cartHtml += '<dt>'
+		if(data.list[x].type == 1){
+			cartHtml += '<a href="/tab/' + data.list[x].product_id + '?fm=min_cart"><img src="' + data.list[x].images.image_120 + '" width="60" /></a>'
+		}else if(data.list[x].type == 2){
+			cartHtml += '<a href="/zine/' + data.list[x].product_id + '?fm=min_cart"><img src="' + data.list[x].images.image_120 + '" width="60" /></a>'
+		} else {
+			cartHtml += '<a href="/item/' + data.list[x].product_id + '?fm=min_cart"><img src="' + data.list[x].images.image_120 + '" width="60"/></a>'
+		}
+
+		cartHtml += '</dt>'
+		cartHtml += '<dd>'
+		if(data.list[x].type == 1){
+			cartHtml += '<a href="/tab/' + data.list[x].product_id + '?fm=min_cart">' + data.list[x].product_name + '</a>'
+		}else if(data.list[x].type == 2){
+			cartHtml += '<a href="/zine/' + data.list[x].product_id + '?fm=min_cart">' + data.list[x].product_name + '</a>'
+		}else {
+			cartHtml += '<a href="/item/' + data.list[x].product_id + '?fm=min_cart">' + data.list[x].product_name + '</a>'
+		}
+		cartHtml += '<span>×' + data.list[x].quantity + '</span>'
+		cartHtml += '</dd>'
+		cartHtml += '<dd><span class="fl redbtxt">' + data.list[x].sell_price + '</span><a class="fr gray minicart_li" cid="' + data.list[x].id + '">[删除]</a> </dd>'
+		cartHtml += '</dl>'
+
+	}
+	cartHtml += '<p class="cart_count">共<font>' + data.total.quantity + '</font>件商品<br/>'
+	cartHtml += '金额总计：<font>¥' + data.total.product_amount + '</font></p>'
+	cartHtml += '<div class="gotocart"><a class="btn btn-large btn-primary" id="gotocart">去购物车并结算</a></div>';
+	return cartHtml;
 }
 
 

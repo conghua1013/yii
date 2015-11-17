@@ -168,7 +168,7 @@
                                     <?php elseif($row['type'] == 2): ?>
                                         <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['images']['cover']; ?>" width="60" /></a>
                                     <?php else: ?>
-                                        <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['image_120']; ?>" width="60" /></a>
+                                        <a href="/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['image_120']; ?>" width="60" /></a>
                                     <?php endif; ?>
                                 </td>
                                 <td width="30%">
@@ -177,7 +177,7 @@
                                     <?php elseif($row['type'] == 2): ?>
                                         <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" id="pname_<?php echo $row['id']; ?>"> <?php echo $row['product_name']; ?> </a>
                                     <?php else: ?>
-                                        <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank" id="pname_<?php echo $row['id']; ?>"> <?php echo $row['product_name']; ?> </a>
+                                        <a href="/item/<?php echo $row['product_id']; ?>" target="_blank" id="pname_<?php echo $row['id']; ?>"> <?php echo $row['product_name']; ?> </a>
                                     <?php endif; ?>
                                 </td>
                                 <td width="14%" align="center">¥<?php echo $row['sell_price']; ?></td>

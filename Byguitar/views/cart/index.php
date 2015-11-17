@@ -8,7 +8,7 @@
 
         <div class="ch_t">
             <h1 class="fl">我的购物车</h1>
-            <notempty name="list"><a class="fr white btn btn-small btn-brown checkbtn" id="tocheck-1" href="/cart/checkout">立即结算</a>  </notempty>
+            <?php if(!empty($list)): ?><a class="fr white btn btn-small btn-brown checkbtn" id="tocheck-1" href="/cart/checkout">立即结算</a><?php endif; ?>
             <div class="clear"></div>
         </div>
 

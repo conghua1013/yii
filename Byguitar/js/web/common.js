@@ -81,7 +81,7 @@
 
 
     $('#gotocart').live('click',function(){
-        window.location.href= "/shop/cart";
+        window.location.href= "/cart";
     })
 
 

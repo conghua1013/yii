@@ -59,7 +59,7 @@ class CartController extends ShopBaseController
 
     public function actionMiniCart()
     {
-        $result = array('flag' => '1','data'=>array());
+        $result = array('status' => '1','data'=>'');
         try{
             $userId = $this->user_id;
             if(empty($userId)){
@@ -68,7 +68,6 @@ class CartController extends ShopBaseController
             $data = Cart::model()->getCartList($userId);
             $result['data'] = $data;
         }catch(exception $e){
-            $result['flag'] = 0;
             $result['data'] = $e->getMessage();
         }
         exit(json_encode($result));
@@ -112,8 +111,6 @@ class CartController extends ShopBaseController
         }
         exit(json_encode($res));
     }
-
-
 
     /**
      * 从购物车删除商品数据
@@ -209,7 +206,7 @@ class CartController extends ShopBaseController
 
 
     /**
-     * 使用优惠券时 （绑定优惠券、计算优惠券金额）
+     * 使用优惠券时 （绑定优惠券、计算优惠券金额）【ckeckout页面绑定优惠券、并检查优惠券的使用】
      */
     public function actionCheckCoupon()
     {

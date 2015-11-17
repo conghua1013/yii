@@ -43,7 +43,7 @@ class ProductController extends ManageController {
             $transaction->commit();
         } catch(exception $e){
             $transaction->rollback();
-            $res['statusCode'] = 500;
+            $res['statusCode'] = 300;
             $res['message'] = '添加失败!【'.$e->getMessage().'】';
         }
 
@@ -92,7 +92,7 @@ class ProductController extends ManageController {
             $transaction->commit();
         } catch(exception $e){
             $transaction->rollback();
-            $res['statusCode'] = 500;
+            $res['statusCode'] = 300;
             $res['message'] = '修改失败!【'.$e->getMessage().'】';
         }
         $res['navTabId'] = 'productList';
@@ -297,7 +297,7 @@ class ProductController extends ManageController {
             }
             $data = $imageId = $this->saveProductImage($productId);
         } catch(exception $e){
-            $status = 500;
+            $status = 300;
             $message = $e->getMessage();
         }
 
@@ -386,7 +386,7 @@ class ProductController extends ManageController {
                 throw new exception('删除失败，刷新后重试！');
             }
         } catch(exception $e){
-            $status = 500;
+            $status = 300;
             $message = '删除失败!【'.$e->getMessage().'】';
         }
         $result['status'] = $status;
@@ -429,7 +429,7 @@ class ProductController extends ManageController {
                 }
             }
         } catch(exception $e){
-            $result['statusCode'] = 500;
+            $result['statusCode'] = 300;
             $result['message'] = '删除失败!【'.$e->getMessage().'】';
         }
         $result['callbackType'] = 'reloadTab';
@@ -460,7 +460,7 @@ class ProductController extends ManageController {
                 }
             }
         } catch(exception $e){
-            $result['statusCode'] = 500;
+            $result['statusCode'] = 300;
             $result['message'] = '删除失败!【'.$e->getMessage().'】';
         }
         $result['callbackType'] = 'reloadTab';
@@ -493,7 +493,8 @@ class ProductController extends ManageController {
     }
 
     //商品属性添加
-    public function actionProductAttrAdd(){
+    public function actionProductAttrAdd()
+    {
         if(empty($_POST)){
             $select = ProductAttributes::model()->getProductAttrTree();
             $viewData = array();
@@ -502,23 +503,17 @@ class ProductController extends ManageController {
             exit;
         }
 
+        $res = array('statusCode'=>200, 'message'=>'添加成功!');
         $model = new ProductAttributes();
         $model->parent_id = $_REQUEST['parent_id'];
         $model->attr_name = $_REQUEST['attr_name'];
         $model->add_time = time();
         $flag = $model->save();
 
-        if($flag){
-            $status = 200;
-            $message = '添加成功!';
-        } else {
-            $status = 200;
-            $message = '添加失败!';
+        if(!$flag){
+            $res['status'] = 300;
+            $res['message'] = '添加失败!';
         }
-
-        $res = array();
-        $res['statusCode']      = $status;
-        $res['message']         = $message;
         $this->ajaxDwzReturn($res);
     }
 
@@ -527,7 +522,8 @@ class ProductController extends ManageController {
      * 商品的属性分类修改
      +
      */
-    public function actionProductAttrEdit(){
+    public function actionProductAttrEdit()
+    {
         if(empty($_POST)){
             $info = ProductAttributes::model()->findByPk($_REQUEST['id']);
             $select = ProductAttributes::model()->getSelectAttributes();
@@ -538,55 +534,44 @@ class ProductController extends ManageController {
             $this->render('/productAttr/edit',$viewData);exit;
         }
 
+        $res = array('statusCode'=>200, 'message'=>'添加成功!');
         $model =  ProductAttributes::model()->findByPk($_REQUEST['id']);
         $model->parent_id = $_REQUEST['parent_id'];
         $model->attr_name = $_REQUEST['attr_name'];
         $model->add_time = time();
         $flag = $model->save();
-
-        if($flag){
-            $status = 200;
-            $message = '修改成功!';
-        } else {
-            $status = 200;
-            $message = '修改失败!';
+        if(!$flag){
+            $res['status'] = 300;
+            $res['message'] = '添加失败!';
         }
-
-        $res = array();
-        $res['statusCode']      = $status;
-        $res['message']         = $message;
         $this->ajaxDwzReturn($res);        
     }
 
     //商品添加或者修改页面
-    public function actionGetProductAttrs(){
+    public function actionGetProductAttrs()
+    {
         $attr_group_id = intval($_REQUEST['attr_id']);
         $list = ProductAttributes::model()->getProductAttrTree();
         $info = isset($list[$attr_group_id]) ? $list[$attr_group_id]['child'] : '';
         exit(json_encode($info));
     }
 
-    public function actionProductAttrDel(){
+    public function actionProductAttrDel()
+    {
+        $res = array('statusCode'=>200, 'message'=>'添加成功!');
         try{
             if(empty($_REQUEST['id'])){
                 throw new Exception("数据错误，id不能为空！", 1);
             }
             $flag = ProductAttributes::model()->deleteByPk($_REQUEST['id']);
-            if($flag){
-                $message = '删除成功!';
-                $status = 200;
-            }else{
-                $message = '删除失败!';
-                $status = 300;
+            if(!$flag){
+                $res['status'] = 300;
+                $res['message'] = '删除失败!';
             }
         }catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['message'] = $e->getMessage();
+            $res['status'] = 300;;
         }
-
-        $res = array();
-        $res['statusCode']      = $status;
-        $res['message']         = $message;
         $this->ajaxDwzReturn($res);
     }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 商品属性页面 end <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//

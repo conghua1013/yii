@@ -451,7 +451,7 @@ class Cart extends CActiveRecord
         }elseif($addInfo['user_id'] != $userId){
             throw new exception('地址异常修改地址后再提交订单！');
         }elseif($addInfo['is_default'] != 1){
-            $this->saveUserLastAddressDefault($addInfo['id']);
+            Address::model()->saveUserLastAddressDefault($userId,$addInfo['id']);
         }
 
         $m = new Order();

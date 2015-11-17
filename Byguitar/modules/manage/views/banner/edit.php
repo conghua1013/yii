@@ -26,7 +26,7 @@
                 <label>banner图片：</label>
                 <input type="file" name="banner_image" id="banner_image"/>
                 <?php if($info->img): ?>
-                    <image src="images/banner/<?php echo $info->img;?>" />
+                    <image src="images/banner/<?php echo $info->img;?>" width="50"/>
                 <?php endif;?>
                 <br><br>
             </div>

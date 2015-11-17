@@ -106,7 +106,7 @@ class OrderController extends ManageController
 			OrderLog::model()->addOrderLog($logData);
 
 		}catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '发货失败!【'.$e->getMessage().'】';
 		}
 		$res['navTabId'] = 'orderList';
@@ -176,7 +176,7 @@ class OrderController extends ManageController
 			OrderLog::model()->addOrderLog($logData);
 
 		}catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '取消失败!【'.$e->getMessage().'】';
 		}
 		$res['callbackType'] = 'reloadTab';
@@ -193,7 +193,7 @@ class OrderController extends ManageController
 		try{
 
 		} catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '支付订单失败!【'.$e->getMessage().'】';
 		}
 		$res['callbackType'] = 'reloadTab';
@@ -229,7 +229,7 @@ class OrderController extends ManageController
 			OrderLog::model()->addOrderLog($logData);
 
 		} catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '审核订单失败!【'.$e->getMessage().'】';
 		}
 		$res['callbackType'] = 'reloadTab';
@@ -291,7 +291,7 @@ class OrderController extends ManageController
 			OrderLog::model()->addOrderLog($logData);
 
 		} catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '发货失败!【'.$e->getMessage().'】';
 		}
 		$res['navTabId'] = 'orderList';
@@ -328,7 +328,7 @@ class OrderController extends ManageController
 			OrderLog::model()->addOrderLog($logData);
 
 		} catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '发货失败!【'.$e->getMessage().'】';
 		}
 		$res['callbackType'] = 'reloadTab';
@@ -366,7 +366,7 @@ class OrderController extends ManageController
 			OrderLog::model()->addOrderLog($logData);
 
 		}catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '确认收货失败!【'.$e->getMessage().'】';
 		}
 		$res['callbackType'] = 'reloadTab';
@@ -402,7 +402,7 @@ class OrderController extends ManageController
 			OrderLog::model()->addOrderLog($logData);
 
 		} catch(exception $e){
-			$res['statusCode'] = 500;
+			$res['statusCode'] = 300;
 			$res['message'] = '关闭失败!【'.$e->getMessage().'】';
 		}
 		$res['callbackType'] = 'reloadTab';

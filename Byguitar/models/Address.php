@@ -129,6 +129,9 @@ class Address extends CActiveRecord
         if(!$flag){
             throw new exception('设置失败！');
         }
+
+        $sql = 'update bg_address set is_default= 0 where user_id = '.$userId.' and id != '.$address_id;
+        Yii::app()->shop->createCommand($sql)->query();
         return true;
     }
 
@@ -176,7 +179,7 @@ class Address extends CActiveRecord
      * @param $add_id
      * @return bool
      */
-    protected function saveUserLastAddressDefault($userId,$add_id)
+    public function saveUserLastAddressDefault($userId,$add_id)
     {
         if(empty($add_id) || empty($userId)){return false;}
 
@@ -185,8 +188,8 @@ class Address extends CActiveRecord
             $info->is_default = 1;
             $info->save();
         }
-
-        //吧其他的地址设为非默认地址
+        $sql = 'update bg_address set is_default= 0 where user_id = '.$userId.' and id != '.$add_id;
+        Yii::app()->shop->createCommand($sql)->query();
         return true;
     }
 }

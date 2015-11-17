@@ -54,7 +54,7 @@
 					<?php endif;?>
 				</a></td>
 				<td><?php echo $row->sort; ?></td>
-				<td><?php echo $row->add_time > 0 ? date('Y-m-d H:i:s') : ''; ?></td>
+				<td><?php echo $row->add_time > 0 ? date('Y-m-d H:i:s',$row->add_time) : ''; ?></td>
 			</tr>
 			<?php endforeach; ?>
 			<?php endif; ?>
