@@ -98,7 +98,7 @@ class Coupon extends CActiveRecord
      */
     public function getAndCheckCouponInfo($userId,$coupon_sn)
     {
-        if(empty($coupon_sn) || $userId){return false;}
+        if(empty($coupon_sn) || empty($userId)){return false;}
 
         #先检查时否是优惠券
         $map = array();
@@ -115,7 +115,7 @@ class Coupon extends CActiveRecord
             }elseif($couponInfo['end_time'] < time()){
                 throw new exception('该优惠券已经过期！');
             }
-            $couponInfo['type'] = 'A';
+            $couponInfo['type'] = 'B';
             return $couponInfo;
         }
 
@@ -130,7 +130,7 @@ class Coupon extends CActiveRecord
             }elseif($couponInfo['end_time'] < time()){
                 throw new exception('该优惠券已经过期！');
             }
-            $couponInfo['type'] = 'B';
+            $couponInfo['type'] = 'A';
         }else{
             throw new exception('该优惠券不存在！');
         }

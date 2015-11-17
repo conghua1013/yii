@@ -2,7 +2,6 @@
 
 class IndexController extends ShopBaseController
 {
-     
 
     public function actionIndex()
     {
@@ -72,7 +71,10 @@ class IndexController extends ShopBaseController
     }
 
 
-    //获取首页的显示模块
+    /**
+     * 获取首页的显示模块
+     * @return array|bool
+     */
     public function getIndexModule()
     {
         $criteria = new CDbCriteria();
@@ -82,7 +84,6 @@ class IndexController extends ShopBaseController
         $criteria->limit = 5;
         $criteria->order = 'sort desc ,id desc';
 
-        $order = 'sort desc ,id desc';
         $list = IndexModule::model()->findAll($criteria);
         if(empty($list)){return false;}
 
@@ -103,14 +104,16 @@ class IndexController extends ShopBaseController
             array_push($moduleList, $moduleInfo);
         }
         return $moduleList;
-    } 
+    }
 
-    
 
-    //获取模块下面的商品
+    /**
+     * 获取模块下面的商品
+     * @param $info
+     * @return array|bool|mixed|null|string
+     */
     protected function getModuleProduct($info)
     {
-        $list = array();
         if(empty($info['type'])){
             $pids = $info['product_ids'];
             if(empty($pids)){return false;}
@@ -123,7 +126,11 @@ class IndexController extends ShopBaseController
     }
 
 
-    //通过自动策略获取商品
+    /**
+     * 通过自动策略获取商品
+     * @param $info
+     * @return array|bool|mixed|null
+     */
     protected function getModuleProductAuto($info)
     {
         $list = array();
@@ -143,7 +150,7 @@ class IndexController extends ShopBaseController
     
 
     /**
-     *自动策略抓取商品1（新品）
+     * 自动策略抓取商品1（新品）
      */
     protected function getNewProducts(){
         $criteria = new CDbCriteria();
@@ -166,7 +173,7 @@ class IndexController extends ShopBaseController
 
 
     /**
-     *自动策略抓取商品1（热卖）销量最高的5个商品
+     * 自动策略抓取商品1（热卖）销量最高的5个商品
      */
     protected function getHotProducts()
     {
@@ -190,7 +197,7 @@ class IndexController extends ShopBaseController
 
 
     /**
-     *自动策略抓取商品2（特卖）折扣最高的5个
+     * 自动策略抓取商品2（特卖）折扣最高的5个
      */
     protected function getPromoteProducts()
     {
@@ -216,9 +223,7 @@ class IndexController extends ShopBaseController
 
 
     /**
-     +
-     *自动策略抓取商品3（精选）售出个数最高按照品牌取出5个
-     +
+     * 自动策略抓取商品3（精选）售出个数最高按照品牌取出5个
      */
     protected function getBestProducts()
     {

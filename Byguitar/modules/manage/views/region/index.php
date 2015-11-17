@@ -20,11 +20,12 @@
         <thead>
         <tr>
             <th width="30">ID</th>
-            <th width="80">地区名称</th>
-            <th width="40">地区编码</th>
-            <th width="100">是否可用</th>
-            <th width="150">地区级别</th>
-            <th width="150">父级id</th>
+            <th width="120">地区名称</th>
+            <th width="60">地区编码</th>
+            <th width="60">是否可用</th>
+            <th width="60">地区级别</th>
+            <th width="60">父级id</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -37,6 +38,13 @@
                     <td><?php echo $row->is_show; ?></td>
                     <td><?php echo $row->level; ?></td>
                     <td><?php echo $row->parent_id; ?></td>
+                    <td>
+                        <?php if($row['is_show'] == 0): ?>
+                            <a title="启用" target="ajaxTodo" href="/manage/region/changeStatus?id=<?php echo $row['id']; ?>&is_show=1" fresh="true" ><img src="/images/dwz/ok.gif" aSt="显示"  /></a>
+                        <?php else: ?>
+                            <a title="不启用" target="ajaxTodo" href="/manage/region/changeStatus?id=<?php echo $row['id']; ?>&is_show=0" fresh="true" ><img src="/images/dwz/del.gif" alt="不显示" /></a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             <?php endif; ?>

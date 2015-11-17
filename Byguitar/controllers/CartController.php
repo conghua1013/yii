@@ -178,10 +178,7 @@ class CartController extends ShopBaseController
     public function actionCreateOrder()
     {
         $request = $_REQUEST;
-        $res = array();
-        $res['status'] 	= 1;
-        $res['msg'] 	= '';
-        $res['ordersn'] = '';
+        $res = array('status' => 1, 'msg' => '', 'ordersn' => '');
 
         $userId = $this->user_id;
         $tran1 = Yii::app()->shop->beginTransaction();
@@ -220,10 +217,12 @@ class CartController extends ShopBaseController
             $map = array();
             $map['coupon_sn'] = $sn;
             $info = Coupon::model()->findByAttributes($map);
+            $type = 'B';
             if(empty($info)){
                 $map = array();
                 $map['coupon_sn'] = $sn;
                 $info = CouponType::model()->findByAttributes($map);
+                $type = 'A';
                 if(empty($info)){
                     throw new Exception("优惠券错误，该券号不存在！", 0);
                 }
@@ -259,6 +258,9 @@ class CartController extends ShopBaseController
                 throw new Exception("优惠券不满足使用条件！", 0);
             }
             $couponlist = Coupon::model()->getUserUsingCouponList($userId);
+            if($type == 'A'){
+                array_push($couponlist,$info->getAttributes());
+            }
             $res['couponlist'] = $couponlist;
         }catch(exception $e){
             $res['status'] = $e->getCode();

@@ -24,6 +24,7 @@
             <th width="40">快递费用</th>
             <th width="100">快递编码</th>
             <th width="150">是否可用</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -35,6 +36,13 @@
                     <td><?php echo $row->shipping_fee; ?></td>
                     <td><?php echo $row->shipping_code; ?></td>
                     <td><?php echo $row->is_show; ?></td>
+                    <td>
+                        <?php if($row['is_show'] == 0): ?>
+                            <a title="启用" target="ajaxTodo" href="/manage/payment/changeStatus?id=<?php echo $row['id']; ?>&is_show=1" fresh="true" ><img src="/images/dwz/ok.gif" aSt="显示"  /></a>
+                        <?php else: ?>
+                            <a title="不启用" target="ajaxTodo" href="/manage/payment/changeStatus?id=<?php echo $row['id']; ?>&is_show=0" fresh="true" ><img src="/images/dwz/del.gif" alt="不显示" /></a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             <?php endif; ?>

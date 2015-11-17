@@ -13,7 +13,7 @@
             <li class="line">line</li>
             <li><a class="delete" href="/manage/payment/del?id={sid_user}" target="ajaxTodo" title="确定要删除支付方式吗?"><span>删除</span></a></li>
             <li class="line">line</li>
-            <li><a mask="true" target="dialog" href="/manage/payment/edit?id={sid_user}" class="add"  width="660" height="430"><span>支付方式修改</span></a></li>
+            <li><a mask="true" target="dialog" href="/manage/payment/edit?id={sid_user}" class="edit"  width="660" height="430"><span>支付方式修改</span></a></li>
         </ul>
     </div>
     <table class="table" width="100%" layoutH="75">
@@ -21,10 +21,11 @@
         <tr>
             <th width="30">ID</th>
             <th width="80">支付方式名称</th>
-            <th width="40">支付方式编码</th>
-            <th width="100">是否可用</th>
+            <th width="80">支付方式编码</th>
             <th width="150">是否是平台</th>
-            <th width="150">排序</th>
+            <th width="40">排序</th>
+            <th width="60">是否可用</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -34,9 +35,16 @@
                     <td><?php echo $row->id; ?></td>
                     <td><?php echo $row->pay_name; ?></td>
                     <td><?php echo $row->pay_code; ?></td>
-                    <td><?php echo $row->is_valid; ?></td>
-                    <td><?php echo $row->is_plat; ?></td>
+                    <td><?php echo $row->is_plat ? '是' : '否'; ?></td>
                     <td><?php echo $row->sort; ?></td>
+                    <td><?php echo $row->is_valid ? '是' : '否'; ?></td>
+                    <td>
+                        <?php if($row['is_valid'] == 0): ?>
+                            <a title="启用" target="ajaxTodo" href="/manage/payment/changeStatus?id=<?php echo $row['id']; ?>&is_valid=1" fresh="true" ><img src="/images/dwz/ok.gif" aSt="显示"  /></a>
+                        <?php else: ?>
+                            <a title="不启用" target="ajaxTodo" href="/manage/payment/changeStatus?id=<?php echo $row['id']; ?>&is_valid=0" fresh="true" ><img src="/images/dwz/del.gif" alt="不显示" /></a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             <?php endif; ?>

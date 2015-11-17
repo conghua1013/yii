@@ -108,6 +108,8 @@
                     $('#yhq_input').val($('.yhq_selected').html()); 
                     $('#yhqbox1').hide();
                     $('#yhqbox2').show();
+					$('#yhq_select').next().hide();
+					$('#useyhq_btn').next().hide();
                 }else if(re.status == 2){
                     window.location.href= "/public/login";
                 }else{
@@ -117,6 +119,43 @@
                 return;
             }
         });
+	});
+
+	//选取优惠券操作触发-只能选可用的，不可用的选不中
+	$('.yhq_list').find('li').not('.yhq_off').click(function(){
+		$('#yhq_input').val($(this).html());
+		$(this).addClass('yhq_selected').siblings().removeClass('yhq_selected');
+		$(this).parent().hide();
+
+		var couponsn = $(this).attr('couponsn');
+		var data =  "sn="+couponsn;
+		$.ajax({
+			type: "POST",
+			url: "/cart/checkCoupon",
+			dataType:"json",
+			cache: false,
+			data: data+"&ajax=1&m=" + Math.random(),
+			success:function(re){
+				if(re.status == 1){
+					$('#yhq_select').next().hide();
+					$('#useyhq_btn').next().hide();
+					//$('#productAmount').html(re.);
+					//$('#shippingFee').html(re.);
+					$('#couponAmount').html('-¥' + re.couponAmount);
+					//$('#reduceAmount').html(re.);
+					$('#finalAmount').html('¥' + re.finalAmount);
+				}else if(re.status == 2){
+					window.location.href= "/public/login";
+				}else{
+					$('#yhq_select').next().html(re.msg).show();
+					//$('#useyhq_btn').next().html(re.msg).show();
+				}
+			},error:function(){
+				return;
+			}
+		});
+
+		return false;
 	});
 
 
@@ -170,40 +209,7 @@
 		}, function(){		
 			$(this).removeClass('yhq_hover');		
 		});
-	
-	//选取优惠券操作触发-只能选可用的，不可用的选不中	
-	$('.yhq_list').find('li').not('.yhq_off').click(function(){	
-		$('#yhq_input').val($(this).html());
-		$(this).addClass('yhq_selected').siblings().removeClass('yhq_selected');
-		$(this).parent().hide();
 
-		var couponsn = $(this).attr('couponsn');
-		var data =  "sn="+couponsn;
-		$.ajax({
-			type: "POST",
-			url: "/cart/checkCoupon",
-			dataType:"json",
-			cache: false,
-			data: data+"&ajax=1&m=" + Math.random(),
-			success:function(re){
-				if(re.status == 1){
-					//$('#productAmount').html(re.);
-					//$('#shippingFee').html(re.);
-					$('#couponAmount').html('-¥' + re.couponAmount);
-					//$('#reduceAmount').html(re.);
-					$('#finalAmount').html('¥' + re.finalAmount);
-				}else if(re.status == 2){
-                    window.location.href= "/public/login";
-                }else{
-                    $('#useyhq_btn').next().html(re.msg).show();
-				}
-			},error:function(){
-					return;
-			}
-		  });
-
-		return false;
-	});	
 	
 	//优惠券列表展开后点击其他区域消失隐藏的事件
 	$("body").bind("click", function(){		

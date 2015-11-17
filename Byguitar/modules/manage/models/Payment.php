@@ -28,8 +28,12 @@ class Payment extends CActiveRecord
 		return 'bg_payment';
 	}
 
-	//获取菜单列表
-	public function getPaymentListPage(){
+    /**
+     * 获取菜单列表【后端列表页面】
+     * @return array
+     */
+	public function getPaymentListPage()
+    {
 		$pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
 		$criteria = new CDbCriteria(); 
         $criteria->order = 'id DESC';

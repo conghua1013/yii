@@ -65,12 +65,12 @@ class CouponController extends ManageController {
             $m->coupon_type         = $_REQUEST['coupon_type'];
             $m->coupon_sn           = $_REQUEST['coupon_sn'];
             $m->coupon_amount       = $_REQUEST['coupon_amount'];
-            $m->satisfied_amount 	  = $_REQUEST['satisfied_amount'];
-            $m->detail 		     = $_REQUEST['detail'];
-            $m->start_time 	     = strtotime( $_REQUEST['start_time']);
-            $m->end_time 		     = strtotime($_REQUEST['end_time']);
+            $m->satisfied_amount 	= $_REQUEST['satisfied_amount'];
+            $m->detail 		        = $_REQUEST['detail'];
+            $m->start_time 	        = strtotime( $_REQUEST['start_time']);
+            $m->end_time 		    = strtotime($_REQUEST['end_time']);
             $flag = $m->save();
-            if($flag){
+            if(!$flag){
                 throw new exception('修改失败');     
             }
 
@@ -182,6 +182,38 @@ class CouponController extends ManageController {
         $viewData['pageNum'] = $list['pageNum'];
         $viewData['request'] = $_REQUEST;
         $this->render('index', $viewData);
+    }
+
+
+    //编辑页面
+    public function actionEdit()
+    {
+        if(empty($_POST)){
+            $info = Coupon::model()->findByPk($_REQUEST['id']);
+            $viewData = array();
+            $viewData['info'] = $info;
+            $this->render('edit', $viewData); exit;
+        }
+
+        $res = array('statusCode' => 200,'message' => '修改成功！');
+        try {
+            $m =  Coupon::model()->findByPk($_REQUEST['id']);
+            $m->coupon_amount       = $_REQUEST['coupon_amount'];
+            $m->satisfied_amount    = $_REQUEST['satisfied_amount'];
+            $m->start_time          = strtotime( $_REQUEST['start_time']);
+            $m->end_time            = strtotime($_REQUEST['end_time']);
+            $flag = $m->save();
+            if(!$flag){
+                throw new exception('修改失败');
+            }
+        } catch(Exception $e){
+            $res['statusCode'] = 300;
+            $res['message'] = '修改失败【'.$e->getMessage().'】';
+        }
+        $res['navTabId'] = 'couponList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/coupon/index';
+        $this->ajaxDwzReturn($res);
     }
 
 }

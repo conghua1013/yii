@@ -183,7 +183,7 @@
                 </div>
                 <div class="cart_infoline" id="yhqbox2" style="display:none;">
                     <label>使用已有优惠券:</label>
-                    <div class="fl yhq_select">
+                    <div class="fl yhq_select" id="yhq_select">
                         <input class="input yhq_input" id="yhq_input" name="" type="text" style="width:226px;" value="" />
                         <ul class="yhq_list">
                             <li class="yhq_off">请选择优惠券...</li>
@@ -198,6 +198,7 @@
                         <div class="yhqarrow"></div>
                         <div class="yhqarrowbg"></div>
                     </div>
+                    <span class="alert1 alert"></span>
                     <a class="fl qing" id="useryhq2">或输入优惠券/兑换券&nbsp;&gt;&gt;</a>
                     <div class="clear"></div>
                 </div>

@@ -32,9 +32,11 @@ class ItemController extends ShopBaseController
 		$this->render('item/index',$viewData);
 	}
 
-
-
-    //获取同款商品的列表信息
+    /**
+     * 获取同款商品的列表信息
+     * @param $ids
+     * @return array|bool
+     */
     protected function getSameColorProducts($ids)
     {
         if(empty($ids)){return false;}
@@ -49,8 +51,6 @@ class ItemController extends ShopBaseController
         }
         return $list;
     }
-
-
 
     /**
      * 商品评论
@@ -193,57 +193,4 @@ class ItemController extends ShopBaseController
         return array('list'=>$list,'count'=>$count,'pageSize'=>$pageSize,'p'=>$p);
     }
 
-
-    //手机端接口说明
-    public function mobile() {
-        $id = intval($_GET['id']);
-        if($id <= 0) {
-            $error = "商品不存在！";
-            $this->ajaxReturn('',$error,1);
-        }
-
-        $productKey = 'product_'.$id;
-        $productData = $this->MemcacheSmartGet($productKey,300,array($this,'getProductInfo'),array($id));
-        unset($productData['pInfo']['detail']);
-        if(empty($productData['pInfo'])){
-            $error = "商品不存在！";
-            $this->ajaxReturn('',$error,1);
-        }
-
-        $this->ajaxReturn($productData,'',1);
-
-
-        // $is_like    = $this->getLikeStatus($id);
-        // $this->assign('pInfo',$productData['pInfo']);
-        // $this->assign('brandInfo',$productData['brandInfo']);
-        // $this->assign('cake',$productData['cake']);
-        // $this->assign('sameColors',$productData['sameColors']);
-        // $this->assign('attrList',$productData['attrList']);
-        // $this->assign('is_like',$is_like);
-        // $this->display();
-    }
-
-    public function mobile_detail(){
-        $id = intval($_REQUEST['id']);
-        $info = $this->product->getMobileDetail($id);
-        echo $info;
-    }
-
-
-    public function tab(){
-        $this->display();
-    }
-
-
-    public function tabImage(){
-        if($_REQUEST['flag'] == 1){
-            $image = 'Public/Images/public/ad1.jpg';
-        }else{
-            $image = 'Public/Images/public/554e9c196ff063e12b6cf94520aeb7e3.gif';
-        }
-
-        $path_array = pathinfo($image);
-        header('Content-Type:image/'.$path_array['extension']);
-        echo file_get_contents($image);
-    }
 }

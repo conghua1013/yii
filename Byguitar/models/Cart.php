@@ -610,7 +610,7 @@ class Cart extends CActiveRecord
     protected function saveOrderCoupon($order_id,$couponInfo)
     {
         if(empty($couponInfo)){return false;}
-        if($couponInfo['type'] == 'B'){return false;} //A（固定券码 暂不保存数据）
+        if($couponInfo['type'] == 'A'){return false;} //A（固定券码 暂不保存数据）
 
         $couponInfo = Coupon::model()->findByAttributes(array('coupon_sn'=>$couponInfo['coupon_sn']));
         if(empty($couponInfo)){
