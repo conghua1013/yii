@@ -77,7 +77,7 @@ class UserController extends ShopBaseController
 			Yii::app()->session['loginUserName'] 	= $user->username;
 			Yii::app()->session['face'] 			= $user->avatar;
 			Yii::app()->session['isadmin'] 			= $user->adminid;
-			Yii::app()->session['msg'] 				= $user;
+			Yii::app()->session['msg'] 				= 0;
 			Yii::app()->session['isoldman'] 		= time() - $user->regtime > (3600 * 24 * 7) ? true : false;
 
 			$user_id = new CHttpCookie('identifier',$user->id);
@@ -93,6 +93,55 @@ class UserController extends ShopBaseController
 			$this->render('user/register',$viewData);exit;
 		}
 		$this->redirect('/?from=register');
+	}
+
+
+	/**
+	 * 检查email是否可用.
+	 */
+	public function actionCheckMail()
+	{
+		$status = 'ok';
+		try{
+			if(empty($_POST['email'])){
+				$status = '不能为空';
+			}
+			$is_exist = User::model()->findByAttributes(array('email'=>$_POST['email']));
+			if($is_exist){
+				throw new exception('邮箱已经存在!');
+			}
+		} catch (exception $e){
+			$status = 'error';
+		}
+		echo $status;
+	}
+
+	/**
+	 * 检查email是否可用.
+	 */
+	public function actionCheckName()
+	{
+		$status = 'ok';
+		try{
+			if(empty($_POST['name'])){
+				$status = '不能为空';
+			}
+			$info = User::model()->findByAttributes(array('username'=>$_POST['name']));
+			if(!empty($info)){
+				throw new exception('用户名称已经存在!');
+			}
+		} catch (exception $e){
+			$status = 'error';
+		}
+		echo $status;
+	}
+
+	/**
+	 * 检查验证码
+	 */
+	public function actionCheckverify()
+	{
+		echo 'ok';
 	}
 
 	/**

@@ -41,7 +41,7 @@
                      <?php endif; ?>
 				</div>
                 <ul class="uinfolist shadow">
-                    <li><a class="qing" href="/user/"><?php echo 'test'; ?></a></li>
+                    <li><a class="qing" href="/user/"><?php echo strchr(Yii::app()->session['loginUserName'],'@',true) ; ?></a></li>
                     <li>
                         <?php if(Yii::app()->session['msg'] > 0): ?>
                             <b><a class="qing" href="/user/mailspull/">

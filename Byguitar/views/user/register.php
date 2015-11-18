@@ -55,7 +55,7 @@
 						</tr>
 						<tr>
 							<td height="50" align="right" valign="middle"><strong>验证码:</strong></td>
-							<td valign="middle"><span class="yzm_box"><input type="text" class="do_input yzm_input" id="captcha" name="verify" /></span><img class="yzmimg" src="__URL__/verify/" width="50" height="26" /><a tabindex="-1"  class="qing cursor" id="yzmimglook">看不清？换一张</a></td>
+							<td valign="middle"><span class="yzm_box"><input type="text" class="do_input yzm_input" id="captcha" name="verify" /></span><img class="yzmimg" src="/user/verify" width="50" height="26" /><a tabindex="-1"  class="qing cursor" id="yzmimglook">看不清？换一张</a></td>
 							<td align="left" valign="middle"><span></span></td>
 						</tr>
 						<tr>

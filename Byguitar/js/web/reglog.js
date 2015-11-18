@@ -428,7 +428,7 @@ function CheckEmail(Email)
 			{	Email.parents('td').next().find("span").addClass('oked_txt').html("邮件验证中...<b></b>");		
 				$.ajax({
 				   type: "post",
-				   url: "/public/checkmail",
+				   url: "/user/checkmail",
 				   data: 'email=' + Email.val() + "&m=" + Math.random(),
 				   success:function(msg){
 				   if ( msg == 'ok' ){
@@ -470,7 +470,7 @@ function CheckNick(Nick)
 				Nick.parents('td').next().find("span").addClass('oked_txt').html("验证中...<b></b>");		
 				$.ajax({
 				   type: "post",
-				   url: "/public/checkname",
+				   url: "/user/checkname",
 				   data: 'name=' + Nick.val() + "&m=" + Math.random(),
 				   success:function(msg){
 				   if ( msg == 'ok' ){
@@ -738,13 +738,12 @@ function checkSignupForm() {
   
   $.ajax({
 	   type: "POST",
-	   url: "/public/checkverify",
+	   url: "/user/checkverify",
 	   data: 'verify=' + $('#captcha').val() + '&m=' + Math.random(),
 	   success:function(msg){
 		  
     	    if(msg == 'error')
     	    {
-				
     			$("#captcha").parents('td').next().find("span").removeClass().addClass('alert_txt').html("验证码不正确<b></b>");
     	        return false;
     	    } 

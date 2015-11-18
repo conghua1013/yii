@@ -154,6 +154,8 @@ class User extends CActiveRecord
 		$user->salt 	= $salt;
 		$user->regip 	= $userip;
 		$user->lastip 	=$userip;
+		$user->md5email = '';
+		$user->expired = '';
 		$regok = $user->save();
 		if(empty($regok) && $user->id) {
 			header("Content-Type:text/html; charset=utf-8");
