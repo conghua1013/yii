@@ -69,9 +69,9 @@ class ShippingController extends ManageController {
             $res['statusCode'] = 300;
             $res['message'] = '失败【'.$e->getMessage().'】';
         }
-        $res['navTabId'] = 'paymentList';
+        $res['navTabId'] = 'shippingList';
         $res['callbackType'] = 'closeCurrent';
-        $res['forwardUrl'] = '/manage/payment/index';
+        $res['forwardUrl'] = '/manage/shipping/index';
         $this->ajaxDwzReturn($res);
     }
 

@@ -17,7 +17,8 @@ class IndexModuleController extends ManageController {
     }
 
     //添加页面
-    public function actionAdd(){
+    public function actionAdd()
+    {
         if(empty($_POST)){
             $types = IndexModule::model()->getType('','array');
             $viewData = array();
@@ -25,6 +26,7 @@ class IndexModuleController extends ManageController {
             $this->render('add', $viewData);exit;
         }
 
+        $res = array('statusCode' => 200,'message' => '添加成功！');
         try {
             $banner_name = '';
             $image = CUploadedFile::getInstanceByName('img');
@@ -52,26 +54,22 @@ class IndexModuleController extends ManageController {
             $m->end_time 	 = strtotime($_REQUEST['end_time']);
             $m->add_time 	 = time();
             $flag = $m->save();
-            if($flag){
-                $message = '添加成功!';
-                $status = 200;
-            }else{
-                $message = '添加失败!';
-                $status = 300;
+            if(!$flag){
+                throw new exception('添加失败');
             }
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-
-        $res = array();
-        $res['statusCode'] 	= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'indexModuleList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/indexModule/index';
         $this->ajaxDwzReturn($res);
     }
 
     //编辑页面
-    public function actionEdit(){
+    public function actionEdit()
+    {
         if(empty($_POST)){
             $info = IndexModule::model()->findByPk($_REQUEST['id']);
             $types = IndexModule::model()->getType('','array');
@@ -81,6 +79,7 @@ class IndexModuleController extends ManageController {
             $this->render('edit', $viewData); exit;
         }
 
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         try {
             $banner_name = '';
             $image = CUploadedFile::getInstanceByName('img');
@@ -110,47 +109,48 @@ class IndexModuleController extends ManageController {
             $m->end_time 	 = strtotime($_REQUEST['end_time']);
             $m->add_time 	 = time();
             $flag = $m->save();
-            if($flag){
-                //todo 删除原图片
 
-                $message = '修改成功!';
-                $status = 200;
-            }else{
-                $message = '修改失败!';
-                $status = 300;
+            //todo 删除原图片
+            if(!$flag){
+                throw new exception('修改失败');
             }
-
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'indexModuleList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/indexModule/index';
         $this->ajaxDwzReturn($res);
     }
 
     //删除页面
-    public function actionDel(){
-        $flag = IndexModule::model()->deleteByPk($_REQUEST['id']);
-        if($flag){
-            //todo 删除原图片
-            $message = '删除成功!';
-            $status = 200;
-        }else{
-            $message = '删除失败!';
-            $status = 300;
+    public function actionDel()
+    {
+        $res = array('statusCode' => 200,'message' => '删除成功！');
+        try{
+            if(empty($_REQUEST['id'])){
+                throw new Exception("数据错误，id不能为空！", 1);
+            }
+            $flag = IndexModule::model()->deleteByPk($_REQUEST['id']);
+            if(!$flag){
+                throw new exception('删除失败');
+            }
+        }catch(Exception $e){
+            $res['statusCode'] = 300;
+            $res['message'] = '删除失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/indexModule/index';
         $this->ajaxDwzReturn($res);
     }
 
     //修改状态
-    public function actionChange(){
-        $info = IndexModule::model()->findByPk($_REQUEST['id']);
+    public function actionChange()
+    {
+        $res = array('statusCode' => 200,'message' => '删除成功！');
         try{
+            $info = IndexModule::model()->findByPk($_REQUEST['id']);
             if(empty($info)){
                 throw new exception('记录不存在了！');
             }
@@ -163,12 +163,11 @@ class IndexModuleController extends ManageController {
             $message = '修改状态成功!';
             $status = 200;
         } catch (Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '修改失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/indexModule/index';
         $this->ajaxDwzReturn($res);
     }
 

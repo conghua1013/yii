@@ -15,7 +15,8 @@ class CategoryController extends ManageController {
     }
 
     //添加页面
-    public function actionAdd(){
+    public function actionAdd()
+    {
         if(empty($_POST)){
             $select = Category::model()->getSelectCategoryForEdit();
             $viewData = array();
@@ -23,8 +24,7 @@ class CategoryController extends ManageController {
             $this->render('add', $viewData); exit;
         }
 
-        $message = '添加成功！';
-        $status = 200;
+        $res = array('statusCode' => 200,'message' => '添加成功！');
         try {
             if(!empty($_REQUEST['parent_id'])){
                 $info = Category::model()->findByPk($_REQUEST['parent_id']);
@@ -50,22 +50,21 @@ class CategoryController extends ManageController {
             $m->add_time 		= time();
             $flag = $m->save();
             if(!$flag){
-                throw new exception('添加失败!');
+                throw new exception('添加失败');
             }
-
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 500;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'categoryList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/category/index';
         $this->ajaxDwzReturn($res);
     }
 
     //编辑页面
-    public function actionEdit(){
+    public function actionEdit()
+    {
         if(empty($_POST)){
                 $select = Category::model()->getSelectCategoryForEdit();
                 $info = Category::model()->findByPk($_REQUEST['id']);
@@ -76,8 +75,7 @@ class CategoryController extends ManageController {
                 exit;
         }
 
-        $message = '';
-        $status = 200;
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         try {
             if(!empty($_REQUEST['parent_id'])){
                 $info = Category::model()->findByPk($_REQUEST['parent_id']);
@@ -103,39 +101,45 @@ class CategoryController extends ManageController {
             $m->add_time 		= time();
             $flag = $m->save();
             if(!$flag){
-                    throw new exception('修改失败!');
+                throw new exception('修改失败');
             }
-
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'categoryList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/category/index';
         $this->ajaxDwzReturn($res);
     }
 
     //删除页面
-    public function actionDel(){
-            $flag = Category::model()->deleteByPk($_REQUEST['id']);
-            if($flag){
-                $message = '删除成功!';
-                $status = 200;
-            }else{
-                $message = '删除失败!';
-                $status = 300;
+    public function actionDel()
+    {
+        $res = array('statusCode' => 200,'message' => '删除成功！');
+        try{
+            if(empty($_REQUEST['id'])){
+                throw new Exception("数据错误，id不能为空！", 1);
             }
-            $res = array();
-            $res['statusCode'] 		= $status;
-            $res['message'] 		= $message;
-            $this->ajaxDwzReturn($res);
+            $flag = Category::model()->deleteByPk($_REQUEST['id']);
+            if(!$flag){
+                throw new exception('删除失败');
+            }
+        }catch(Exception $e){
+            $res['statusCode'] = 300;
+            $res['message'] = '删除失败【'.$e->getMessage().'】';
+        }
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/category/index';
+        $this->ajaxDwzReturn($res);
     }
 
     //修改状态
-    public function actionChange(){
-        $info = Category::model()->findByPk($_REQUEST['id']);
+    public function actionChange()
+    {
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         try{
+            $info = Category::model()->findByPk($_REQUEST['id']);
             if(empty($info)){
                 throw new exception('记录不存在了！');
             }
@@ -144,23 +148,21 @@ class CategoryController extends ManageController {
             if(empty($flag)){
                 throw new exception('修改状态失败！');
             }
-
-            $message = '修改状态成功!';
-            $status = 200;
         } catch (Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '修改失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/category/index';
         $this->ajaxDwzReturn($res);
     }
 
     //修改状态
-    public function actionChangeSelect(){
-        $info = Category::model()->findByPk($_REQUEST['id']);
+    public function actionChangeSelect()
+    {
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         try{
+            $info = Category::model()->findByPk($_REQUEST['id']);
             if(empty($info)){
                 throw new exception('记录不存在了！');
             }
@@ -169,21 +171,18 @@ class CategoryController extends ManageController {
             if(empty($flag)){
                 throw new exception('修改状态失败！');
             }
-
-            $message = '修改状态成功!';
-            $status = 200;
         } catch (Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '修改失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/category/index';
         $this->ajaxDwzReturn($res);
     }
 
     //树状图
-    public function actionTree(){
+    public function actionTree()
+    {
         $tree = Category::model()->getCategoryListTree();
         $viewData = array();
         $viewData['tree'] = $tree;

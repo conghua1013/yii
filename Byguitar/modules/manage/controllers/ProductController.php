@@ -19,7 +19,8 @@ class ProductController extends ManageController {
     }
     
     //商品添加页面 
-    public function actionAdd(){
+    public function actionAdd()
+    {
         if(empty($_POST)){
             $categorys = Category::model()->getSelectCategoryForProductEdit(); //可选分类列表
             $brands = Brand::model()->getSelectBrandForProductEdit(); //可选品牌列表
@@ -54,7 +55,8 @@ class ProductController extends ManageController {
     }
 
     //商品编辑页面
-    public function actionEdit(){
+    public function actionEdit()
+    {
         if(empty($_POST)){
             $pInfo = Product::model()->findByPk($_REQUEST['id']);
             $categorys = Category::model()->getSelectCategoryForProductEdit(); //可选分类列表
@@ -106,7 +108,8 @@ class ProductController extends ManageController {
     * 保存商品的基本数据
     +
     */
-    protected function saveProduct(){
+    protected function saveProduct()
+    {
         if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $model = Product::model()->findByPk($_REQUEST['id']);
         }else{
@@ -138,7 +141,8 @@ class ProductController extends ManageController {
     }
 
     //保存商品的分类信息
-    protected function saveProductCategory($productId){
+    protected function saveProductCategory($productId)
+    {
         if(empty($_REQUEST['cat_id']) || empty($productId)){ return false;}
         
         $info = Category::model()->findByPk($_REQUEST['cat_id']);
@@ -175,7 +179,8 @@ class ProductController extends ManageController {
     }
 
     //保存商品的属性信息
-    protected function saveProductAttr($productId){
+    protected function saveProductAttr($productId)
+    {
         if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $res = ProductAttr::model()->deleteByAttributes(array('product_id'=>$_REQUEST['id']));
             if(empty($res)){ 
@@ -201,8 +206,8 @@ class ProductController extends ManageController {
     }
 
     //保存商品的库存信息
-    protected function saveProductStock($productId){
-
+    protected function saveProductStock($productId)
+    {
         //多属性库存保存
         if($_REQUEST['is_multiple'] == 1){
             if($_REQUEST['attr_stock']){
@@ -252,7 +257,8 @@ class ProductController extends ManageController {
     }
 
     //保存商品的扩展信息
-    protected function saveProductExtend($productId){
+    protected function saveProductExtend($productId)
+    {
         if(isset($_REQUEST['id']) && !empty($_REQUEST['id'])){
             $model = ProductExtend::model()->findByAttributes(array('product_id'=>$_REQUEST['id']));
         }
@@ -286,8 +292,8 @@ class ProductController extends ManageController {
 
 
     //保存商品的图片信息
-    public function actionUploadImage(){
-
+    public function actionUploadImage()
+    {
         try{
             $status = 200;
             $message = '图片上传成功!';
@@ -309,8 +315,8 @@ class ProductController extends ManageController {
     /**
     * 保存商品的图片信息
     */
-    protected function saveProductImage($productId){
-
+    protected function saveProductImage($productId)
+    {
         $imageConfig = Yii::app()->params['image']['product'];
         if(empty($imageConfig)){
             throw new exception('缺少商品图片配置');
@@ -352,7 +358,8 @@ class ProductController extends ManageController {
     }
 
 
-    public function createPath($dir, $mode = 0755){
+    public function createPath($dir, $mode = 0755)
+    {
         if (is_dir($dir) || @mkdir($dir,$mode)) return true;
         if (!$this->createPath(dirname($dir),$mode)) return false;
         return @mkdir($dir,$mode);
@@ -361,7 +368,8 @@ class ProductController extends ManageController {
     /**
      * 删除商品图库中的图片
      */
-    public function actionDeleteImage(){
+    public function actionDeleteImage()
+    {
         try{
             $status = 200;
             $message = '删除成功!';
@@ -476,7 +484,8 @@ class ProductController extends ManageController {
      * 商品的属性分类树
      +
      */
-    public function actionAttrlist(){
+    public function actionAttrlist()
+    {
         $list = ProductAttributes::model()->getAttrListPage();
         $viewData = array();
         $viewData['list'] = $list['list'];
@@ -485,7 +494,8 @@ class ProductController extends ManageController {
         $this->render('/productAttr/index', $viewData);
     }
 
-    public function actionProductAttrTree(){
+    public function actionProductAttrTree()
+    {
         $tree = ProductAttributes::model()->getProductAttrTree();
         $viewData = array();
         $viewData['tree'] = $tree;
@@ -504,16 +514,21 @@ class ProductController extends ManageController {
         }
 
         $res = array('statusCode'=>200, 'message'=>'添加成功!');
-        $model = new ProductAttributes();
-        $model->parent_id = $_REQUEST['parent_id'];
-        $model->attr_name = $_REQUEST['attr_name'];
-        $model->add_time = time();
-        $flag = $model->save();
-
-        if(!$flag){
-            $res['status'] = 300;
-            $res['message'] = '添加失败!';
+        try{
+            $model = new ProductAttributes();
+            $model->parent_id = $_REQUEST['parent_id'];
+            $model->attr_name = $_REQUEST['attr_name'];
+            $model->add_time = time();
+            $flag = $model->save();
+            if(empty($flag)){
+                throw new exception('添加失败！');
+            }
+        }catch (Exception $e){
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/product/Attrlist';
         $this->ajaxDwzReturn($res);
     }
 
@@ -534,17 +549,25 @@ class ProductController extends ManageController {
             $this->render('/productAttr/edit',$viewData);exit;
         }
 
-        $res = array('statusCode'=>200, 'message'=>'添加成功!');
-        $model =  ProductAttributes::model()->findByPk($_REQUEST['id']);
-        $model->parent_id = $_REQUEST['parent_id'];
-        $model->attr_name = $_REQUEST['attr_name'];
-        $model->add_time = time();
-        $flag = $model->save();
-        if(!$flag){
-            $res['status'] = 300;
-            $res['message'] = '添加失败!';
+        $res = array('statusCode'=>200, 'message'=>'修改成功!');
+        try {
+
+
+            $model = ProductAttributes::model()->findByPk($_REQUEST['id']);
+            $model->parent_id = $_REQUEST['parent_id'];
+            $model->attr_name = $_REQUEST['attr_name'];
+            $model->add_time = time();
+            $flag = $model->save();
+            if(empty($flag)){
+                throw new exception('修改失败！');
+            }
+        }catch (Exception $e){
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-        $this->ajaxDwzReturn($res);        
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/product/Attrlist';
+        $this->ajaxDwzReturn($res);
     }
 
     //商品添加或者修改页面
@@ -558,20 +581,21 @@ class ProductController extends ManageController {
 
     public function actionProductAttrDel()
     {
-        $res = array('statusCode'=>200, 'message'=>'添加成功!');
+        $res = array('statusCode'=>200, 'message'=>'删除成功!');
         try{
             if(empty($_REQUEST['id'])){
                 throw new Exception("数据错误，id不能为空！", 1);
             }
             $flag = ProductAttributes::model()->deleteByPk($_REQUEST['id']);
-            if(!$flag){
-                $res['status'] = 300;
-                $res['message'] = '删除失败!';
+            if(empty($flag)){
+                throw new exception('删除失败！');
             }
         }catch(Exception $e){
-            $res['message'] = $e->getMessage();
-            $res['status'] = 300;;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/product/Attrlist';
         $this->ajaxDwzReturn($res);
     }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 商品属性页面 end <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//

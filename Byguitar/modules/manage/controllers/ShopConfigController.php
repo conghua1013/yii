@@ -12,12 +12,14 @@ class ShopConfigController extends ManageController {
 		$this->render('index', $viewData);
 	}
 
-	public function actionAdd(){
+	public function actionAdd()
+	{
 		if(empty($_POST)){
 			$viewData = array();
 			$this->render('add', $viewData);exit;
 		}
 
+		$res = array('statusCode' => 200,'message' => '添加成功！');
 		try{
 			$m = new ShopConfig();
 			$m->attribute_name 	= $_POST['attribute_name'];
@@ -25,21 +27,16 @@ class ShopConfigController extends ManageController {
 			$m->value 			= $_POST['value'];
 			$m->add_time 		= time();
 			$flag = $m->save();
-			if($flag){
-				$message = '添加成功!';
-				$status = 200;
-			}else{
-				$message = '添加失败!';
-				$status = 300;
+			if(!$flag){
+				throw new exception('添加失败');
 			}
 		} catch(Exception $e){
-			$message = $e->getMessage();
-			$status = 300;
+			$res['statusCode'] = 300;
+			$res['message'] = '失败【'.$e->getMessage().'】';
 		}
-
-		$res = array();
-		$res['statusCode'] 		= $status;
-		$res['message'] 		= $message;
+		$res['navTabId'] = 'shopConfigList';
+		$res['callbackType'] = 'closeCurrent';
+		$res['forwardUrl'] = '/manage/shopConfig/index';
 		$this->ajaxDwzReturn($res);
 	}
 
@@ -51,6 +48,7 @@ class ShopConfigController extends ManageController {
 			$this->render('edit', $viewData);exit;
 		}
 
+		$res = array('statusCode' => 200,'message' => '修改成功！');
 		try{
 			$m =  ShopConfig::model()->findByPk($_REQUEST['id']);
 			$m->attribute_name 	= $_POST['attribute_name'];
@@ -58,45 +56,36 @@ class ShopConfigController extends ManageController {
 			$m->value 			= $_POST['value'];
 			$m->add_time 		= time();
 			$flag = $m->save();
-			if($flag){
-				$message = '修改成功!';
-				$status = 200;
-			}else{
-				$message = '修改失败!';
-				$status = 300;
+			if(!$flag){
+				throw new exception('修改失败');
 			}
 		} catch(Exception $e){
-			$message = $e->getMessage();
-			$status = 300;
+			$res['statusCode'] = 300;
+			$res['message'] = '失败【'.$e->getMessage().'】';
 		}
-
-		$res = array();
-		$res['statusCode'] 		= $status;
-		$res['message'] 		= $message;
+		$res['navTabId'] = 'shopConfigList';
+		$res['callbackType'] = 'closeCurrent';
+		$res['forwardUrl'] = '/manage/shopConfig/index';
 		$this->ajaxDwzReturn($res);
 	}
 
-	public function actionDel(){
+	public function actionDel()
+	{
+		$res = array('statusCode' => 200,'message' => '删除成功！');
 		try{
 			if(empty($_REQUEST['id'])){
 				throw new Exception("数据错误，id不能为空！", 1);
 			}
 			$flag = ShopConfig::model()->deleteByPk($_REQUEST['id']);
-			if($flag){
-				$message = '删除成功!';
-				$status = 200;
-			}else{
-				$message = '删除失败!';
-				$status = 300;
+			if(!$flag){
+				throw new exception('删除失败');
 			}
 		}catch(Exception $e){
-			$message = $e->getMessage();
-			$status = 300;
+			$res['statusCode'] = 300;
+			$res['message'] = '删除失败【'.$e->getMessage().'】';
 		}
-
-		$res = array();
-		$res['statusCode'] 		= $status;
-		$res['message'] 		= $message;
+		$res['callbackType'] = 'reloadTab';
+		$res['forwardUrl'] = '/manage/shopConfig/index';
 		$this->ajaxDwzReturn($res);
 	}
 

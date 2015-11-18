@@ -1,8 +1,10 @@
 <?php
 
-class IndexController extends ManageController {
+class IndexController extends ManageController
+{
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $manage_id = Yii::app()->session['manage_id'];
         if(empty($manage_id)){
             $model =new ManageLogin();
@@ -35,7 +37,8 @@ class IndexController extends ManageController {
     }
 
     //生成验证码
-    public function actionLogout(){
+    public function actionLogout()
+    {
         // Yii::app()->session['manage_id']    = 0;
         // Yii::app()->session['manage_email'] = '';
         // Yii::app()->session->sessionID
@@ -48,6 +51,10 @@ class IndexController extends ManageController {
         $this->redirect('/manage/index/login');
     }
 
+    /**
+     * 验证码的生成.
+     * @return array
+     */
     public function actions()
     {
         return array(

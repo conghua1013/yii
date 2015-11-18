@@ -3,7 +3,8 @@
 class BannerController extends ManageController {
 
     //列表页面
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $list = Banner::model()->getBannerListPage();
         $viewData = array();
         $viewData['list'] = $list['list'];
@@ -14,7 +15,8 @@ class BannerController extends ManageController {
     }
 
     //添加页面
-    public function actionAdd(){
+    public function actionAdd()
+    {
         if(empty($_POST)){
             $stations = Banner::model()->getBannertSation();
             $viewData = array();
@@ -22,6 +24,7 @@ class BannerController extends ManageController {
             $this->render('add', $viewData);exit;
         }
 
+        $res = array('statusCode' => 200,'message' => '添加成功！');
         try {
             $banner_name = '';
             $image = CUploadedFile::getInstanceByName('banner_image');
@@ -45,26 +48,22 @@ class BannerController extends ManageController {
             $m->end_time 		 = strtotime($_REQUEST['end_time']);
             $m->add_time 		 = time();
             $flag = $m->save();
-            if($flag){
-                $message = '添加成功!';
-                $status = 200;
-            }else{
-                $message = '添加失败!';
-                $status = 300;
+            if(!$flag){
+                throw new exception('添加失败');
             }
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-
-        $res = array();
-        $res['statusCode'] 	= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'bannerList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/banner/index';
         $this->ajaxDwzReturn($res);
     }
 
     //编辑页面
-    public function actionEdit(){
+    public function actionEdit()
+    {
         if(empty($_POST)){
             $info = Banner::model()->findByPk($_REQUEST['id']);
             $stations = Banner::model()->getBannertSation();
@@ -74,6 +73,7 @@ class BannerController extends ManageController {
             $this->render('edit', $viewData); exit;
         }
 
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         try {
             $banner_name = '';
             $image = CUploadedFile::getInstanceByName('banner_image');
@@ -98,62 +98,60 @@ class BannerController extends ManageController {
             $m->start_time 	 = strtotime( $_REQUEST['start_time']);
             $m->end_time 		 = strtotime($_REQUEST['end_time']);
             $flag = $m->save();
-            if($flag){
-                $message = '修改成功!';
-                $status = 200;
-            }else{
-                $message = '修改失败!';
-                $status = 300;
+            if(!$flag){
+                throw new exception('修改失败');
             }
-
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'bannerList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/banner/index';
         $this->ajaxDwzReturn($res);
     }
 
     //删除页面
-    public function actionDel(){
-        $flag = Banner::model()->deleteByPk($_REQUEST['id']);
-        if($flag){
-            $message = '删除成功!';
-            $status = 200;
-        }else{
-            $message = '删除失败!';
-            $status = 300;
+    public function actionDel()
+    {
+        $res = array('statusCode' => 200,'message' => '删除成功！');
+        try{
+            if(empty($_REQUEST['id'])){
+                throw new Exception("数据错误，id不能为空！", 1);
+            }
+            $flag = Banner::model()->deleteByPk($_REQUEST['id']);
+            if(!$flag){
+                throw new exception('删除失败');
+            }
+        }catch(Exception $e){
+            $res['statusCode'] = 300;
+            $res['message'] = '删除失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/banner/index';
         $this->ajaxDwzReturn($res);
     }
 
     //修改状态
-    public function actionChange(){
-        $info = Banner::model()->findByPk($_REQUEST['id']);
+    public function actionChange()
+    {
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         try{
+            $info = Banner::model()->findByPk($_REQUEST['id']);
             if(empty($info)){
                 throw new exception('记录不存在了！');
             }
             $info->is_show = $_REQUEST['is_show'];
             $flag = $info->save();
-            if(empty($flag)){
-                throw new exception('修改状态失败！');
+            if(!$flag){
+                throw new exception('修改失败');
             }
-
-            $message = '修改状态成功!';
-            $status = 200;
         } catch (Exception $e){
-            $message = $e->getMessage();
-            $status = 300;
+            $res['statusCode'] = 300;
+            $res['message'] = '修改失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/banner/index';
         $this->ajaxDwzReturn($res);
     }
 

@@ -3,7 +3,8 @@
 class BrandController extends ManageController {
 
     //列表页面
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $list = Brand::model()->getBrandListPage();
         $viewData = array();
         $viewData['list'] = $list['list'];
@@ -14,14 +15,14 @@ class BrandController extends ManageController {
     }
 
     //添加页面
-    public function actionAdd(){
+    public function actionAdd()
+    {
         if(empty($_POST)){
             $viewData = array();
             $this->render('add', $viewData); exit;
         }
 
-        $message = '添加成功！';
-        $status = 200;
+        $res = array('statusCode' => 200,'message' => '添加成功！');
         try {
             $brand_name = '';
             $image = CUploadedFile::getInstanceByName('brand_logo');
@@ -50,21 +51,21 @@ class BrandController extends ManageController {
             $m->add_time 		= time();
             $flag = $m->save();
             if(!$flag){
-                throw new exception('添加失败！');
+                throw new exception('添加失败');
             }
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 500;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'bannerList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/brand/index';
         $this->ajaxDwzReturn($res);
     }
 
     //编辑页面
-    public function actionEdit(){
+    public function actionEdit()
+    {
         if(empty($_POST)){
             $info = Brand::model()->findByPk($_REQUEST['id']);
             $viewData = array();
@@ -72,8 +73,7 @@ class BrandController extends ManageController {
             $this->render('edit', $viewData); exit;
         }
 
-        $message = '修改成功！';
-        $status = 200;
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         try {
             $brand_name = '';
             $image = CUploadedFile::getInstanceByName('brand_logo');
@@ -103,23 +103,22 @@ class BrandController extends ManageController {
             $m->is_show 		= $_REQUEST['is_show'];
             $flag = $m->save();
             if(!$flag){
-                throw new exception('修改失败！');
+                throw new exception('修改失败');
             }
         } catch(Exception $e){
-            $message = $e->getMessage();
-            $status = 500;
+            $res['statusCode'] = 300;
+            $res['message'] = '失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['navTabId'] = 'bannerList';
+        $res['callbackType'] = 'closeCurrent';
+        $res['forwardUrl'] = '/manage/brand/index';
         $this->ajaxDwzReturn($res);
     }
 
     //删除页面
-    public function actionDel(){
-        $message = '删除成功!';
-        $status = 200;
-
+    public function actionDel()
+    {
+        $res = array('statusCode' => 200,'message' => '删除成功！');
         try {
             $info = Brand::model()->findByPk($_REQUEST['id']);
             if(empty($info)){
@@ -133,21 +132,21 @@ class BrandController extends ManageController {
 
             $flag = Brand::model()->deleteByPk($_REQUEST['id']);
             if(!$flag){
-                throw new exception('记录删除失败！');
+                throw new exception('删除失败');
             }
-        } catch (exception $e){
-            $message = '删除失败!【'.$e->getMessage().'】';
-            $status = 500;
+        }catch(Exception $e){
+            $res['statusCode'] = 300;
+            $res['message'] = '删除失败【'.$e->getMessage().'】';
         }
-
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/brand/index';
         $this->ajaxDwzReturn($res);
     }
 
     //修改状态
-    public function actionChange(){
+    public function actionChange()
+    {
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         $info = Brand::model()->findByPk($_REQUEST['id']);
         try{
             if(empty($info)){
@@ -158,16 +157,12 @@ class BrandController extends ManageController {
             if(empty($flag)){
                 throw new exception('修改状态失败！');
             }
-
-            $message = '修改状态成功!';
-            $status = 200;
         } catch (Exception $e){
-            $message = $e->getMessage();
-            $status = 500;
+            $res['statusCode'] = 300;
+            $res['message'] = '删除失败【'.$e->getMessage().'】';
         }
-        $res = array();
-        $res['statusCode'] 		= $status;
-        $res['message'] 		= $message;
+        $res['callbackType'] = 'reloadTab';
+        $res['forwardUrl'] = '/manage/brand/index';
         $this->ajaxDwzReturn($res);
     }
 

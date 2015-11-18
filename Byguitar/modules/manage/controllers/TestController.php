@@ -2,11 +2,13 @@
 
 class TestController extends ManageController {
 
-	public function actionIndex(){
+	public function actionIndex()
+	{
 		echo "index class";
 	}
 
-	public function actionEcho(){
+	public function actionEcho()
+	{
 		echo "echo here";
 	}
 
