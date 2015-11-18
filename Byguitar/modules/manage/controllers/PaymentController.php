@@ -36,7 +36,9 @@ class PaymentController extends ManageController {
             $payment = new Payment();
             $payment->pay_code 		= $_POST['pay_code'];
             $payment->pay_name 		= $_POST['pay_name'];
-            $payment->payment_logo 	= str_replace(ROOT_PATH,'',$imageNamePath);
+            if($imageNamePath){
+                $payment->payment_logo 	= str_replace(ROOT_PATH.'/images/bank/','',$imageNamePath);
+            }
             $payment->keya 		= $_POST['keya'];
             $payment->keyb 		= $_POST['keyb'];
             $payment->is_valid 		= $_POST['is_valid'];
@@ -85,9 +87,11 @@ class PaymentController extends ManageController {
             $payment =  Payment::model()->findByPk($_REQUEST['id']);
             $payment->pay_code 		= $_POST['pay_code'];
             $payment->pay_name 		= $_POST['pay_name'];
-            $payment->payment_logo      = str_replace(ROOT_PATH,'',$imageNamePath);
-            $payment->keya 		= $_POST['keya'];
-            $payment->keyb 		= $_POST['keyb'];
+            if($imageNamePath){
+                $payment->payment_logo  = str_replace(ROOT_PATH.'/images/bank/','',$imageNamePath);
+            }
+            $payment->keya 		   = $_POST['keya'];
+            $payment->keyb 		  = $_POST['keyb'];
             $payment->is_valid 		= $_POST['is_valid'];
             $payment->is_plat 		= $_POST['is_plat'];
             $payment->sort 		= $_POST['sort'];

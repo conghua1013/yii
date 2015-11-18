@@ -89,13 +89,12 @@
             <div class="post_list">
                 <div class="bank_box">
                     <div>
-
                         <?php if(!empty($payList['plat'])): ?>
                         <?php foreach($payList['plat'] as $row): ?>
                         <p class="fl">
                             <input type="radio" <?php if($row['id'] == 1):?>checked="checked"<?php endif; ?> value="<?php echo $row['id'];?>" way="<?php echo $row['pay_name'];?>" id="radio_<?php echo $row['id'];?>" name="pay_id">
                             <label for="radio_<?php echo $row['id'];?>">
-                                <img width="131" height="37" src="/Public/Images/payment/<?php echo $row['payment_logo'];?>" alt="<?php echo $row['pay_name'];?>" />
+                                <img width="131" height="37" src="<?php echo str_replace(ROOT_PATH,'',Yii::app()->params['image']['bank']['path'].$row['payment_logo']);?>" alt="<?php echo $row['pay_name'];?>" />
                             </label>
                         </p>
                         <?php endforeach; ?>
@@ -105,19 +104,19 @@
                     </div>
 
 
-                        <?php if(!empty($payList['bank'])): ?>
-                        <div class="spline bank_split"></div>
-                        <div>
-                            <?php foreach($payList['bank'] as $row): ?>
-                                <p class="fl">
-                                    <input type="radio" value="<?php echo $row['id'];?>" way="<?php echo $row['pay_name'];?>" id="radio_<?php echo $row['id'];?>" name="pay_id">
-                                    <label for="radio_<?php echo $row['id'];?>">
-                                        <img width="131" height="37" src="/Public/Images/payment/<?php echo $row['payment_logo'];?>" alt="<?php echo $row['pay_name'];?>" />
-                                    </label>
-                                </p>
-                            <?php endforeach; ?>
-                        </div>
-                        <?php endif; ?>
+                    <?php if(!empty($payList['bank'])): ?>
+                    <div class="spline bank_split"></div>
+                    <div>
+                        <?php foreach($payList['bank'] as $row): ?>
+                            <p class="fl">
+                                <input type="radio" value="<?php echo $row['id'];?>" way="<?php echo $row['pay_name'];?>" id="radio_<?php echo $row['id'];?>" name="pay_id">
+                                <label for="radio_<?php echo $row['id'];?>">
+                                    <img width="131" height="37" src="<?php echo str_replace(ROOT_PATH,'',Yii::app()->params['image']['bank']['path'].$row['payment_logo']);?>" alt="<?php echo $row['pay_name'];?>" />
+                                </label>
+                            </p>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
                     <div class="clear"></div>
                 </div>
 
@@ -184,16 +183,14 @@
                 <div class="cart_infoline" id="yhqbox2" style="display:none;">
                     <label>使用已有优惠券:</label>
                     <div class="fl yhq_select" id="yhq_select">
-                        <input class="input yhq_input" id="yhq_input" name="" type="text" style="width:226px;" value="" />
+                        <input class="input yhq_input" id="yhq_input" name="" type="text" style="width:226px;" value="请选择优惠券..." />
                         <ul class="yhq_list">
                             <li class="yhq_off">请选择优惠券...</li>
-
                             <?php if(!empty($couponlist)): ?>
                             <?php foreach($couponlist as $row): ?>
                                 <li class="yhq_on" couponsn="<?php echo $row['coupon_sn'];?>">¥<?php echo $row['coupon_amount'];?>（满¥<?php echo $row['satisfied_amount'];?>可用）有效期至<?php echo date('Y-m-d',$row['end_time']); ?>[<?php echo $row['coupon_name'];?>]</li>
                             <?php endforeach; ?>
                             <?php endif; ?>
-
                         </ul>
                         <div class="yhqarrow"></div>
                         <div class="yhqarrowbg"></div>

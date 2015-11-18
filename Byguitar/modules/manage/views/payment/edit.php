@@ -18,7 +18,7 @@
                 <label>支付方式图片：</label>
                 <input type="file" name="payment_logo" />
                 <?php if($info->payment_logo):?>
-                <image width="80" src="<?php echo $info->payment_logo;?>" alt="<?php echo $info->payment_logo;?>"/>
+                <image width="80" src="<?php echo str_replace(ROOT_PATH,'',Yii::app()->params['image']['bank']['path'].$info->payment_logo);?>" alt="<?php echo $info->payment_logo;?>"/>
                 <?php endif; ?>
             </div>
 
