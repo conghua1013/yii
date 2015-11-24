@@ -36,7 +36,7 @@ class Brand extends CActiveRecord
         $criteria->offset = ($pageNum-1)*20;
         $criteria->limit = 20;
         if(!empty($_REQUEST['brand_name'])){
-                $criteria->compare('brand_name',$_REQUEST['brand_name'],true);  
+            $criteria->compare('brand_name',$_REQUEST['brand_name'],true);
         }
 
         $count = self::model()->count($criteria); 
@@ -78,4 +78,85 @@ class Brand extends CActiveRecord
         }
         return $newList;
     }
+
+    /**
+     * 获取品牌列表.
+     * @param $request
+     * @return array
+     */
+    public function getBrandListByPageForWeb($request)
+    {
+        $pageNum = empty($request['p']) ? 1 : $request['p'];
+        $criteria = new CDbCriteria();
+        $criteria->order = 'id DESC';
+        $criteria->offset = ($pageNum-1)*20;
+        $criteria->limit = 20;
+
+        $count = self::model()->count($criteria);
+        $list = self::model()->findAll($criteria);
+        $newList = array();
+        if(!empty($list)){
+            foreach($list as $row){
+                $newList[] = $row->getAttributes();
+            }
+        }
+
+        $filter = array();
+        $filter['p'] = $pageNum;
+        $filter['page_size'] = 20;
+        return array(
+            'count'     => $count,
+            'list'      => $newList,
+            'filter'    => $filter,
+        );
+    }
+
+    /**
+     * 获取品牌的详情
+     * @param $brand_id
+     * @return array|null|string|static
+     */
+    public function getBrandInfoForWeb($brand_id)
+    {
+        $brandInfo = Brand::model()->findByPk($brand_id);
+        if(empty($brandInfo)){
+            return '';
+        }
+        $brandInfo = $brandInfo->getAttributes();
+        $brandInfo['brand_logo'] = $brandInfo['brand_logo'] ? 'images/brand/'.$brandInfo['brand_logo'] : '';
+        return $brandInfo;
+    }
+
+    /**
+     * 前端展示品牌商品页面数据
+     */
+    public function getBrandProductByPageForWeb($request)
+    {
+        $pageNum = empty($request['p']) ? 1 : $request['p'];
+        $criteria = new CDbCriteria();
+        $criteria->select = 'id,product_name,sell_price,market_price,discount';
+        $criteria->compare('brand_id',$request['id'],true);
+        $criteria->compare('is_show',1);
+        $criteria->compare('status',2);
+        $criteria->order = 'id DESC';
+        $criteria->offset = ($pageNum-1)*20;
+        $criteria->limit = 20;
+
+        $count = Product::model()->count($criteria);
+        $list = Product::model()->findAll($criteria);
+        $newList = array();
+        if(!empty($list)){
+            foreach($list as $row){
+                $temp = $row->getAttributes();
+                $temp['images'] = Product::model()->getProductFaceImageByProductId($row->id);
+                $newList[] = $temp;
+            }
+        }
+
+        $filter = array();
+        $filter['p'] = $pageNum;
+        $filter['page_size'] = 20;
+        return array('count' => $count, 'list' => $newList, 'filter' => $filter);
+    }
+
 }
