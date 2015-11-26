@@ -190,7 +190,8 @@ class Product extends CActiveRecord
      * @param $product_ids
      * @return array|string
      */
-    public function getProductFaceImageByProductIds($product_ids) {
+    public function getProductFaceImageByProductIds($product_ids)
+    {
         if(empty($product_ids)){return '';}
         $criteria = new CDbCriteria;
         $criteria->select = '*';

@@ -192,4 +192,204 @@ class Category extends CActiveRecord
         return $lineArr;
     }
 
+
+    /**
+     * 根据条件查询相关的分类商品
+     * @param $filter
+     */
+    public function getCategoryProducts($filter)
+    {
+        if(empty($filter)){ return ''; }
+        $count = Yii::app()->shop->createCommand()
+            ->select('count(1)')
+            ->from('bg_product p')
+            ->leftJoin('bg_product_category pc','p.cat_id = pc.id')
+            ->where($filter['where'])
+            ->queryScalar();
+
+        $fields = 'p.id,p.product_name,p.sell_price,p.market_price,p.discount,p.quantity,p.like_num';
+        $list = Yii::app()->shop->createCommand()
+            ->select($fields)
+            ->from('bg_product p')
+            ->leftJoin('bg_product_category pc','p.cat_id = pc.id')
+            ->where($filter['where'])
+            ->order($filter['order'])
+            ->limit($filter['limit'])
+            ->offset($filter['offset'])
+            ->queryAll();
+
+        //批量处理图片
+        $product_ids = array();
+        $newList = array();
+        if($list){
+            foreach($list as $row){
+                array_push($product_ids,$row['id']);
+                $newList[$row['id']] = $row;
+            }
+
+            $image_list = Product::model()->getProductFaceImageByProductIds($product_ids);
+            if(!empty($image_list)){
+                foreach($image_list as $row){
+                    $newList[$row['product_id']]['images'] = $row['images'];
+                }
+            }
+        }
+        return array('list'=>$newList,'count'=>$count);
+    }
+
+    /**
+     * 处理页面的输入参数
+     * @return array
+     */
+    public function parseFilter($request)
+    {
+        $filter = array();
+        $filter['id'] 		= intval($request['id']);     //分类
+        $filter['brand'] 	= intval($request['brand']);	//品牌
+        $filter['price'] 	= intval($request['price']);	//价格区间(数字类型的)
+        $filter['size'] 	= intval($request['size']);	//尺寸
+        $filter['origin'] 	= intval($request['origin']);	//原产地
+        $filter['color'] 	= intval($request['color']);	//颜色
+        $filter['sort'] 	= intval($request['sort']);	//排序
+        $filter['p'] 		= intval($request['p']);		//分页
+        $filter['p'] 		= empty($filter['p']) ? 1 : intval($filter['p']);
+        $filter['limit'] =  20;
+        $filter['offset'] = ($filter['p'] - 1) * $filter['limit'];
+        $filter['where'] = ' p.status = 2 and p.is_show = 1 ';
+        $filter['option_where'] = ' p.status = 2 and p.is_show = 1 ';
+
+        if(!empty($filter['id'])){ //分类筛选
+            $catelist = Category::model()->getCategoryList();
+            $catinfo = $catelist[$filter['id']];
+            $filter['where'] .= ' and p.cat_id = '.intval($filter['id']);
+            $filter['option_where'] .= ' and p.cat_id = '.intval($filter['id']);
+            //if(!empty($catinfo)){
+            //    if($catinfo['level'] == 1){
+            //        $filter['where'] .= ' and pc.one_id = '.intval($filter['id']);
+            //    }elseif($catinfo['level'] == 2){
+            //        $filter['where'] .= ' and pc.two_id = '.intval($filter['id']);
+            //    }
+            //}
+        }
+
+        if(!empty($filter['brand'])){ //品牌筛选
+            $filter['where'] .= ' and p.brand_id = '.intval($filter['brand']);
+        }
+        if(!empty($_REQUEST['price'])){//价格筛选
+            $priceRange = Category::model()->getPriceRange($_REQUEST['price']);
+            $min = intval($priceRange['min']);
+            $max = $priceRange['max'] == false ? false : intval($priceRange['max']) + 1;
+            $filter['where'] .= ' and p.sell_price >= '.$min;
+            if($max > 0){
+                $filter['where'] .= ' and p.sell_price <= '.$max;
+            }
+        }
+        if(!empty($filter['size'])){//尺寸筛选
+            $filter['where'] .= ' and p.attr_id = '.intval($filter['size']);
+        }
+
+        $filter['order'] = 'p.id desc';
+        if(!empty($filter['sort'])){
+            if($filter['sort'] == 1){
+                $filter['order'] = 'p.sold_num desc';
+            }elseif($filter['sort'] == 2){
+                $filter['order'] = 'p.add_time desc';
+            }elseif($filter['sort'] == 3){
+                $filter['order'] = 'p.sell_price desc';
+            }
+        }
+        return $filter;
+    }
+
+    /**
+     * 获取分类的筛选条件.
+     * @param $filter
+     */
+    public function getCategoryOptions($filter)
+    {
+        $options = array();
+        $options['brands'] = $this->getOptionBrands($filter);
+        $options['prices'] = $this->getOptionPrices();
+        return $options;
+    }
+
+    /**
+     * 获取分类的品牌选项
+     * @param $filter
+     * @return string
+     */
+    public function getOptionBrands($filter)
+    {
+        $field = 'p.brand_id as id';
+        $group = 'p.brand_id';
+        $list = Yii::app()->shop->createCommand()
+            ->select($field)
+            ->from('bg_product p')
+            ->leftJoin('bg_product_category pc','p.cat_id = pc.id')
+            ->where($filter['option_where'])
+            ->group($group)
+            ->queryAll();
+        if(empty($list)){return '';}
+
+        $brandList = Brand::model()->getBrandList();
+        foreach ($list as &$value) {
+            $value['brand_name'] = isset($brandList[$value['id']]) ? $brandList[$value['id']]['brand_name'] : '';
+        }
+        return $list;
+    }
+
+    /**
+     * 获取加个选项
+     * @param $filter
+     * @param $optionWhere
+     * @return array|bool
+     */
+    protected function getOptionPrices()
+    {
+        $priceRange = Category::model()->getPriceRange('','array');//获取价格区间数组
+        if(empty($priceRange)){return false;}
+
+        $list = array();
+        foreach ($priceRange as $key => $value) {
+            $priceName = empty($value['min']) ? '' : $value['min'];
+            $priceName .= empty($value['min']) || empty($value['max']) ? '' :'-';
+            $priceName .= empty($value['max']) ? '以上' : $value['max'];
+            $list[$key] = $priceName;
+        }
+        return $list;
+    }
+
+    /**
+     * 获取选项的列表
+     * @param $filter
+     */
+    protected function getOptionAttr($filter)
+    {
+
+    }
+
+    /**
+     * 处理分类商品的喜欢状态.
+     * @param $userId
+     * @param $list
+     * @return string
+     */
+    public function getCategoryProductLikeStatus($userId,$list)
+    {
+        if(empty($userId) || empty($list)){return '';}
+        $product_ids = array();
+        foreach($list as $row){
+            array_push($product_ids,$row['id']);
+        }
+        $likeList = Like::model()->findAllByAttributes(array('user_id'=>$userId,'product_id'=>$product_ids));
+        if(empty($likeList)){ return $list; }
+
+        foreach($likeList as $row) {
+            if(isset($list[$row->product_id])){
+                $list[$row->product_id]['is_like'] = 1;
+            }
+        }
+        return $list;
+    }
+
 }

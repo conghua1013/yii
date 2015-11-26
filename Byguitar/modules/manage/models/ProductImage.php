@@ -25,7 +25,7 @@ class ProductImage extends CActiveRecord
 	//表名、全名
 	public function tableName()
 	{
-		return 'bg_Product_img';
+		return 'bg_product_img';
 	}
 
 }
