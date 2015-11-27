@@ -15,8 +15,6 @@ class BrandController extends ShopBaseController
             $this->redirect('/?from=brand_empty');
         }
 
-        echo "sss";exit;
-
         $pages = '';//正常分页信息
         $pageShort = '';//短分页信息
 
@@ -33,7 +31,7 @@ class BrandController extends ShopBaseController
         $viewData['filter'] = $result['filter'];
         $viewData['pages'] = $pages;
         $viewData['pageShort'] = $pageShort;
-        $this->render('brands/index', $viewData);
+        $this->render('brand/index', $viewData);
     }
 
     /**
@@ -43,21 +41,18 @@ class BrandController extends ShopBaseController
     {
         $_REQUEST['id'] = intval($_REQUEST['id']);
         if(empty($_REQUEST['id'])){
-            //$this->redirect('/?from=brand_empty');
+            $this->redirect('/?from=brand_empty');
         }
 
         $brandInfo = Brand::model()->getBrandInfoForWeb($_REQUEST['id']);
         if(empty($brandInfo)){
-            //$this->redirect('/?from=brand_empty');
+            $this->redirect('/?from=brand_empty');
         }
 
         $result = Brand::model()->getBrandProductByPageForWeb($_REQUEST);
         if(empty($result) || $result['count'] <= 0 ){
-            //$this->redirect('/?from=brand_product_empty');
+            $this->redirect('/?from=brand_product_empty');
         }
-        echo "<pre>";
-        print_r($result);
-        exit;
 
         $filter =$result['filter'];
         $urlStr = '/brand/'.$_REQUEST['id'];
@@ -75,6 +70,6 @@ class BrandController extends ShopBaseController
         $viewData['filter'] = $result['filter'];
         $viewData['pages'] = $pages;
         $viewData['pageShort'] = $pageShort;
-        $this->render('brands/detail', $viewData);
+        $this->render('brand/detail', $viewData);
     }
 }

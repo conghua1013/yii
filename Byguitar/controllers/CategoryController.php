@@ -13,7 +13,7 @@ class CategoryController extends ShopBaseController {
 
         $pages 		= '';//正常分页信息
         $pageShort 	= '';//短分页信息
-        $urlStr = 'category/'.Common::instance()->getFormatUrl('category',$filter);
+        $urlStr = '/category/'.Common::instance()->getFormatUrl('category',$filter);
         if($result['count'] >0 ){
            $pages		= Common::instance()->get_page_list($result['count'], $filter['p'], $filter['limit'], $urlStr,'category');
            $pageShort	= Common::instance()->get_page_short($result['count'], $filter['p'], $filter['limit'], $urlStr,'category');
