@@ -18,7 +18,7 @@
                             <?php echo $info['order_status_txt']; ?><!-- 未付款 已付款 配送中 --></strong></span>
                     <span class="fr">
                     <?php if($info['order_status'] == 0): ?>
-                        <a class="fl btn btn-large btn-primary white" href="/shop/pay/<?php echo $info['order_sn']; ?>">立即付款</a>
+                        <a class="fl btn btn-large btn-primary white" href="/pay/<?php echo $info['order_sn']; ?>">立即付款</a>
                     <?php endif; ?>
 
                     <?php if($info['order_status'] == 0): ?>

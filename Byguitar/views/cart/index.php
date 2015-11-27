@@ -30,7 +30,7 @@
                     </tr>
                 <?php else: ?>
                     <tr>
-                        <td colspan="8" align="center" valign="middle"><p><img src="/images/public/cart_empty.gif" />&nbsp;&nbsp;您的购物车中没有商品，快去挑选吧。 <a class="qing" href="/shop" target="_blank">回到首页&gt;&gt;</a></p></td>
+                        <td colspan="8" align="center" valign="middle"><p><img src="/images/public/cart_empty.gif" />&nbsp;&nbsp;您的购物车中没有商品，快去挑选吧。 <a class="qing" href="/" target="_blank">回到首页&gt;&gt;</a></p></td>
                     </tr>
                 <?php endif; ?>
 
@@ -45,7 +45,7 @@
                             <?php elseif($row['type'] == 2): ?>
                                 <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" ><img src="<?php echo $row['images']['cover']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
                             <?php else: ?>
-                                <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['image_120']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
+                                <a href="/item/<?php echo $row['product_id']; ?>" target="_blank"><img src="<?php echo $row['images']['image_120']; ?>" width="60" id="pimg_<?php echo $row['id']; ?>"/></a>
                             <?php endif; ?>
                         </td>
                         <td align="left">
@@ -55,7 +55,7 @@
                                     <?php elseif($row['type'] == 2): ?>
                                     <a href="/zine/<?php echo $row['product_id']; ?>" target="_blank" id="pname_<?php echo $row['id']; ?>"> <?php echo $row['product_name']; ?> </a>
                                     <?php else: ?>
-                                    <a href="/shop/item/<?php echo $row['product_id']; ?>" target="_blank" id="pname_<?php echo $row['id']; ?>"> <?php echo $row['product_name']; ?> </a>
+                                    <a href="/item/<?php echo $row['product_id']; ?>" target="_blank" id="pname_<?php echo $row['id']; ?>"> <?php echo $row['product_name']; ?> </a>
                                 <?php endif; ?>
                             </p>
                         </td>

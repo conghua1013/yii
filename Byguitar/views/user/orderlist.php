@@ -39,7 +39,7 @@
                                 <td align="center" valign="middle">
                                     <a class="qing" href="/user/order/<?php echo $row['order_sn']; ?>">查看详情</a>
                                     <?php if($row['order_status'] == 0): ?>
-                                        <a class="btn btn-small btn-primary white" href="/shop/pay/<?php echo $row['order_sn']; ?>">
+                                        <a class="btn btn-small btn-primary white" href="/pay/<?php echo $row['order_sn']; ?>">
                                             立即付款</a>
                                     <?php endif; ?>
                                 </td>

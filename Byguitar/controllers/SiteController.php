@@ -1,8 +1,10 @@
 <?php
 
-class SiteController extends CController {
+class SiteController extends CController
+{
 
-	public function actionError(){
+	public function actionError()
+	{
 		if($error=Yii::app()->errorHandler->error)
 	    {
 	    	echo "<pre>";
@@ -12,7 +14,8 @@ class SiteController extends CController {
 	    }
 	}
 
-    public function actionTest() {
+    public function actionTest()
+	{
         echo "<pre>";
 
         // 批量获取是商品详情

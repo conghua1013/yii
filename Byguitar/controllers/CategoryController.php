@@ -9,6 +9,9 @@ class CategoryController extends ShopBaseController {
     {
         $filter = Category::model()->parseFilter($_REQUEST);
         $result = Category::model()->getCategoryProducts($filter);
+        if(empty($result) || empty($result['list']) || $result['count'] <= 0){
+            $this->redirect('/?from=no_list');//跳转到首页
+        }
         $options = Category::model()->getCategoryOptions($filter);
 
         $pages 		= '';//正常分页信息

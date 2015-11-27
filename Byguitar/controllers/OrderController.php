@@ -56,7 +56,7 @@ class OrderController extends ShopBaseController
         $data['receive_mobile'] = $oInfo['mobile'];
 
         $alipay_url = Yii::app()->alipay->get_code($data);
-        echo $alipay_url ."<hr>";exit;
+        //echo $alipay_url ."<hr>";exit;
 
         header("Content-type:text/html;charset=utf-8");
         header('Location:'.$alipay_url); //跳转到支付宝网关

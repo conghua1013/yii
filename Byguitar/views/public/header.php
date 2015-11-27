@@ -9,7 +9,7 @@
             <ul class="fl menu">
                 <li class="nav "><a href="/zine" title="杂志" hidefocus="true">杂志</a><span></span></li>
                 <li class="nav "><a href="/tab" title="谱库" hidefocus="true">谱库</a><span></span></li>
-                <li class="nav "><a href="/shop" title="TAO" hidefocus="true">TAO</a><span></span><div class="shopnewtip"></div></li>
+                <li class="nav "><a href="/" title="TAO" hidefocus="true">TAO</a><span></span><div class="shopnewtip"></div></li>
             </ul>
             <ul class="fl menu">
                 <li class="nav "><a href="/player" title="同学" hidefocus="true">同学</a><span></span></li>

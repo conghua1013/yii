@@ -297,9 +297,6 @@ class UserController extends ShopBaseController
 		$list = $result['list'];
 		$product_ids = $result['product_ids'];
 		$productList = Product::model()->getProductInfoByIds($product_ids,'all');
-//		echo "<pre>";
-//		print_r($productList);
-//		exit;
 
 		$baseUrl = '/user/like?';
 		$pages = '';
@@ -330,7 +327,7 @@ class UserController extends ShopBaseController
 		$count = $result['count'];
 		$list = $result['list'];
 
-		$baseUrl = '/user/orderlist?';
+		$baseUrl = '/user/orderlist';
 		$pages = '';
 		if($count > 0){
 			$pages = Common::instance()->get_page_list($count, $result['p'], $result['page_size'], $baseUrl);
@@ -363,7 +360,6 @@ class UserController extends ShopBaseController
 			$status = Order::model()->getOrderStatusForUserPage($oInfo);
 			$logs = OrderLog::model()->findAllByAttributes(array('order_id'=>$oInfo['id']));
 		} catch (exception $e){
-			//echo ''.$e;exit;
 			$this->redirect('/?from=order_error');
 		}
 

@@ -17,7 +17,7 @@
       <p>
         <label>品牌</label>
         <?php echo $brandInfo['brand_name'];?>
-      <!-- <a class="gray" href="/shop/brand/{$pInfo.brand_id}" target="_blank"><?php //echo $brandInfo['brand_name']; ?></a> -->
+        <a class="gray" href="/brand/<?php echo $pInfo['brand_id'];?>" target="_blank"><?php echo $brandInfo['brand_name']; ?></a>
       </p>
     </li>
     <li class="price">

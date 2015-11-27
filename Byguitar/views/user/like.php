@@ -32,7 +32,7 @@
                                             </a>
                                         </div>
                                         <div class="pininfo">
-                                            <h3><a href="/shop/item/<?php echo $row['product_id']; ?>"><?php echo isset($productList[$row['product_id']]) ? $productList[$row['product_id']]['product_name'] : ''; ?></a></h3>
+                                            <h3><a href="/item/<?php echo $row['product_id']; ?>"><?php echo isset($productList[$row['product_id']]) ? $productList[$row['product_id']]['product_name'] : ''; ?></a></h3>
                                             <p class="pinprice"><b>¥<?php echo isset($productList[$row['product_id']]) ? $productList[$row['product_id']]['sell_price'] : ''; ?></b> |
                                                 <del>¥<?php echo isset($productList[$row['product_id']]) ? $productList[$row['product_id']]['market_price'] : ''; ?></del></p>
                                         </div>

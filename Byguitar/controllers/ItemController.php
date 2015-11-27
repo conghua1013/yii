@@ -8,7 +8,7 @@ class ItemController extends ShopBaseController
         $product_id = intval($_REQUEST['id']);
         $pInfo = Product::model()->getProductInfoById($product_id);
         if(empty($pInfo)){
-            $this->redirect('/');//跳转到首页
+            $this->redirect('/?from=no_goods');//跳转到首页
         }
 
         $brandInfo = '';
