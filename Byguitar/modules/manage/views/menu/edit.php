@@ -1,5 +1,5 @@
 <div class="pageContent">
-	<form method="post" action="manage/menu/edit" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
+	<form method="post" action="/manage/menu/edit" class="pageForm required-validate" onsubmit="return validateCallback(this, navTabAjaxDone);">
 		<div class="pageFormContent" layoutH="57">
 			<p>
 				<label>上级菜单：</label>

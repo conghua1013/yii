@@ -1,4 +1,4 @@
-<form id="pagerForm" method="post" action="manage/brand/index">
+<form id="pagerForm" method="post" action="/manage/brand/index">
 	<input type="hidden" name="brand_name" value="<?php isset($request['brand_name']) ? $request['brand_name'] : ''; ?>" />
 	<input type="hidden" name="pageNum" value="<?php echo $pageNum; ?>" />
 	<input type="hidden" name="numPerPage" value="${model.numPerPage}" />
@@ -8,7 +8,7 @@
 
 
 <div class="pageHeader">
-	<form onsubmit="return navTabSearch(this);" action="manage/brand/index" method="post">
+	<form onsubmit="return navTabSearch(this);" action="/manage/brand/index" method="post">
 	<div class="searchBar">
 		<table class="searchContent">
 			<tr>
@@ -20,7 +20,7 @@
 		<div class="subBar">
 			<ul>
 				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">检索</button></div></div></li>
-				<li><a class="button" href="manage/brand/index" target="dialog" mask="true" title="查询框"><span>高级检索</span></a></li>
+				<li><a class="button" href="/manage/brand/index" target="dialog" mask="true" title="查询框"><span>高级检索</span></a></li>
 			</ul>
 		</div>
 	</div>
@@ -30,11 +30,11 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="manage/brand/add" target="navTab" title="品牌添加"><span>添加</span></a></li>
+			<li><a class="add" href="/manage/brand/add" target="navTab" title="品牌添加"><span>添加</span></a></li>
 			<li class="line">line</li>
-			<li><a class="delete" href="manage/brand/del?id={sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
+			<li><a class="delete" href="/manage/brand/del?id={sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
 			<li class="line">line</li>
-			<li><a class="edit" href="manage/brand/edit?id={sid_user}" target="navTab" title="品牌修改"><span>修改</span></a></li>
+			<li><a class="edit" href="/manage/brand/edit?id={sid_user}" target="navTab" title="品牌修改"><span>修改</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="138">
@@ -62,7 +62,7 @@
 				<td><?php echo $row->address; ?></td>
 				<td><?php echo $row->mobile; ?></td>
 				<td><?php echo $row->tel; ?></td>
-				<td><a class="delete" href="manage/brand/change?id=<?php echo $row->id; ?>&is_show=<?php echo $row->is_show == 0 ?1 : 0; ?>" target="ajaxTodo" title="确定要修改状态吗?">
+				<td><a class="delete" href="/manage/brand/change?id=<?php echo $row->id; ?>&is_show=<?php echo $row->is_show == 0 ?1 : 0; ?>" target="ajaxTodo" title="确定要修改状态吗?">
 					<?php if($row->is_show == 1): ?>
 						<image  src="/css/dwz/images/accept.png" alt="显示"/>
 					<?php else: ?>

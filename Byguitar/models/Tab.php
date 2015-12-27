@@ -18,6 +18,26 @@ class Tab extends CActiveRecord
         return 'bg_tab';
     }
 
+    //获取谱子列表
+    public function getTabListPage(){
+        $pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
+        $criteria = new CDbCriteria();
+        $criteria->order = 'id DESC';
+        $criteria->offset = ($pageNum-1)*20;
+        $criteria->limit = 20;
+        if(!empty($_REQUEST['brand_name'])){
+            $criteria->compare('brand_name',$_REQUEST['brand_name'],true);
+        }
+
+        $count = self::model()->count($criteria);
+        $list = self::model()->findAll($criteria);
+        return array(
+            'count'=>$count,
+            'list'=>$list,
+            'pageNum'=>$pageNum,
+        );
+    }
+
     /**
      * 根据id获取谱子的信息
      * @param $tab_ids

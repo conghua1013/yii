@@ -18,6 +18,23 @@ class Zine extends CActiveRecord
         return 'bg_zine';
     }
 
+    //获取杂志列表
+    public function getZineListPage(){
+        $pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
+        $criteria = new CDbCriteria();
+        $criteria->order = 'id DESC';
+        $criteria->offset = ($pageNum-1)*20;
+        $criteria->limit = 20;
+
+        $count = self::model()->count($criteria);
+        $list = self::model()->findAll($criteria);
+        return array(
+            'count'=>$count,
+            'list'=>$list,
+            'pageNum'=>$pageNum,
+        );
+    }
+
     /**
      * 根据杂志id列表获取杂志信息.
      * @param $zine_ids

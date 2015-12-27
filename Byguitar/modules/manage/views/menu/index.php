@@ -9,11 +9,11 @@
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="manage/menu/add" target="navTab" title="菜单添加"><span>添加</span></a></li>
-			<li><a class="delete" href="manage/menu/del?id={sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
-			<li><a class="edit" href="manage/menu/edit?id={sid_user}" target="navTab" title="菜单修改"><span>修改</span></a></li>
+			<li><a class="add" href="/manage/menu/add" target="navTab" title="菜单添加"><span>添加</span></a></li>
+			<li><a class="delete" href="/manage/menu/del?id={sid_user}" target="ajaxTodo" title="确定要删除吗?"><span>删除</span></a></li>
+			<li><a class="edit" href="/manage/menu/edit?id={sid_user}" target="navTab" title="菜单修改"><span>修改</span></a></li>
 			<li class="line">line</li>
-			<li><a class="add" href="manage/menu/tree" target="navTab"><span>菜单树状图</span></a></li>
+			<li><a class="add" href="/manage/menu/tree" target="navTab"><span>菜单树状图</span></a></li>
 		</ul>
 	</div>
 	<table class="table" width="100%" layoutH="75">
@@ -43,7 +43,7 @@
 				<td><?php echo $row->status == 0 ? '不显示' : '显示'; ?></td>
 				<td><?php echo $row->level; ?></td>
 				<td><?php echo isset($names[$row->parent_id]) ? $names[$row->parent_id]['title'] : '无'; ?></td>
-				<td><a class="delete" href="manage/menu/change?id=<?php echo $row->id; ?>&status=<?php echo $row->status == 0 ?1 : 0; ?>" target="ajaxTodo" title="确定要修改状态吗?">
+				<td><a class="delete" href="/manage/menu/change?id=<?php echo $row->id; ?>&status=<?php echo $row->status == 0 ?1 : 0; ?>" target="ajaxTodo" title="确定要修改状态吗?">
 					<?php if($row->status == 1): ?>
 						<image  src="/css/dwz/images/accept.png" alt="显示"/>
 					<?php else: ?>

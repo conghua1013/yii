@@ -28,7 +28,7 @@ class Brand extends CActiveRecord
         return 'bg_brand';
     }
 
-    //获取菜单列表
+    //获取品牌列表【后台】
     public function getBrandListPage(){
         $pageNum = empty($_REQUEST['pageNum']) ? 1 : $_REQUEST['pageNum'];
         $criteria = new CDbCriteria(); 
