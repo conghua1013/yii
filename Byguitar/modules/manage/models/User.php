@@ -58,6 +58,11 @@ class User extends CActiveRecord
 	 */
 	public function userAuthCheck($request)
 	{
+		if(empty($request['account'])){
+			throw new exception('用户名不能为空!');
+		}elseif(empty($request['password'])){
+			throw new exception('密码不能为空!');
+		}
 		// 支持使用绑定帐号登录
 		$map = array();
 		if (preg_match('/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/', trim($request['account']))) {
@@ -132,11 +137,41 @@ class User extends CActiveRecord
 	}
 
 	/**
+	 * 根据用户信息数组生成用户的token
+	 * @author mwq2020
+	 */
+	public function getUserToken($userInfo)
+	{
+		if(empty($userInfo) || empty($userInfo['id']) ){
+			return false;
+		}
+		$token = md5(md5($userInfo['id'].$userInfo['password']));
+		return $token;
+	}
+
+	/**
 	 * 用户的注册过程
 	 * @param $request
 	 */
 	public function userRegister($request)
 	{
+		if(empty($request['email'])){
+			throw new exception('邮箱不能为空！');
+		} elseif(empty($request['password'])){
+			throw new exception('密码不能为空！');
+		}
+
+		$is_exist = User::model()->findByAttributes(array('email'=>$request['email']));
+		if(!empty($is_exist)){
+			throw new exception('邮箱已经存在！');
+		}
+		if(!empty($request['username'])){
+			$is_exist = User::model()->findByAttributes(array('username'=>$request['username']));
+			if(!empty($is_exist)){
+				throw new exception('用户名已经存在！');
+			}
+		}
+
 		$user = new User();
 		$userip			= Yii::app()->request->userHostAddress;
 		$salt			= substr(uniqid(rand()), -6);
@@ -149,7 +184,8 @@ class User extends CActiveRecord
 		}
 		//验证码
 		//$this->checkverify();
-		$user->username = $request['email'];
+		$user->username = $request['username'];
+		$user->email 	= $request['email'];
 		$user->password = $password;
 		$user->salt 	= $salt;
 		$user->regip 	= $userip;

@@ -82,7 +82,7 @@ class ProductController extends ManageController {
             $viewData['productAttributes']  = $productAttributes;
             $this->render('edit',$viewData);exit;
         }
-        $res = array('statusCode' => 200,'message' => '添加成功！');
+        $res = array('statusCode' => 200,'message' => '修改成功！');
         $transaction = Yii::app()->shop->beginTransaction();
         try{
             $productId = $this->saveProduct(); //保存商品的基本信息

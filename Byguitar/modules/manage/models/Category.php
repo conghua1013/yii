@@ -200,18 +200,19 @@ class Category extends CActiveRecord
     public function getCategoryProducts($filter)
     {
         if(empty($filter)){ return ''; }
+
         $count = Yii::app()->shop->createCommand()
             ->select('count(1)')
-            ->from('bg_product p')
-            ->leftJoin('bg_product_category pc','p.cat_id = pc.id')
+            ->from('bg_product as p')
+            ->leftJoin('bg_category as c','p.cat_id = c.id')
             ->where($filter['where'])
             ->queryScalar();
 
         $fields = 'p.id,p.product_name,p.sell_price,p.market_price,p.discount,p.quantity,p.like_num';
         $list = Yii::app()->shop->createCommand()
             ->select($fields)
-            ->from('bg_product p')
-            ->leftJoin('bg_product_category pc','p.cat_id = pc.id')
+            ->from('bg_product as p')
+            ->leftJoin('bg_category as c','p.cat_id = c.id')
             ->where($filter['where'])
             ->order($filter['order'])
             ->limit($filter['limit'])
@@ -261,15 +262,15 @@ class Category extends CActiveRecord
         if(!empty($filter['id'])){ //分类筛选
             $catelist = Category::model()->getCategoryList();
             $catinfo = $catelist[$filter['id']];
-            $filter['where'] .= ' and p.cat_id = '.intval($filter['id']);
-            $filter['option_where'] .= ' and p.cat_id = '.intval($filter['id']);
-            //if(!empty($catinfo)){
-            //    if($catinfo['level'] == 1){
-            //        $filter['where'] .= ' and pc.one_id = '.intval($filter['id']);
-            //    }elseif($catinfo['level'] == 2){
-            //        $filter['where'] .= ' and pc.two_id = '.intval($filter['id']);
-            //    }
-            //}
+            if(!empty($catinfo)){
+                if($catinfo['level'] == 1){
+                    $filter['where'] .= ' and c.parent_id = '.intval($filter['id']);
+                    $filter['option_where'] .= ' and c.parent_id = '.intval($filter['id']);
+                }elseif($catinfo['level'] == 2){
+                    $filter['where'] .= ' and p.cat_id = '.intval($filter['id']);
+                    $filter['option_where'] .= ' and p.cat_id = '.intval($filter['id']);
+                }
+            }
         }
 
         if(!empty($filter['brand'])){ //品牌筛选
@@ -325,7 +326,7 @@ class Category extends CActiveRecord
         $list = Yii::app()->shop->createCommand()
             ->select($field)
             ->from('bg_product p')
-            ->leftJoin('bg_product_category pc','p.cat_id = pc.id')
+            ->leftJoin('bg_category c','p.cat_id = c.id')
             ->where($filter['option_where'])
             ->group($group)
             ->queryAll();

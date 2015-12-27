@@ -1,6 +1,6 @@
 <?php
 
-class PublicController extends ShopBaseController
+class PublicController extends ApiController
 {
 
 }

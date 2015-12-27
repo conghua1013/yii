@@ -20,10 +20,13 @@ return array(
         'application.modules.manage.components.*',
         'application.modules.manage.models.*',
         'application.helpers.*',
+        'application.modules.api.components.*',
+        'application.modules.api.models.*',
     ),
 
     'modules' => array(
         'manage'=>array(),
+        'api'=>array(),
     ),
 
     'defaultController'=>'index',
